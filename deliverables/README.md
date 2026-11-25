@@ -13,5 +13,6 @@ working project lives in `workspace/poc` (git-ignored).
 | `poc/test_c_external/`, `poc/test_c_input_cat_greenscreen.mp4` | GIF / sheet / MP4 processing results and the MP4 test input |
 | `poc/test_d_hybrid/`, `poc/test_d_hybrid_composite_preview.gif` | character + Engine A effect layer export and composite preview |
 | `poc/poc_workspace_backup.zip` | workspace backup (git-ignored) |
+| `poc/test_*/test_*.zip` | export ZIPs (git-ignored; rebuild with `python demo/build_poc.py`) |
 
 Sample art credits: knight — Pixel Atelier (demonstration only, samples/knight/NOTICE.md); torch/cat GIFs — Atelier showcase (MIT).

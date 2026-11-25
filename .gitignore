@@ -11,3 +11,27 @@ deliverables/poc/poc_workspace_backup.zip
 
 # former upstream checkouts are no longer used
 upstream/
+
+# export ZIPs duplicate the export folders next to them (rebuild with demo/build_poc.py)
+deliverables/**/*.zip
+
+# Python build / tooling
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+venv/
+node_modules/
+
+# editors / OS
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
