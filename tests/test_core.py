@@ -258,5 +258,19 @@ class ExportTests(unittest.TestCase):
             self.assertIn("cocos/t.plist", z.namelist())
 
 
+class VersionTests(unittest.TestCase):
+    def test_version_strings_match(self):
+        import re
+        import artstudio
+        root = Path(__file__).resolve().parent.parent
+        version = (root / "VERSION").read_text(encoding="utf-8").strip()
+        pyproject = (root / "pyproject.toml").read_text(encoding="utf-8")
+        self.assertRegex(version, r"^\d+\.\d+\.\d+$")
+        self.assertEqual(artstudio.__version__, version)
+        self.assertIn(f'version = "{version}"', pyproject)
+        changelog = (root / "CHANGELOG.md").read_text(encoding="utf-8")
+        self.assertTrue(re.search(rf"^## \[{re.escape(version)}\]", changelog, re.M), "CHANGELOG has no entry for VERSION")
+
+
 if __name__ == "__main__":
     unittest.main()

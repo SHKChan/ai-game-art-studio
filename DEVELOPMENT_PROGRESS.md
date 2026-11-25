@@ -3,24 +3,24 @@
 Labels: **implemented** · **offline-tested** (executed here with real data) · **mock-tested** (only against mock providers) ·
 **production-verified** (Stage B on a real ComfyUI — none yet).
 
-## Current state (2026-11-25, after reorganisation)
+## Current state (2026-11-26, v0.2.0)
 
 | Area | State | Evidence |
 |---|---|---|
 | Engine A — own Python pixel engine (`artstudio/engine`), Atelier-compatible call format | offline-tested | tests/test_engine.py: tool semantics, persistence, determinism; **Atelier showcase recipes potion/slash replay pixel-identical to Atelier's GIFs**; all builders identical to the earlier Atelier-rendered POC frames |
-| Builders: potion, chest, chest_open, fireball, sword_slash, **ice_spear** (3 elements) + `artstudio draw` call lists | offline-tested | EngineATests; contact sheets inspected |
+| Builders: potion, chest, chest_open, fireball, sword_slash, **ice_spear** (3 elements), **hero_shrine** (96×96, animated) + `artstudio draw` call lists | offline-tested | EngineATests; contact sheets inspected |
 | Engine A authoring guide + skill | done | docs/engine-a-guide.md, skills/procedural-builder-authoring |
 | Pixel Atelier code moved in: spritepipe, Chinese sheet prompts, Codex client, knight sample | offline-tested | tests/test_spritepipe.py (14 upstream tests ported, pass); POC spritepipe TECHNICAL_VERIFIED |
 | Encoding (GBK/cp936/cp1252/C locale) | offline-tested | tests/test_encoding.py: no locale-default I/O in code; full Chinese CLI flow under C locale with UTF-8 mode OFF and no relaunch; POSIX argv recovery |
 | Bilingual en / zh-CN | offline-tested | UI dictionary + observer; server/CLI localized errors; zh prompts; README/deployment in Chinese; Playwright zh pass over all 7 workspaces |
-| Engine C import/processing, character masters, animation editing, QA, export, job queue, server, CLI | offline-tested | 63 tests total |
+| Engine C import/processing, character masters, animation editing, QA, export, job queue, server, CLI | offline-tested | 65 tests total |
 | ComfyUI provider + workflow library + mock service | mock-tested | ComfyTests (ok, missing model/nodes, invalid values, failure, timeout, WS disconnect, cancel, unreachable) |
 | Proof of concept | done (offline parts) | deliverables/poc/POC_REPORT.json |
 | Stage B | **not run** | needs the ComfyUI PC |
 
 ## Commands executed (results read)
 
-- `python scripts/run_tests.py` → **63 tests OK** (build sandbox, Python 3.13). Device VM results below.
+- `python scripts/run_tests.py` → 63 tests OK (build sandbox, Python 3.13, before hero_shrine). Device VM results below.
 - `python tests/ui_playwright.py` → passed in English and Chinese, no console errors.
 - `python demo/build_poc.py` → tests A–D + mock pipeline regenerated with Engine A.
 
@@ -37,7 +37,10 @@ Labels: **implemented** · **offline-tested** (executed here with real data) · 
 
 - c25b33e — Stage A implementation integrating Atelier (Rust binary via MCP/CLI) and Pixel Atelier (as libraries).
 - Session 2 — encoding issue reproduced (Pixel Atelier locale-default I/O); `artstudio draw` added.
-- Session 3 — reorganisation into a self-contained codebase, Engine A rewrite, i18n, ice_spear builder, guide.
+- 0a8b4d9 — reorganisation into a self-contained codebase, Engine A rewrite, i18n, ice_spear builder, guide.
+- 724107c — Engine A parity fixes (brush anchoring, inclusive region rects); 0 differing pixels vs Atelier on 10 samples.
+- 0f1773c — hero_shrine builder.
+- v0.2.0 — README (features, usage, upstreams), CHANGELOG, VERSION, AGENTS.md facts/gotchas, version consistency test.
 
 ## Blockers
 
