@@ -3,7 +3,7 @@ calls (DESCRIPTION, PARAMS, ASSET_TYPE, build(**params) -> list[call]). The engi
 stores the layered document and records its own replayable `doc.recipe`."""
 from importlib import import_module
 
-_NAMES = ["potion", "chest", "chest_open", "fireball", "sword_slash", "ice_spear"]
+_NAMES = ["potion", "chest", "chest_open", "fireball", "sword_slash", "ice_spear", "hero_shrine"]
 BUILDERS = {}
 for _n in _NAMES:
     try:

@@ -18,6 +18,8 @@ const ZH = {
   'Wooden treasure chest with iron trim and a gold lock (closed).': '带铁包边和金锁的木制宝箱（关闭状态）。',
   '8-frame treasure chest opening animation (anticipation, light leak, overshoot, settle, sparkle).': '8 帧宝箱开启动画（预备晃动、漏光、过冲、回稳、闪光）。',
   'Looping 8-frame fireball projectile (faces right) with hot core, flame tongues and trailing embers.': '8 帧循环火球弹（朝右），含炽热核心、火舌和拖尾火星。',
+  'Shrine of Heroes: stone temple with a sword-raising hero statue, banners and animated braziers.': '英雄神殿：石砌神殿，英雄雕像高举长剑，配有旗帜和动态火盆。',
+  'banner': '旗帜颜色',
   '8-frame crescent sword-slash effect with anticipation, sweep, impact flash and dissipation.': '8 帧新月形剑气特效：预备闪光、挥扫、命中闪光与消散。', 'Prompt language': '提示词语言', 'Saved': '已保存', '— no project —': '— 无项目 —',
   // library / project
   'New project': '新建项目', 'Name': '名称', 'Game': '游戏', 'Default style': '默认风格', 'Pixel art': '像素风',

@@ -1,0 +1,249 @@
+{
+  "schema": "artstudio.export/1",
+  "app_version": "0.1.0",
+  "export_id": "exp-0faa044b2a70",
+  "name": "hero_shrine",
+  "created_at": 1795616028.271,
+  "project_id": "shrine",
+  "character_id": null,
+  "contains_test_fixtures": false,
+  "coordinate_notes": "Pixel coords: origin top-left, y down. pivot_norm uses y-up (Cocos/Unity anchor convention).",
+  "animations": [
+    {
+      "key": "hero_shrine",
+      "asset_id": "shrine-of-heroes-1c8a4d",
+      "name": "hero_shrine",
+      "direction": "none",
+      "art_style": "pixel",
+      "loop": {
+        "enabled": false,
+        "ping_pong": false,
+        "hold_last": false
+      },
+      "canvas": [
+        96,
+        96
+      ],
+      "pivot_px": [
+        48,
+        95
+      ],
+      "duration_ms": 480,
+      "frames": [
+        {
+          "name": "hero_shrine_00",
+          "index": 0,
+          "duration_ms": 120,
+          "start_ms": 0,
+          "trim_offset": [
+            4,
+            4
+          ],
+          "trimmed_size": [
+            89,
+            91
+          ],
+          "source_size": [
+            96,
+            96
+          ],
+          "pivot_px": [
+            48,
+            95
+          ],
+          "pivot_norm": [
+            0.5,
+            0.010417
+          ],
+          "pivot_norm_trimmed": [
+            0.494382,
+            0.0
+          ],
+          "phase": null,
+          "origin": "procedural",
+          "sheet": {
+            "x": 0,
+            "y": 0,
+            "w": 96,
+            "h": 96
+          },
+          "atlas": {
+            "x": 2,
+            "y": 2,
+            "w": 89,
+            "h": 91,
+            "page": 0
+          }
+        },
+        {
+          "name": "hero_shrine_01",
+          "index": 1,
+          "duration_ms": 120,
+          "start_ms": 120,
+          "trim_offset": [
+            4,
+            4
+          ],
+          "trimmed_size": [
+            89,
+            91
+          ],
+          "source_size": [
+            96,
+            96
+          ],
+          "pivot_px": [
+            48,
+            95
+          ],
+          "pivot_norm": [
+            0.5,
+            0.010417
+          ],
+          "pivot_norm_trimmed": [
+            0.494382,
+            0.0
+          ],
+          "phase": null,
+          "origin": "procedural",
+          "sheet": {
+            "x": 96,
+            "y": 0,
+            "w": 96,
+            "h": 96
+          },
+          "atlas": {
+            "x": 93,
+            "y": 2,
+            "w": 89,
+            "h": 91,
+            "page": 0
+          }
+        },
+        {
+          "name": "hero_shrine_02",
+          "index": 2,
+          "duration_ms": 120,
+          "start_ms": 240,
+          "trim_offset": [
+            4,
+            4
+          ],
+          "trimmed_size": [
+            89,
+            91
+          ],
+          "source_size": [
+            96,
+            96
+          ],
+          "pivot_px": [
+            48,
+            95
+          ],
+          "pivot_norm": [
+            0.5,
+            0.010417
+          ],
+          "pivot_norm_trimmed": [
+            0.494382,
+            0.0
+          ],
+          "phase": null,
+          "origin": "procedural",
+          "sheet": {
+            "x": 192,
+            "y": 0,
+            "w": 96,
+            "h": 96
+          },
+          "atlas": {
+            "x": 2,
+            "y": 95,
+            "w": 89,
+            "h": 91,
+            "page": 0
+          }
+        },
+        {
+          "name": "hero_shrine_03",
+          "index": 3,
+          "duration_ms": 120,
+          "start_ms": 360,
+          "trim_offset": [
+            4,
+            4
+          ],
+          "trimmed_size": [
+            89,
+            91
+          ],
+          "source_size": [
+            96,
+            96
+          ],
+          "pivot_px": [
+            48,
+            95
+          ],
+          "pivot_norm": [
+            0.5,
+            0.010417
+          ],
+          "pivot_norm_trimmed": [
+            0.494382,
+            0.0
+          ],
+          "phase": null,
+          "origin": "procedural",
+          "sheet": {
+            "x": 288,
+            "y": 0,
+            "w": 96,
+            "h": 96
+          },
+          "atlas": {
+            "x": 93,
+            "y": 95,
+            "w": 89,
+            "h": 91,
+            "page": 0
+          }
+        }
+      ],
+      "events": [],
+      "phases": [],
+      "layers": [],
+      "previews": {
+        "gif": "previews/hero_shrine.gif",
+        "apng": "previews/hero_shrine.png"
+      },
+      "is_test_fixture": false,
+      "provider": "procedural",
+      "character_id": null,
+      "mirror_of": null,
+      "atlas": "hero_shrine_atlas.png"
+    }
+  ],
+  "direction_map": {
+    "hero_shrine": {
+      "none": {
+        "key": "hero_shrine",
+        "flip_x": false
+      }
+    }
+  },
+  "files": [
+    "frames/hero_shrine/00.png",
+    "frames/hero_shrine/01.png",
+    "frames/hero_shrine/02.png",
+    "frames/hero_shrine/03.png",
+    "sheets/hero_shrine.png",
+    "previews/hero_shrine.gif",
+    "previews/hero_shrine.png",
+    "hero_shrine_atlas.png",
+    "hero_shrine_atlas.json",
+    "cocos/hero_shrine.png",
+    "cocos/hero_shrine.plist"
+  ]
+}
