@@ -25,7 +25,7 @@ def _put(a: np.ndarray, x: int, y: int, c) -> None:
 def _brush(a, cx, cy, c, size):
     if size <= 1:
         return _put(a, cx, cy, c)
-    o = (size - 1) // 2
+    o = size // 2  # same anchoring as Atelier: square spans [c - size//2, c - size//2 + size - 1]
     y0, x0 = max(0, cy - o), max(0, cx - o)
     a[y0:max(0, cy - o + size), x0:max(0, cx - o + size)] = c
 
@@ -484,8 +484,10 @@ def t_doc_region(e, a):
     d = e._doc(a)
     r = a.get("rect")
     if not (isinstance(r, list) and len(r) == 4):
-        raise EngineError("rect must be [x, y, w, h]")
-    x, y, w, h = (int(v) for v in r)
+        raise EngineError("rect must be [x0, y0, x1, y1] (inclusive corners, as in Atelier)")
+    x0, y0, x1, y1 = (int(v) for v in r)
+    x, y = min(x0, x1), min(y0, y1)
+    w, h = abs(x1 - x0) + 1, abs(y1 - y0) + 1
     layer = _int(a, "layer", 0, lo=0)
     for f in _frames(d, a):
         cel = d.cel(layer, f)

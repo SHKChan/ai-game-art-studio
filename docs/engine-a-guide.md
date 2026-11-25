@@ -25,7 +25,7 @@ Rule of thumb: if you will make it a second time with different settings, write 
 | `doc_paint_grid` | `layer, frame, frame_to, x, y, legend {char: palette index or colour}, rows [...], replace` |
 | `doc_draw` | `op: pencil|line|rect|ellipse|polyline|polygon|stroke|fill|fill_cel|clear_cel`, coordinates, `color`, `fill`, `erase`, `frame_to` |
 | `doc_fx` | `op: outline|flip|shift|replace_color` |
-| `doc_region` | `op: clear|move, rect [x,y,w,h], offset` |
+| `doc_region` | `op: clear|move, rect [x0,y0,x1,y1] (inclusive), offset [dx,dy]` |
 | `doc_rescale` | `factor` (integer, nearest) |
 | `doc_add_tag` | `name, from, to` |
 | `doc_look`, `doc_export`, `doc_info`, `list_docs`, `delete_doc` | inspection / export |

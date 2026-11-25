@@ -78,6 +78,21 @@ class EngineTests(unittest.TestCase):
                 up = np.array(mine.resize((mine.width * s, mine.height * s), Image.Resampling.NEAREST))
                 self.assertTrue(np.array_equal(binarize(up), binarize(np.array(theirs))), f"{name} frame {i}")
 
+    def test_matches_frames_rendered_by_atelier(self):
+        """Call lists covering every drawing primitive; reference PNGs rendered by the original Atelier binary."""
+        ref = ROOT / "tests" / "fixtures" / "atelier_reference"
+        for name in ("sword_icon", "primitives"):
+            calls = [json.loads(l) for l in (ref / f"{name}.jsonl").read_text(encoding="utf-8").splitlines() if l.strip()]
+            frames, durs, _ = self.e.export_frames(self.e.run(calls))
+            self.assertEqual(durs, json.loads((ref / f"{name}.durations.json").read_text(encoding="utf-8")), name)
+            for i, mine in enumerate(frames):
+                with Image.open(ref / f"{name}_f{i}.png") as im:
+                    theirs = np.array(im.convert("RGBA"))
+                a = np.array(mine)
+                a[a[..., 3] == 0] = 0
+                theirs[theirs[..., 3] == 0] = 0
+                self.assertTrue(np.array_equal(a, theirs), f"{name} frame {i}")
+
 
 if __name__ == "__main__":
     unittest.main()

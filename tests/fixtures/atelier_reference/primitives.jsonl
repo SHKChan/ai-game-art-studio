@@ -1,0 +1,20 @@
+{"name": "doc_new", "arguments": {"name": "primitives", "width": 48, "height": 48}}
+{"name": "doc_palette", "arguments": {"doc_id": "$DOC", "op": "set", "colors": ["#1a1020", "#e04040", "#40a0f0", "#f0d040", "#60d060", "#ffffff"]}}
+{"name": "doc_layer", "arguments": {"doc_id": "$DOC", "op": "add", "name": "top"}}
+{"name": "doc_draw", "arguments": {"doc_id": "$DOC", "layer": 0, "frame": 0, "op": "rect", "x0": 2, "y0": 2, "x1": 20, "y1": 14, "color": "#e04040"}}
+{"name": "doc_draw", "arguments": {"doc_id": "$DOC", "layer": 0, "frame": 0, "op": "rect", "x0": 5, "y0": 5, "x1": 12, "y1": 11, "color": "#f0d040", "fill": true}}
+{"name": "doc_draw", "arguments": {"doc_id": "$DOC", "layer": 0, "frame": 0, "op": "ellipse", "cx": 34, "cy": 9, "rx": 10, "ry": 6, "color": "#40a0f0"}}
+{"name": "doc_draw", "arguments": {"doc_id": "$DOC", "layer": 0, "frame": 0, "op": "ellipse", "cx": 34, "cy": 9, "rx": 5, "ry": 3, "color": "#60d060", "fill": true}}
+{"name": "doc_draw", "arguments": {"doc_id": "$DOC", "layer": 0, "frame": 0, "op": "line", "x0": 2, "y0": 46, "x1": 30, "y1": 20, "color": "#ffffff"}}
+{"name": "doc_draw", "arguments": {"doc_id": "$DOC", "layer": 0, "frame": 0, "op": "line", "x0": 4, "y0": 46, "x1": 32, "y1": 22, "color": "#f0d040", "size": 2}}
+{"name": "doc_draw", "arguments": {"doc_id": "$DOC", "layer": 1, "frame": 0, "op": "polyline", "points": [[30, 30], [44, 26], [40, 44], [28, 40]], "color": "#e04040", "closed": true}}
+{"name": "doc_draw", "arguments": {"doc_id": "$DOC", "layer": 1, "frame": 0, "op": "fill", "x": 36, "y": 34, "color": "#60d060"}}
+{"name": "doc_draw", "arguments": {"doc_id": "$DOC", "layer": 1, "frame": 0, "op": "pencil", "points": [[10, 30], [12, 32], [14, 30]], "color": "#ffffff"}}
+{"name": "doc_fx", "arguments": {"doc_id": "$DOC", "layer": 1, "frame": 0, "op": "outline", "color": "#1a1020"}}
+{"name": "doc_frame", "arguments": {"doc_id": "$DOC", "op": "add", "copy_from": 0, "duration_ms": 120}}
+{"name": "doc_fx", "arguments": {"doc_id": "$DOC", "layer": 0, "frame": 1, "op": "flip", "horizontal": true}}
+{"name": "doc_fx", "arguments": {"doc_id": "$DOC", "layer": 1, "frame": 1, "op": "shift", "dx": -3, "dy": 2}}
+{"name": "doc_region", "arguments": {"doc_id": "$DOC", "layer": 0, "frame": 1, "op": "clear", "rect": [0, 0, 10, 10]}}
+{"name": "doc_frame", "arguments": {"doc_id": "$DOC", "op": "duration", "frame": 0, "duration_ms": 150}}
+{"name":"doc_region","arguments":{"doc_id":"$DOC","layer":0,"frame":0,"op":"move","rect":[2,2,20,14],"offset":[4,20]}}
+{"name":"doc_draw","arguments":{"doc_id":"$DOC","layer":0,"frame":1,"op":"rect","x0":30,"y0":30,"x1":46,"y1":46,"color":"#e04040","size":3}}

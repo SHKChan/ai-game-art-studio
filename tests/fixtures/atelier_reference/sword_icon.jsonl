@@ -1,0 +1,6 @@
+{"name":"doc_new","arguments":{"name":"iron-sword-icon","width":32,"height":32}}
+{"name":"doc_palette","arguments":{"doc_id":"$DOC","op":"set","colors":["#1a1220","#4a5068","#9aa6c0","#e6eefa","#6b3a1f","#c78445","#d49a22","#f7d14a"]}}
+{"name":"doc_layer","arguments":{"doc_id":"$DOC","op":"rename","index":0,"name":"blade"}}
+{"name":"doc_layer","arguments":{"doc_id":"$DOC","op":"add","name":"hilt"}}
+{"name":"doc_paint_grid","arguments":{"doc_id":"$DOC","layer":0,"frame":0,"x":12,"y":2,"legend":{"o":0,"d":1,"m":2,"l":3},"rows":["..........oo","........ooml",".......omlo.","......omlo..",".....omlo...",".....mlo....","....mlo.....","...mlo......","..mlo.......",".mdo........","odo........."]}}
+{"name":"doc_paint_grid","arguments":{"doc_id":"$DOC","layer":1,"frame":0,"x":5,"y":12,"legend":{"o":0,"b":4,"w":5,"g":6,"y":7},"rows":["......oo..","....oyyo..","...ogyo...","..ooggoo..",".owbo.oo..","owbo......","obo.......","yo........","o........."]}}
