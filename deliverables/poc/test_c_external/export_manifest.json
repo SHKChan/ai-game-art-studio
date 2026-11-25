@@ -1,0 +1,1469 @@
+{
+  "schema": "artstudio.export/1",
+  "app_version": "0.1.0",
+  "export_id": "exp-acb32b6d480e",
+  "name": "test_c_external",
+  "created_at": 1795609597.548,
+  "project_id": "poc-fantasy-rpg",
+  "character_id": null,
+  "contains_test_fixtures": false,
+  "coordinate_notes": "Pixel coords: origin top-left, y down. pivot_norm uses y-up (Cocos/Unity anchor convention).",
+  "animations": [
+    {
+      "key": "torch",
+      "asset_id": "torch-imported-gif-7dca8c",
+      "name": "torch",
+      "direction": "none",
+      "art_style": "pixel",
+      "loop": {
+        "enabled": true,
+        "ping_pong": false,
+        "hold_last": false
+      },
+      "canvas": [
+        100,
+        136
+      ],
+      "pivot_px": [
+        50,
+        132
+      ],
+      "duration_ms": 1000,
+      "frames": [
+        {
+          "name": "torch_00",
+          "index": 0,
+          "duration_ms": 100,
+          "start_ms": 0,
+          "trim_offset": [
+            4,
+            8
+          ],
+          "trimmed_size": [
+            88,
+            124
+          ],
+          "source_size": [
+            100,
+            136
+          ],
+          "pivot_px": [
+            50,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.029412
+          ],
+          "pivot_norm_trimmed": [
+            0.522727,
+            0.0
+          ],
+          "phase": null,
+          "origin": "imported",
+          "sheet": {
+            "x": 0,
+            "y": 0,
+            "w": 100,
+            "h": 136
+          },
+          "atlas": {
+            "x": 120,
+            "y": 258,
+            "w": 88,
+            "h": 124,
+            "page": 0
+          }
+        },
+        {
+          "name": "torch_01",
+          "index": 1,
+          "duration_ms": 100,
+          "start_ms": 100,
+          "trim_offset": [
+            4,
+            4
+          ],
+          "trimmed_size": [
+            92,
+            128
+          ],
+          "source_size": [
+            100,
+            136
+          ],
+          "pivot_px": [
+            50,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.029412
+          ],
+          "pivot_norm_trimmed": [
+            0.5,
+            0.0
+          ],
+          "phase": null,
+          "origin": "imported",
+          "sheet": {
+            "x": 100,
+            "y": 0,
+            "w": 100,
+            "h": 136
+          },
+          "atlas": {
+            "x": 2,
+            "y": 2,
+            "w": 92,
+            "h": 128,
+            "page": 0
+          }
+        },
+        {
+          "name": "torch_02",
+          "index": 2,
+          "duration_ms": 100,
+          "start_ms": 200,
+          "trim_offset": [
+            4,
+            16
+          ],
+          "trimmed_size": [
+            80,
+            116
+          ],
+          "source_size": [
+            100,
+            136
+          ],
+          "pivot_px": [
+            50,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.029412
+          ],
+          "pivot_norm_trimmed": [
+            0.575,
+            0.0
+          ],
+          "phase": null,
+          "origin": "imported",
+          "sheet": {
+            "x": 200,
+            "y": 0,
+            "w": 100,
+            "h": 136
+          },
+          "atlas": {
+            "x": 256,
+            "y": 384,
+            "w": 80,
+            "h": 116,
+            "page": 0
+          }
+        },
+        {
+          "name": "torch_03",
+          "index": 3,
+          "duration_ms": 100,
+          "start_ms": 300,
+          "trim_offset": [
+            4,
+            12
+          ],
+          "trimmed_size": [
+            84,
+            120
+          ],
+          "source_size": [
+            100,
+            136
+          ],
+          "pivot_px": [
+            50,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.029412
+          ],
+          "pivot_norm_trimmed": [
+            0.547619,
+            0.0
+          ],
+          "phase": null,
+          "origin": "imported",
+          "sheet": {
+            "x": 300,
+            "y": 0,
+            "w": 100,
+            "h": 136
+          },
+          "atlas": {
+            "x": 476,
+            "y": 258,
+            "w": 84,
+            "h": 120,
+            "page": 0
+          }
+        },
+        {
+          "name": "torch_04",
+          "index": 4,
+          "duration_ms": 100,
+          "start_ms": 400,
+          "trim_offset": [
+            4,
+            12
+          ],
+          "trimmed_size": [
+            84,
+            120
+          ],
+          "source_size": [
+            100,
+            136
+          ],
+          "pivot_px": [
+            50,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.029412
+          ],
+          "pivot_norm_trimmed": [
+            0.547619,
+            0.0
+          ],
+          "phase": null,
+          "origin": "imported",
+          "sheet": {
+            "x": 400,
+            "y": 0,
+            "w": 100,
+            "h": 136
+          },
+          "atlas": {
+            "x": 2,
+            "y": 384,
+            "w": 84,
+            "h": 120,
+            "page": 0
+          }
+        },
+        {
+          "name": "torch_05",
+          "index": 5,
+          "duration_ms": 100,
+          "start_ms": 500,
+          "trim_offset": [
+            4,
+            8
+          ],
+          "trimmed_size": [
+            88,
+            124
+          ],
+          "source_size": [
+            100,
+            136
+          ],
+          "pivot_px": [
+            50,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.029412
+          ],
+          "pivot_norm_trimmed": [
+            0.522727,
+            0.0
+          ],
+          "phase": null,
+          "origin": "imported",
+          "sheet": {
+            "x": 500,
+            "y": 0,
+            "w": 100,
+            "h": 136
+          },
+          "atlas": {
+            "x": 210,
+            "y": 258,
+            "w": 88,
+            "h": 124,
+            "page": 0
+          }
+        },
+        {
+          "name": "torch_06",
+          "index": 6,
+          "duration_ms": 100,
+          "start_ms": 600,
+          "trim_offset": [
+            4,
+            12
+          ],
+          "trimmed_size": [
+            80,
+            120
+          ],
+          "source_size": [
+            100,
+            136
+          ],
+          "pivot_px": [
+            50,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.029412
+          ],
+          "pivot_norm_trimmed": [
+            0.575,
+            0.0
+          ],
+          "phase": null,
+          "origin": "imported",
+          "sheet": {
+            "x": 600,
+            "y": 0,
+            "w": 100,
+            "h": 136
+          },
+          "atlas": {
+            "x": 174,
+            "y": 384,
+            "w": 80,
+            "h": 120,
+            "page": 0
+          }
+        },
+        {
+          "name": "torch_07",
+          "index": 7,
+          "duration_ms": 100,
+          "start_ms": 700,
+          "trim_offset": [
+            4,
+            8
+          ],
+          "trimmed_size": [
+            84,
+            124
+          ],
+          "source_size": [
+            100,
+            136
+          ],
+          "pivot_px": [
+            50,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.029412
+          ],
+          "pivot_norm_trimmed": [
+            0.547619,
+            0.0
+          ],
+          "phase": null,
+          "origin": "imported",
+          "sheet": {
+            "x": 700,
+            "y": 0,
+            "w": 100,
+            "h": 136
+          },
+          "atlas": {
+            "x": 300,
+            "y": 258,
+            "w": 84,
+            "h": 124,
+            "page": 0
+          }
+        },
+        {
+          "name": "torch_08",
+          "index": 8,
+          "duration_ms": 100,
+          "start_ms": 800,
+          "trim_offset": [
+            4,
+            12
+          ],
+          "trimmed_size": [
+            84,
+            120
+          ],
+          "source_size": [
+            100,
+            136
+          ],
+          "pivot_px": [
+            50,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.029412
+          ],
+          "pivot_norm_trimmed": [
+            0.547619,
+            0.0
+          ],
+          "phase": null,
+          "origin": "imported",
+          "sheet": {
+            "x": 0,
+            "y": 136,
+            "w": 100,
+            "h": 136
+          },
+          "atlas": {
+            "x": 88,
+            "y": 384,
+            "w": 84,
+            "h": 120,
+            "page": 0
+          }
+        },
+        {
+          "name": "torch_09",
+          "index": 9,
+          "duration_ms": 100,
+          "start_ms": 900,
+          "trim_offset": [
+            4,
+            12
+          ],
+          "trimmed_size": [
+            88,
+            120
+          ],
+          "source_size": [
+            100,
+            136
+          ],
+          "pivot_px": [
+            50,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.029412
+          ],
+          "pivot_norm_trimmed": [
+            0.522727,
+            0.0
+          ],
+          "phase": null,
+          "origin": "imported",
+          "sheet": {
+            "x": 100,
+            "y": 136,
+            "w": 100,
+            "h": 136
+          },
+          "atlas": {
+            "x": 386,
+            "y": 258,
+            "w": 88,
+            "h": 120,
+            "page": 0
+          }
+        }
+      ],
+      "events": [],
+      "phases": [],
+      "layers": [],
+      "previews": {
+        "gif": "previews/torch.gif",
+        "apng": "previews/torch.png"
+      },
+      "is_test_fixture": false,
+      "provider": "external",
+      "character_id": null,
+      "mirror_of": null,
+      "atlas": "test_c_external_atlas.png"
+    },
+    {
+      "key": "run_right",
+      "asset_id": "knight-run-sheet-import-auto-slice-98984b",
+      "name": "run",
+      "direction": "right",
+      "art_style": "pixel",
+      "loop": {
+        "enabled": true,
+        "ping_pong": false,
+        "hold_last": false
+      },
+      "canvas": [
+        102,
+        79
+      ],
+      "pivot_px": [
+        51,
+        75
+      ],
+      "duration_ms": 640,
+      "frames": [
+        {
+          "name": "run_right_00",
+          "index": 0,
+          "duration_ms": 80,
+          "start_ms": 0,
+          "trim_offset": [
+            13,
+            8
+          ],
+          "trimmed_size": [
+            67,
+            67
+          ],
+          "source_size": [
+            102,
+            79
+          ],
+          "pivot_px": [
+            51,
+            75
+          ],
+          "pivot_norm": [
+            0.5,
+            0.050633
+          ],
+          "pivot_norm_trimmed": [
+            0.567164,
+            0.0
+          ],
+          "phase": null,
+          "origin": "imported",
+          "sheet": {
+            "x": 0,
+            "y": 0,
+            "w": 102,
+            "h": 79
+          },
+          "atlas": {
+            "x": 72,
+            "y": 506,
+            "w": 67,
+            "h": 67,
+            "page": 0
+          }
+        },
+        {
+          "name": "run_right_01",
+          "index": 1,
+          "duration_ms": 80,
+          "start_ms": 80,
+          "trim_offset": [
+            11,
+            8
+          ],
+          "trimmed_size": [
+            68,
+            67
+          ],
+          "source_size": [
+            102,
+            79
+          ],
+          "pivot_px": [
+            51,
+            75
+          ],
+          "pivot_norm": [
+            0.5,
+            0.050633
+          ],
+          "pivot_norm_trimmed": [
+            0.588235,
+            0.0
+          ],
+          "phase": null,
+          "origin": "imported",
+          "sheet": {
+            "x": 102,
+            "y": 0,
+            "w": 102,
+            "h": 79
+          },
+          "atlas": {
+            "x": 2,
+            "y": 506,
+            "w": 68,
+            "h": 67,
+            "page": 0
+          }
+        },
+        {
+          "name": "run_right_02",
+          "index": 2,
+          "duration_ms": 80,
+          "start_ms": 160,
+          "trim_offset": [
+            13,
+            6
+          ],
+          "trimmed_size": [
+            68,
+            69
+          ],
+          "source_size": [
+            102,
+            79
+          ],
+          "pivot_px": [
+            51,
+            75
+          ],
+          "pivot_norm": [
+            0.5,
+            0.050633
+          ],
+          "pivot_norm_trimmed": [
+            0.558824,
+            0.0
+          ],
+          "phase": null,
+          "origin": "imported",
+          "sheet": {
+            "x": 204,
+            "y": 0,
+            "w": 102,
+            "h": 79
+          },
+          "atlas": {
+            "x": 407,
+            "y": 384,
+            "w": 68,
+            "h": 69,
+            "page": 0
+          }
+        },
+        {
+          "name": "run_right_03",
+          "index": 3,
+          "duration_ms": 80,
+          "start_ms": 240,
+          "trim_offset": [
+            15,
+            13
+          ],
+          "trimmed_size": [
+            67,
+            62
+          ],
+          "source_size": [
+            102,
+            79
+          ],
+          "pivot_px": [
+            51,
+            75
+          ],
+          "pivot_norm": [
+            0.5,
+            0.050633
+          ],
+          "pivot_norm_trimmed": [
+            0.537313,
+            0.0
+          ],
+          "phase": null,
+          "origin": "imported",
+          "sheet": {
+            "x": 306,
+            "y": 0,
+            "w": 102,
+            "h": 79
+          },
+          "atlas": {
+            "x": 210,
+            "y": 506,
+            "w": 67,
+            "h": 62,
+            "page": 0
+          }
+        },
+        {
+          "name": "run_right_04",
+          "index": 4,
+          "duration_ms": 80,
+          "start_ms": 320,
+          "trim_offset": [
+            25,
+            4
+          ],
+          "trimmed_size": [
+            67,
+            71
+          ],
+          "source_size": [
+            102,
+            79
+          ],
+          "pivot_px": [
+            51,
+            75
+          ],
+          "pivot_norm": [
+            0.5,
+            0.050633
+          ],
+          "pivot_norm_trimmed": [
+            0.38806,
+            0.0
+          ],
+          "phase": null,
+          "origin": "imported",
+          "sheet": {
+            "x": 408,
+            "y": 0,
+            "w": 102,
+            "h": 79
+          },
+          "atlas": {
+            "x": 338,
+            "y": 384,
+            "w": 67,
+            "h": 71,
+            "page": 0
+          }
+        },
+        {
+          "name": "run_right_05",
+          "index": 5,
+          "duration_ms": 80,
+          "start_ms": 400,
+          "trim_offset": [
+            4,
+            6
+          ],
+          "trimmed_size": [
+            68,
+            69
+          ],
+          "source_size": [
+            102,
+            79
+          ],
+          "pivot_px": [
+            51,
+            75
+          ],
+          "pivot_norm": [
+            0.5,
+            0.050633
+          ],
+          "pivot_norm_trimmed": [
+            0.691176,
+            0.0
+          ],
+          "phase": null,
+          "origin": "imported",
+          "sheet": {
+            "x": 510,
+            "y": 0,
+            "w": 102,
+            "h": 79
+          },
+          "atlas": {
+            "x": 477,
+            "y": 384,
+            "w": 68,
+            "h": 69,
+            "page": 0
+          }
+        },
+        {
+          "name": "run_right_06",
+          "index": 6,
+          "duration_ms": 80,
+          "start_ms": 480,
+          "trim_offset": [
+            17,
+            8
+          ],
+          "trimmed_size": [
+            67,
+            67
+          ],
+          "source_size": [
+            102,
+            79
+          ],
+          "pivot_px": [
+            51,
+            75
+          ],
+          "pivot_norm": [
+            0.5,
+            0.050633
+          ],
+          "pivot_norm_trimmed": [
+            0.507463,
+            0.0
+          ],
+          "phase": null,
+          "origin": "imported",
+          "sheet": {
+            "x": 612,
+            "y": 0,
+            "w": 102,
+            "h": 79
+          },
+          "atlas": {
+            "x": 141,
+            "y": 506,
+            "w": 67,
+            "h": 67,
+            "page": 0
+          }
+        },
+        {
+          "name": "run_right_07",
+          "index": 7,
+          "duration_ms": 80,
+          "start_ms": 560,
+          "trim_offset": [
+            26,
+            7
+          ],
+          "trimmed_size": [
+            67,
+            68
+          ],
+          "source_size": [
+            102,
+            79
+          ],
+          "pivot_px": [
+            51,
+            75
+          ],
+          "pivot_norm": [
+            0.5,
+            0.050633
+          ],
+          "pivot_norm_trimmed": [
+            0.373134,
+            0.0
+          ],
+          "phase": null,
+          "origin": "imported",
+          "sheet": {
+            "x": 714,
+            "y": 0,
+            "w": 102,
+            "h": 79
+          },
+          "atlas": {
+            "x": 547,
+            "y": 384,
+            "w": 67,
+            "h": 68,
+            "page": 0
+          }
+        }
+      ],
+      "events": [
+        {
+          "frame": 0,
+          "type": "footstep",
+          "time_ms": 0
+        },
+        {
+          "frame": 4,
+          "type": "footstep",
+          "time_ms": 320
+        }
+      ],
+      "phases": [],
+      "layers": [],
+      "previews": {
+        "gif": "previews/run_right.gif",
+        "apng": "previews/run_right.png"
+      },
+      "is_test_fixture": false,
+      "provider": "external",
+      "character_id": null,
+      "mirror_of": null,
+      "atlas": "test_c_external_atlas.png"
+    },
+    {
+      "key": "cat",
+      "asset_id": "cat-mp4-green-screen-import-9ee523",
+      "name": "cat",
+      "direction": "none",
+      "art_style": "pixel",
+      "loop": {
+        "enabled": true,
+        "ping_pong": false,
+        "hold_last": false
+      },
+      "canvas": [
+        136,
+        132
+      ],
+      "pivot_px": [
+        68,
+        128
+      ],
+      "duration_ms": 1000,
+      "frames": [
+        {
+          "name": "cat_00",
+          "index": 0,
+          "duration_ms": 100,
+          "start_ms": 0,
+          "trim_offset": [
+            8,
+            4
+          ],
+          "trimmed_size": [
+            124,
+            124
+          ],
+          "source_size": [
+            136,
+            132
+          ],
+          "pivot_px": [
+            68,
+            128
+          ],
+          "pivot_norm": [
+            0.5,
+            0.030303
+          ],
+          "pivot_norm_trimmed": [
+            0.483871,
+            0.0
+          ],
+          "phase": null,
+          "origin": "imported",
+          "sheet": {
+            "x": 0,
+            "y": 0,
+            "w": 136,
+            "h": 132
+          },
+          "atlas": {
+            "x": 226,
+            "y": 2,
+            "w": 124,
+            "h": 124,
+            "page": 0
+          }
+        },
+        {
+          "name": "cat_01",
+          "index": 1,
+          "duration_ms": 100,
+          "start_ms": 100,
+          "trim_offset": [
+            8,
+            4
+          ],
+          "trimmed_size": [
+            120,
+            124
+          ],
+          "source_size": [
+            136,
+            132
+          ],
+          "pivot_px": [
+            68,
+            128
+          ],
+          "pivot_norm": [
+            0.5,
+            0.030303
+          ],
+          "pivot_norm_trimmed": [
+            0.5,
+            0.0
+          ],
+          "phase": null,
+          "origin": "imported",
+          "sheet": {
+            "x": 136,
+            "y": 0,
+            "w": 136,
+            "h": 132
+          },
+          "atlas": {
+            "x": 2,
+            "y": 132,
+            "w": 120,
+            "h": 124,
+            "page": 0
+          }
+        },
+        {
+          "name": "cat_02",
+          "index": 2,
+          "duration_ms": 100,
+          "start_ms": 200,
+          "trim_offset": [
+            8,
+            4
+          ],
+          "trimmed_size": [
+            120,
+            124
+          ],
+          "source_size": [
+            136,
+            132
+          ],
+          "pivot_px": [
+            68,
+            128
+          ],
+          "pivot_norm": [
+            0.5,
+            0.030303
+          ],
+          "pivot_norm_trimmed": [
+            0.5,
+            0.0
+          ],
+          "phase": null,
+          "origin": "imported",
+          "sheet": {
+            "x": 272,
+            "y": 0,
+            "w": 136,
+            "h": 132
+          },
+          "atlas": {
+            "x": 124,
+            "y": 132,
+            "w": 120,
+            "h": 124,
+            "page": 0
+          }
+        },
+        {
+          "name": "cat_03",
+          "index": 3,
+          "duration_ms": 100,
+          "start_ms": 300,
+          "trim_offset": [
+            8,
+            4
+          ],
+          "trimmed_size": [
+            120,
+            124
+          ],
+          "source_size": [
+            136,
+            132
+          ],
+          "pivot_px": [
+            68,
+            128
+          ],
+          "pivot_norm": [
+            0.5,
+            0.030303
+          ],
+          "pivot_norm_trimmed": [
+            0.5,
+            0.0
+          ],
+          "phase": null,
+          "origin": "imported",
+          "sheet": {
+            "x": 408,
+            "y": 0,
+            "w": 136,
+            "h": 132
+          },
+          "atlas": {
+            "x": 246,
+            "y": 132,
+            "w": 120,
+            "h": 124,
+            "page": 0
+          }
+        },
+        {
+          "name": "cat_04",
+          "index": 4,
+          "duration_ms": 100,
+          "start_ms": 400,
+          "trim_offset": [
+            8,
+            4
+          ],
+          "trimmed_size": [
+            120,
+            124
+          ],
+          "source_size": [
+            136,
+            132
+          ],
+          "pivot_px": [
+            68,
+            128
+          ],
+          "pivot_norm": [
+            0.5,
+            0.030303
+          ],
+          "pivot_norm_trimmed": [
+            0.5,
+            0.0
+          ],
+          "phase": null,
+          "origin": "imported",
+          "sheet": {
+            "x": 544,
+            "y": 0,
+            "w": 136,
+            "h": 132
+          },
+          "atlas": {
+            "x": 368,
+            "y": 132,
+            "w": 120,
+            "h": 124,
+            "page": 0
+          }
+        },
+        {
+          "name": "cat_05",
+          "index": 5,
+          "duration_ms": 100,
+          "start_ms": 500,
+          "trim_offset": [
+            4,
+            4
+          ],
+          "trimmed_size": [
+            128,
+            124
+          ],
+          "source_size": [
+            136,
+            132
+          ],
+          "pivot_px": [
+            68,
+            128
+          ],
+          "pivot_norm": [
+            0.5,
+            0.030303
+          ],
+          "pivot_norm_trimmed": [
+            0.5,
+            0.0
+          ],
+          "phase": null,
+          "origin": "imported",
+          "sheet": {
+            "x": 680,
+            "y": 0,
+            "w": 136,
+            "h": 132
+          },
+          "atlas": {
+            "x": 96,
+            "y": 2,
+            "w": 128,
+            "h": 124,
+            "page": 0
+          }
+        },
+        {
+          "name": "cat_06",
+          "index": 6,
+          "duration_ms": 100,
+          "start_ms": 600,
+          "trim_offset": [
+            8,
+            4
+          ],
+          "trimmed_size": [
+            124,
+            124
+          ],
+          "source_size": [
+            136,
+            132
+          ],
+          "pivot_px": [
+            68,
+            128
+          ],
+          "pivot_norm": [
+            0.5,
+            0.030303
+          ],
+          "pivot_norm_trimmed": [
+            0.483871,
+            0.0
+          ],
+          "phase": null,
+          "origin": "imported",
+          "sheet": {
+            "x": 816,
+            "y": 0,
+            "w": 136,
+            "h": 132
+          },
+          "atlas": {
+            "x": 352,
+            "y": 2,
+            "w": 124,
+            "h": 124,
+            "page": 0
+          }
+        },
+        {
+          "name": "cat_07",
+          "index": 7,
+          "duration_ms": 100,
+          "start_ms": 700,
+          "trim_offset": [
+            8,
+            4
+          ],
+          "trimmed_size": [
+            120,
+            124
+          ],
+          "source_size": [
+            136,
+            132
+          ],
+          "pivot_px": [
+            68,
+            128
+          ],
+          "pivot_norm": [
+            0.5,
+            0.030303
+          ],
+          "pivot_norm_trimmed": [
+            0.5,
+            0.0
+          ],
+          "phase": null,
+          "origin": "imported",
+          "sheet": {
+            "x": 952,
+            "y": 0,
+            "w": 136,
+            "h": 132
+          },
+          "atlas": {
+            "x": 490,
+            "y": 132,
+            "w": 120,
+            "h": 124,
+            "page": 0
+          }
+        },
+        {
+          "name": "cat_08",
+          "index": 8,
+          "duration_ms": 100,
+          "start_ms": 800,
+          "trim_offset": [
+            8,
+            4
+          ],
+          "trimmed_size": [
+            116,
+            124
+          ],
+          "source_size": [
+            136,
+            132
+          ],
+          "pivot_px": [
+            68,
+            128
+          ],
+          "pivot_norm": [
+            0.5,
+            0.030303
+          ],
+          "pivot_norm_trimmed": [
+            0.517241,
+            0.0
+          ],
+          "phase": null,
+          "origin": "imported",
+          "sheet": {
+            "x": 0,
+            "y": 132,
+            "w": 136,
+            "h": 132
+          },
+          "atlas": {
+            "x": 2,
+            "y": 258,
+            "w": 116,
+            "h": 124,
+            "page": 0
+          }
+        },
+        {
+          "name": "cat_09",
+          "index": 9,
+          "duration_ms": 100,
+          "start_ms": 900,
+          "trim_offset": [
+            4,
+            4
+          ],
+          "trimmed_size": [
+            124,
+            124
+          ],
+          "source_size": [
+            136,
+            132
+          ],
+          "pivot_px": [
+            68,
+            128
+          ],
+          "pivot_norm": [
+            0.5,
+            0.030303
+          ],
+          "pivot_norm_trimmed": [
+            0.516129,
+            0.0
+          ],
+          "phase": null,
+          "origin": "imported",
+          "sheet": {
+            "x": 136,
+            "y": 132,
+            "w": 136,
+            "h": 132
+          },
+          "atlas": {
+            "x": 478,
+            "y": 2,
+            "w": 124,
+            "h": 124,
+            "page": 0
+          }
+        }
+      ],
+      "events": [],
+      "phases": [],
+      "layers": [],
+      "previews": {
+        "gif": "previews/cat.gif",
+        "apng": "previews/cat.png"
+      },
+      "is_test_fixture": false,
+      "provider": "external",
+      "character_id": null,
+      "mirror_of": null,
+      "atlas": "test_c_external_atlas.png"
+    }
+  ],
+  "direction_map": {
+    "torch": {
+      "none": {
+        "key": "torch",
+        "flip_x": false
+      }
+    },
+    "run": {
+      "right": {
+        "key": "run_right",
+        "flip_x": false
+      }
+    },
+    "cat": {
+      "none": {
+        "key": "cat",
+        "flip_x": false
+      }
+    }
+  },
+  "files": [
+    "frames/torch/00.png",
+    "frames/torch/01.png",
+    "frames/torch/02.png",
+    "frames/torch/03.png",
+    "frames/torch/04.png",
+    "frames/torch/05.png",
+    "frames/torch/06.png",
+    "frames/torch/07.png",
+    "frames/torch/08.png",
+    "frames/torch/09.png",
+    "sheets/torch.png",
+    "previews/torch.gif",
+    "previews/torch.png",
+    "frames/run_right/00.png",
+    "frames/run_right/01.png",
+    "frames/run_right/02.png",
+    "frames/run_right/03.png",
+    "frames/run_right/04.png",
+    "frames/run_right/05.png",
+    "frames/run_right/06.png",
+    "frames/run_right/07.png",
+    "sheets/run_right.png",
+    "previews/run_right.gif",
+    "previews/run_right.png",
+    "frames/cat/00.png",
+    "frames/cat/01.png",
+    "frames/cat/02.png",
+    "frames/cat/03.png",
+    "frames/cat/04.png",
+    "frames/cat/05.png",
+    "frames/cat/06.png",
+    "frames/cat/07.png",
+    "frames/cat/08.png",
+    "frames/cat/09.png",
+    "sheets/cat.png",
+    "previews/cat.gif",
+    "previews/cat.png",
+    "test_c_external_atlas.png",
+    "test_c_external_atlas.json",
+    "cocos/test_c_external.png",
+    "cocos/test_c_external.plist",
+    "test_c_external.anim.json",
+    "cocos/test_c_external.anim.json",
+    "godot/README.txt",
+    "export_manifest.json"
+  ],
+  "qa": {
+    "status": "passed",
+    "kind": "deterministic",
+    "checked_at": 1795609597.551,
+    "issues": [],
+    "counts": {
+      "error": 0,
+      "warning": 0,
+      "info": 0
+    },
+    "note": "Deterministic pixel/metadata validation only. Identity, anatomy, style and motion quality need visual review."
+  },
+  "zip": "test_c_external.zip"
+}

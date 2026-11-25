@@ -1,0 +1,17 @@
+{
+  "workspace": "",
+  "host": "127.0.0.1",
+  "port": 8870,
+  "atelier_bin": "",
+  "ffmpeg_bin": "",
+  "default_generation_budget": 0,
+  "log_level": "INFO",
+  "comfyui": {
+    "url": "http://127.0.0.1:8188",
+    "connect_timeout_s": 5,
+    "job_timeout_s": 600,
+    "poll_interval_s": 1,
+    "use_websocket": true,
+    "api_key_env": ""
+  }
+}

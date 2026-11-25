@@ -1,0 +1,1438 @@
+{
+  "schema": "artstudio.export/1",
+  "app_version": "0.1.0",
+  "export_id": "exp-7f06d01607d6",
+  "name": "test_a_procedural",
+  "created_at": 1795609594.336,
+  "project_id": "poc-fantasy-rpg",
+  "character_id": null,
+  "contains_test_fixtures": false,
+  "coordinate_notes": "Pixel coords: origin top-left, y down. pivot_norm uses y-up (Cocos/Unity anchor convention).",
+  "animations": [
+    {
+      "key": "potion",
+      "asset_id": "health-potion-64-20bc1f",
+      "name": "potion",
+      "direction": "none",
+      "art_style": "pixel",
+      "loop": {
+        "enabled": false,
+        "ping_pong": false,
+        "hold_last": false
+      },
+      "canvas": [
+        64,
+        64
+      ],
+      "pivot_px": [
+        32,
+        63
+      ],
+      "duration_ms": 100,
+      "frames": [
+        {
+          "name": "potion_00",
+          "index": 0,
+          "duration_ms": 100,
+          "start_ms": 0,
+          "trim_offset": [
+            14,
+            7
+          ],
+          "trimmed_size": [
+            36,
+            56
+          ],
+          "source_size": [
+            64,
+            64
+          ],
+          "pivot_px": [
+            32,
+            63
+          ],
+          "pivot_norm": [
+            0.5,
+            0.015625
+          ],
+          "pivot_norm_trimmed": [
+            0.5,
+            0.0
+          ],
+          "phase": null,
+          "origin": "procedural",
+          "sheet": {
+            "x": 0,
+            "y": 0,
+            "w": 64,
+            "h": 64
+          },
+          "atlas": {
+            "x": 2,
+            "y": 2,
+            "w": 36,
+            "h": 56,
+            "page": 0
+          }
+        }
+      ],
+      "events": [],
+      "phases": [],
+      "layers": [],
+      "previews": {
+        "gif": "previews/potion.gif",
+        "apng": "previews/potion.png"
+      },
+      "is_test_fixture": false,
+      "provider": "atelier",
+      "character_id": null,
+      "mirror_of": null,
+      "atlas": "test_a_procedural_atlas.png"
+    },
+    {
+      "key": "chest",
+      "asset_id": "treasure-chest-64-0e28c4",
+      "name": "chest",
+      "direction": "none",
+      "art_style": "pixel",
+      "loop": {
+        "enabled": false,
+        "ping_pong": false,
+        "hold_last": false
+      },
+      "canvas": [
+        64,
+        64
+      ],
+      "pivot_px": [
+        32,
+        63
+      ],
+      "duration_ms": 100,
+      "frames": [
+        {
+          "name": "chest_00",
+          "index": 0,
+          "duration_ms": 100,
+          "start_ms": 0,
+          "trim_offset": [
+            6,
+            31
+          ],
+          "trimmed_size": [
+            51,
+            32
+          ],
+          "source_size": [
+            64,
+            64
+          ],
+          "pivot_px": [
+            32,
+            63
+          ],
+          "pivot_norm": [
+            0.5,
+            0.015625
+          ],
+          "pivot_norm_trimmed": [
+            0.509804,
+            0.0
+          ],
+          "phase": null,
+          "origin": "procedural",
+          "sheet": {
+            "x": 0,
+            "y": 0,
+            "w": 64,
+            "h": 64
+          },
+          "atlas": {
+            "x": 96,
+            "y": 109,
+            "w": 51,
+            "h": 32,
+            "page": 0
+          }
+        }
+      ],
+      "events": [],
+      "phases": [],
+      "layers": [],
+      "previews": {
+        "gif": "previews/chest.gif",
+        "apng": "previews/chest.png"
+      },
+      "is_test_fixture": false,
+      "provider": "atelier",
+      "character_id": null,
+      "mirror_of": null,
+      "atlas": "test_a_procedural_atlas.png"
+    },
+    {
+      "key": "chest_open",
+      "asset_id": "chest-opening-8f-24af63",
+      "name": "chest_open",
+      "direction": "none",
+      "art_style": "pixel",
+      "loop": {
+        "enabled": false,
+        "ping_pong": false,
+        "hold_last": false
+      },
+      "canvas": [
+        64,
+        64
+      ],
+      "pivot_px": [
+        32,
+        63
+      ],
+      "duration_ms": 980,
+      "frames": [
+        {
+          "name": "chest_open_00",
+          "index": 0,
+          "duration_ms": 220,
+          "start_ms": 0,
+          "trim_offset": [
+            4,
+            31
+          ],
+          "trimmed_size": [
+            51,
+            32
+          ],
+          "source_size": [
+            64,
+            64
+          ],
+          "pivot_px": [
+            32,
+            63
+          ],
+          "pivot_norm": [
+            0.5,
+            0.015625
+          ],
+          "pivot_norm_trimmed": [
+            0.54902,
+            0.0
+          ],
+          "phase": null,
+          "origin": "procedural",
+          "sheet": {
+            "x": 0,
+            "y": 0,
+            "w": 64,
+            "h": 64
+          },
+          "atlas": {
+            "x": 149,
+            "y": 109,
+            "w": 51,
+            "h": 32,
+            "page": 0
+          }
+        },
+        {
+          "name": "chest_open_01",
+          "index": 1,
+          "duration_ms": 80,
+          "start_ms": 220,
+          "trim_offset": [
+            4,
+            30
+          ],
+          "trimmed_size": [
+            51,
+            33
+          ],
+          "source_size": [
+            64,
+            64
+          ],
+          "pivot_px": [
+            32,
+            63
+          ],
+          "pivot_norm": [
+            0.5,
+            0.015625
+          ],
+          "pivot_norm_trimmed": [
+            0.54902,
+            0.0
+          ],
+          "phase": null,
+          "origin": "procedural",
+          "sheet": {
+            "x": 64,
+            "y": 0,
+            "w": 64,
+            "h": 64
+          },
+          "atlas": {
+            "x": 43,
+            "y": 109,
+            "w": 51,
+            "h": 33,
+            "page": 0
+          }
+        },
+        {
+          "name": "chest_open_02",
+          "index": 2,
+          "duration_ms": 90,
+          "start_ms": 300,
+          "trim_offset": [
+            4,
+            31
+          ],
+          "trimmed_size": [
+            51,
+            32
+          ],
+          "source_size": [
+            64,
+            64
+          ],
+          "pivot_px": [
+            32,
+            63
+          ],
+          "pivot_norm": [
+            0.5,
+            0.015625
+          ],
+          "pivot_norm_trimmed": [
+            0.54902,
+            0.0
+          ],
+          "phase": null,
+          "origin": "procedural",
+          "sheet": {
+            "x": 128,
+            "y": 0,
+            "w": 64,
+            "h": 64
+          },
+          "atlas": {
+            "x": 2,
+            "y": 147,
+            "w": 51,
+            "h": 32,
+            "page": 0
+          }
+        },
+        {
+          "name": "chest_open_03",
+          "index": 3,
+          "duration_ms": 80,
+          "start_ms": 390,
+          "trim_offset": [
+            4,
+            26
+          ],
+          "trimmed_size": [
+            52,
+            37
+          ],
+          "source_size": [
+            64,
+            64
+          ],
+          "pivot_px": [
+            32,
+            63
+          ],
+          "pivot_norm": [
+            0.5,
+            0.015625
+          ],
+          "pivot_norm_trimmed": [
+            0.538462,
+            0.0
+          ],
+          "phase": null,
+          "origin": "procedural",
+          "sheet": {
+            "x": 192,
+            "y": 0,
+            "w": 64,
+            "h": 64
+          },
+          "atlas": {
+            "x": 142,
+            "y": 60,
+            "w": 52,
+            "h": 37,
+            "page": 0
+          }
+        },
+        {
+          "name": "chest_open_04",
+          "index": 4,
+          "duration_ms": 70,
+          "start_ms": 470,
+          "trim_offset": [
+            4,
+            20
+          ],
+          "trimmed_size": [
+            53,
+            43
+          ],
+          "source_size": [
+            64,
+            64
+          ],
+          "pivot_px": [
+            32,
+            63
+          ],
+          "pivot_norm": [
+            0.5,
+            0.015625
+          ],
+          "pivot_norm_trimmed": [
+            0.528302,
+            0.0
+          ],
+          "phase": null,
+          "origin": "procedural",
+          "sheet": {
+            "x": 256,
+            "y": 0,
+            "w": 64,
+            "h": 64
+          },
+          "atlas": {
+            "x": 59,
+            "y": 60,
+            "w": 53,
+            "h": 43,
+            "page": 0
+          }
+        },
+        {
+          "name": "chest_open_05",
+          "index": 5,
+          "duration_ms": 90,
+          "start_ms": 540,
+          "trim_offset": [
+            4,
+            10
+          ],
+          "trimmed_size": [
+            55,
+            53
+          ],
+          "source_size": [
+            64,
+            64
+          ],
+          "pivot_px": [
+            32,
+            63
+          ],
+          "pivot_norm": [
+            0.5,
+            0.015625
+          ],
+          "pivot_norm_trimmed": [
+            0.509091,
+            0.0
+          ],
+          "phase": null,
+          "origin": "procedural",
+          "sheet": {
+            "x": 320,
+            "y": 0,
+            "w": 64,
+            "h": 64
+          },
+          "atlas": {
+            "x": 40,
+            "y": 2,
+            "w": 55,
+            "h": 53,
+            "page": 0
+          }
+        },
+        {
+          "name": "chest_open_06",
+          "index": 6,
+          "duration_ms": 110,
+          "start_ms": 630,
+          "trim_offset": [
+            4,
+            16
+          ],
+          "trimmed_size": [
+            55,
+            47
+          ],
+          "source_size": [
+            64,
+            64
+          ],
+          "pivot_px": [
+            32,
+            63
+          ],
+          "pivot_norm": [
+            0.5,
+            0.015625
+          ],
+          "pivot_norm_trimmed": [
+            0.509091,
+            0.0
+          ],
+          "phase": null,
+          "origin": "procedural",
+          "sheet": {
+            "x": 384,
+            "y": 0,
+            "w": 64,
+            "h": 64
+          },
+          "atlas": {
+            "x": 2,
+            "y": 60,
+            "w": 55,
+            "h": 47,
+            "page": 0
+          }
+        },
+        {
+          "name": "chest_open_07",
+          "index": 7,
+          "duration_ms": 240,
+          "start_ms": 740,
+          "trim_offset": [
+            4,
+            10
+          ],
+          "trimmed_size": [
+            55,
+            53
+          ],
+          "source_size": [
+            64,
+            64
+          ],
+          "pivot_px": [
+            32,
+            63
+          ],
+          "pivot_norm": [
+            0.5,
+            0.015625
+          ],
+          "pivot_norm_trimmed": [
+            0.509091,
+            0.0
+          ],
+          "phase": null,
+          "origin": "procedural",
+          "sheet": {
+            "x": 448,
+            "y": 0,
+            "w": 64,
+            "h": 64
+          },
+          "atlas": {
+            "x": 97,
+            "y": 2,
+            "w": 55,
+            "h": 53,
+            "page": 0
+          }
+        }
+      ],
+      "events": [],
+      "phases": [],
+      "layers": [],
+      "previews": {
+        "gif": "previews/chest_open.gif",
+        "apng": "previews/chest_open.png"
+      },
+      "is_test_fixture": false,
+      "provider": "atelier",
+      "character_id": null,
+      "mirror_of": null,
+      "atlas": "test_a_procedural_atlas.png"
+    },
+    {
+      "key": "fireball",
+      "asset_id": "fireball-8f-588f4d",
+      "name": "fireball",
+      "direction": "none",
+      "art_style": "pixel",
+      "loop": {
+        "enabled": true,
+        "ping_pong": false,
+        "hold_last": false
+      },
+      "canvas": [
+        64,
+        64
+      ],
+      "pivot_px": [
+        32,
+        63
+      ],
+      "duration_ms": 660,
+      "frames": [
+        {
+          "name": "fireball_00",
+          "index": 0,
+          "duration_ms": 100,
+          "start_ms": 0,
+          "trim_offset": [
+            6,
+            38
+          ],
+          "trimmed_size": [
+            52,
+            25
+          ],
+          "source_size": [
+            64,
+            64
+          ],
+          "pivot_px": [
+            32,
+            63
+          ],
+          "pivot_norm": [
+            0.5,
+            0.015625
+          ],
+          "pivot_norm_trimmed": [
+            0.5,
+            0.0
+          ],
+          "phase": null,
+          "origin": "procedural",
+          "sheet": {
+            "x": 0,
+            "y": 0,
+            "w": 64,
+            "h": 64
+          },
+          "atlas": {
+            "x": 55,
+            "y": 147,
+            "w": 52,
+            "h": 25,
+            "page": 0
+          }
+        },
+        {
+          "name": "fireball_01",
+          "index": 1,
+          "duration_ms": 80,
+          "start_ms": 100,
+          "trim_offset": [
+            10,
+            39
+          ],
+          "trimmed_size": [
+            49,
+            24
+          ],
+          "source_size": [
+            64,
+            64
+          ],
+          "pivot_px": [
+            32,
+            63
+          ],
+          "pivot_norm": [
+            0.5,
+            0.015625
+          ],
+          "pivot_norm_trimmed": [
+            0.44898,
+            0.0
+          ],
+          "phase": null,
+          "origin": "procedural",
+          "sheet": {
+            "x": 64,
+            "y": 0,
+            "w": 64,
+            "h": 64
+          },
+          "atlas": {
+            "x": 55,
+            "y": 181,
+            "w": 49,
+            "h": 24,
+            "page": 0
+          }
+        },
+        {
+          "name": "fireball_02",
+          "index": 2,
+          "duration_ms": 80,
+          "start_ms": 180,
+          "trim_offset": [
+            8,
+            40
+          ],
+          "trimmed_size": [
+            50,
+            23
+          ],
+          "source_size": [
+            64,
+            64
+          ],
+          "pivot_px": [
+            32,
+            63
+          ],
+          "pivot_norm": [
+            0.5,
+            0.015625
+          ],
+          "pivot_norm_trimmed": [
+            0.48,
+            0.0
+          ],
+          "phase": null,
+          "origin": "procedural",
+          "sheet": {
+            "x": 128,
+            "y": 0,
+            "w": 64,
+            "h": 64
+          },
+          "atlas": {
+            "x": 2,
+            "y": 207,
+            "w": 50,
+            "h": 23,
+            "page": 0
+          }
+        },
+        {
+          "name": "fireball_03",
+          "index": 3,
+          "duration_ms": 80,
+          "start_ms": 260,
+          "trim_offset": [
+            6,
+            39
+          ],
+          "trimmed_size": [
+            51,
+            23
+          ],
+          "source_size": [
+            64,
+            64
+          ],
+          "pivot_px": [
+            32,
+            63
+          ],
+          "pivot_norm": [
+            0.5,
+            0.015625
+          ],
+          "pivot_norm_trimmed": [
+            0.509804,
+            -0.043478
+          ],
+          "phase": null,
+          "origin": "procedural",
+          "sheet": {
+            "x": 192,
+            "y": 0,
+            "w": 64,
+            "h": 64
+          },
+          "atlas": {
+            "x": 106,
+            "y": 181,
+            "w": 51,
+            "h": 23,
+            "page": 0
+          }
+        },
+        {
+          "name": "fireball_04",
+          "index": 4,
+          "duration_ms": 80,
+          "start_ms": 340,
+          "trim_offset": [
+            8,
+            38
+          ],
+          "trimmed_size": [
+            51,
+            24
+          ],
+          "source_size": [
+            64,
+            64
+          ],
+          "pivot_px": [
+            32,
+            63
+          ],
+          "pivot_norm": [
+            0.5,
+            0.015625
+          ],
+          "pivot_norm_trimmed": [
+            0.470588,
+            -0.041667
+          ],
+          "phase": null,
+          "origin": "procedural",
+          "sheet": {
+            "x": 256,
+            "y": 0,
+            "w": 64,
+            "h": 64
+          },
+          "atlas": {
+            "x": 163,
+            "y": 147,
+            "w": 51,
+            "h": 24,
+            "page": 0
+          }
+        },
+        {
+          "name": "fireball_05",
+          "index": 5,
+          "duration_ms": 80,
+          "start_ms": 420,
+          "trim_offset": [
+            6,
+            38
+          ],
+          "trimmed_size": [
+            51,
+            23
+          ],
+          "source_size": [
+            64,
+            64
+          ],
+          "pivot_px": [
+            32,
+            63
+          ],
+          "pivot_norm": [
+            0.5,
+            0.015625
+          ],
+          "pivot_norm_trimmed": [
+            0.509804,
+            -0.086957
+          ],
+          "phase": null,
+          "origin": "procedural",
+          "sheet": {
+            "x": 320,
+            "y": 0,
+            "w": 64,
+            "h": 64
+          },
+          "atlas": {
+            "x": 159,
+            "y": 181,
+            "w": 51,
+            "h": 23,
+            "page": 0
+          }
+        },
+        {
+          "name": "fireball_06",
+          "index": 6,
+          "duration_ms": 80,
+          "start_ms": 500,
+          "trim_offset": [
+            6,
+            38
+          ],
+          "trimmed_size": [
+            51,
+            24
+          ],
+          "source_size": [
+            64,
+            64
+          ],
+          "pivot_px": [
+            32,
+            63
+          ],
+          "pivot_norm": [
+            0.5,
+            0.015625
+          ],
+          "pivot_norm_trimmed": [
+            0.509804,
+            -0.041667
+          ],
+          "phase": null,
+          "origin": "procedural",
+          "sheet": {
+            "x": 384,
+            "y": 0,
+            "w": 64,
+            "h": 64
+          },
+          "atlas": {
+            "x": 2,
+            "y": 181,
+            "w": 51,
+            "h": 24,
+            "page": 0
+          }
+        },
+        {
+          "name": "fireball_07",
+          "index": 7,
+          "duration_ms": 80,
+          "start_ms": 580,
+          "trim_offset": [
+            6,
+            38
+          ],
+          "trimmed_size": [
+            52,
+            25
+          ],
+          "source_size": [
+            64,
+            64
+          ],
+          "pivot_px": [
+            32,
+            63
+          ],
+          "pivot_norm": [
+            0.5,
+            0.015625
+          ],
+          "pivot_norm_trimmed": [
+            0.5,
+            0.0
+          ],
+          "phase": null,
+          "origin": "procedural",
+          "sheet": {
+            "x": 448,
+            "y": 0,
+            "w": 64,
+            "h": 64
+          },
+          "atlas": {
+            "x": 109,
+            "y": 147,
+            "w": 52,
+            "h": 25,
+            "page": 0
+          }
+        }
+      ],
+      "events": [],
+      "phases": [],
+      "layers": [],
+      "previews": {
+        "gif": "previews/fireball.gif",
+        "apng": "previews/fireball.png"
+      },
+      "is_test_fixture": false,
+      "provider": "atelier",
+      "character_id": null,
+      "mirror_of": null,
+      "atlas": "test_a_procedural_atlas.png"
+    },
+    {
+      "key": "sword_slash",
+      "asset_id": "sword-slash-8f-49d103",
+      "name": "sword_slash",
+      "direction": "none",
+      "art_style": "pixel",
+      "loop": {
+        "enabled": false,
+        "ping_pong": false,
+        "hold_last": false
+      },
+      "canvas": [
+        64,
+        64
+      ],
+      "pivot_px": [
+        32,
+        63
+      ],
+      "duration_ms": 480,
+      "frames": [
+        {
+          "name": "sword_slash_00",
+          "index": 0,
+          "duration_ms": 90,
+          "start_ms": 0,
+          "trim_offset": [
+            5,
+            12
+          ],
+          "trimmed_size": [
+            9,
+            9
+          ],
+          "source_size": [
+            64,
+            64
+          ],
+          "pivot_px": [
+            32,
+            63
+          ],
+          "pivot_norm": [
+            0.5,
+            0.015625
+          ],
+          "pivot_norm_trimmed": [
+            3.0,
+            -4.666667
+          ],
+          "phase": null,
+          "origin": "procedural",
+          "sheet": {
+            "x": 0,
+            "y": 0,
+            "w": 64,
+            "h": 64
+          },
+          "atlas": {
+            "x": 114,
+            "y": 207,
+            "w": 9,
+            "h": 9,
+            "page": 0
+          }
+        },
+        {
+          "name": "sword_slash_01",
+          "index": 1,
+          "duration_ms": 40,
+          "start_ms": 90,
+          "trim_offset": [
+            7,
+            11
+          ],
+          "trimmed_size": [
+            17,
+            9
+          ],
+          "source_size": [
+            64,
+            64
+          ],
+          "pivot_px": [
+            32,
+            63
+          ],
+          "pivot_norm": [
+            0.5,
+            0.015625
+          ],
+          "pivot_norm_trimmed": [
+            1.470588,
+            -4.777778
+          ],
+          "phase": null,
+          "origin": "procedural",
+          "sheet": {
+            "x": 64,
+            "y": 0,
+            "w": 64,
+            "h": 64
+          },
+          "atlas": {
+            "x": 95,
+            "y": 207,
+            "w": 17,
+            "h": 9,
+            "page": 0
+          }
+        },
+        {
+          "name": "sword_slash_02",
+          "index": 2,
+          "duration_ms": 40,
+          "start_ms": 130,
+          "trim_offset": [
+            7,
+            11
+          ],
+          "trimmed_size": [
+            39,
+            15
+          ],
+          "source_size": [
+            64,
+            64
+          ],
+          "pivot_px": [
+            32,
+            63
+          ],
+          "pivot_norm": [
+            0.5,
+            0.015625
+          ],
+          "pivot_norm_trimmed": [
+            0.641026,
+            -2.466667
+          ],
+          "phase": null,
+          "origin": "procedural",
+          "sheet": {
+            "x": 128,
+            "y": 0,
+            "w": 64,
+            "h": 64
+          },
+          "atlas": {
+            "x": 54,
+            "y": 207,
+            "w": 39,
+            "h": 15,
+            "page": 0
+          }
+        },
+        {
+          "name": "sword_slash_03",
+          "index": 3,
+          "duration_ms": 40,
+          "start_ms": 170,
+          "trim_offset": [
+            11,
+            11
+          ],
+          "trimmed_size": [
+            39,
+            36
+          ],
+          "source_size": [
+            64,
+            64
+          ],
+          "pivot_px": [
+            32,
+            63
+          ],
+          "pivot_norm": [
+            0.5,
+            0.015625
+          ],
+          "pivot_norm_trimmed": [
+            0.538462,
+            -0.444444
+          ],
+          "phase": null,
+          "origin": "procedural",
+          "sheet": {
+            "x": 192,
+            "y": 0,
+            "w": 64,
+            "h": 64
+          },
+          "atlas": {
+            "x": 2,
+            "y": 109,
+            "w": 39,
+            "h": 36,
+            "page": 0
+          }
+        },
+        {
+          "name": "sword_slash_04",
+          "index": 4,
+          "duration_ms": 60,
+          "start_ms": 210,
+          "trim_offset": [
+            22,
+            11
+          ],
+          "trimmed_size": [
+            34,
+            52
+          ],
+          "source_size": [
+            64,
+            64
+          ],
+          "pivot_px": [
+            32,
+            63
+          ],
+          "pivot_norm": [
+            0.5,
+            0.015625
+          ],
+          "pivot_norm_trimmed": [
+            0.294118,
+            0.0
+          ],
+          "phase": null,
+          "origin": "procedural",
+          "sheet": {
+            "x": 256,
+            "y": 0,
+            "w": 64,
+            "h": 64
+          },
+          "atlas": {
+            "x": 154,
+            "y": 2,
+            "w": 34,
+            "h": 52,
+            "page": 0
+          }
+        },
+        {
+          "name": "sword_slash_05",
+          "index": 5,
+          "duration_ms": 60,
+          "start_ms": 270,
+          "trim_offset": [
+            33,
+            20
+          ],
+          "trimmed_size": [
+            26,
+            39
+          ],
+          "source_size": [
+            64,
+            64
+          ],
+          "pivot_px": [
+            32,
+            63
+          ],
+          "pivot_norm": [
+            0.5,
+            0.015625
+          ],
+          "pivot_norm_trimmed": [
+            -0.038462,
+            -0.102564
+          ],
+          "phase": null,
+          "origin": "procedural",
+          "sheet": {
+            "x": 320,
+            "y": 0,
+            "w": 64,
+            "h": 64
+          },
+          "atlas": {
+            "x": 114,
+            "y": 60,
+            "w": 26,
+            "h": 39,
+            "page": 0
+          }
+        },
+        {
+          "name": "sword_slash_06",
+          "index": 6,
+          "duration_ms": 70,
+          "start_ms": 330,
+          "trim_offset": [
+            33,
+            22
+          ],
+          "trimmed_size": [
+            25,
+            37
+          ],
+          "source_size": [
+            64,
+            64
+          ],
+          "pivot_px": [
+            32,
+            63
+          ],
+          "pivot_norm": [
+            0.5,
+            0.015625
+          ],
+          "pivot_norm_trimmed": [
+            -0.04,
+            -0.108108
+          ],
+          "phase": null,
+          "origin": "procedural",
+          "sheet": {
+            "x": 384,
+            "y": 0,
+            "w": 64,
+            "h": 64
+          },
+          "atlas": {
+            "x": 196,
+            "y": 60,
+            "w": 25,
+            "h": 37,
+            "page": 0
+          }
+        },
+        {
+          "name": "sword_slash_07",
+          "index": 7,
+          "duration_ms": 80,
+          "start_ms": 400,
+          "trim_offset": [
+            34,
+            54
+          ],
+          "trimmed_size": [
+            23,
+            4
+          ],
+          "source_size": [
+            64,
+            64
+          ],
+          "pivot_px": [
+            32,
+            63
+          ],
+          "pivot_norm": [
+            0.5,
+            0.015625
+          ],
+          "pivot_norm_trimmed": [
+            -0.086957,
+            -1.25
+          ],
+          "phase": null,
+          "origin": "procedural",
+          "sheet": {
+            "x": 448,
+            "y": 0,
+            "w": 64,
+            "h": 64
+          },
+          "atlas": {
+            "x": 125,
+            "y": 207,
+            "w": 23,
+            "h": 4,
+            "page": 0
+          }
+        }
+      ],
+      "events": [],
+      "phases": [],
+      "layers": [],
+      "previews": {
+        "gif": "previews/sword_slash.gif",
+        "apng": "previews/sword_slash.png"
+      },
+      "is_test_fixture": false,
+      "provider": "atelier",
+      "character_id": null,
+      "mirror_of": null,
+      "atlas": "test_a_procedural_atlas.png"
+    }
+  ],
+  "direction_map": {
+    "potion": {
+      "none": {
+        "key": "potion",
+        "flip_x": false
+      }
+    },
+    "chest": {
+      "none": {
+        "key": "chest",
+        "flip_x": false
+      }
+    },
+    "chest_open": {
+      "none": {
+        "key": "chest_open",
+        "flip_x": false
+      }
+    },
+    "fireball": {
+      "none": {
+        "key": "fireball",
+        "flip_x": false
+      }
+    },
+    "sword_slash": {
+      "none": {
+        "key": "sword_slash",
+        "flip_x": false
+      }
+    }
+  },
+  "files": [
+    "frames/potion/00.png",
+    "sheets/potion.png",
+    "previews/potion.gif",
+    "previews/potion.png",
+    "frames/chest/00.png",
+    "sheets/chest.png",
+    "previews/chest.gif",
+    "previews/chest.png",
+    "frames/chest_open/00.png",
+    "frames/chest_open/01.png",
+    "frames/chest_open/02.png",
+    "frames/chest_open/03.png",
+    "frames/chest_open/04.png",
+    "frames/chest_open/05.png",
+    "frames/chest_open/06.png",
+    "frames/chest_open/07.png",
+    "sheets/chest_open.png",
+    "previews/chest_open.gif",
+    "previews/chest_open.png",
+    "frames/fireball/00.png",
+    "frames/fireball/01.png",
+    "frames/fireball/02.png",
+    "frames/fireball/03.png",
+    "frames/fireball/04.png",
+    "frames/fireball/05.png",
+    "frames/fireball/06.png",
+    "frames/fireball/07.png",
+    "sheets/fireball.png",
+    "previews/fireball.gif",
+    "previews/fireball.png",
+    "frames/sword_slash/00.png",
+    "frames/sword_slash/01.png",
+    "frames/sword_slash/02.png",
+    "frames/sword_slash/03.png",
+    "frames/sword_slash/04.png",
+    "frames/sword_slash/05.png",
+    "frames/sword_slash/06.png",
+    "frames/sword_slash/07.png",
+    "sheets/sword_slash.png",
+    "previews/sword_slash.gif",
+    "previews/sword_slash.png",
+    "test_a_procedural_atlas.png",
+    "test_a_procedural_atlas.json",
+    "cocos/test_a_procedural.png",
+    "cocos/test_a_procedural.plist",
+    "test_a_procedural.anim.json"
+  ]
+}

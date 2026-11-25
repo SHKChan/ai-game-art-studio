@@ -1,0 +1,118 @@
+{
+  "master": {
+    "south": {
+      "positive": "Character: Chibi Adventurer. Chibi fantasy adventurer, 2.5-head proportions. Proportions: head_to_body 1:2.5, height_px 48 Clothing: red hood, red cape, brown adventurer tunic, brown boots Accessories: leather belt Weapon (keep exact geometry and grip): type: short sword, hand: right, blade: straight steel, 0.6x body height Must keep: blonde hair visible under the hood; same sword in every direction Character master reference, neutral standing pose, full body, facing the camera (front / south). Style: chibi pixel art, 1px dark outline; crisp pixel art, hard 1px outline, limited palette, no anti-aliasing, no blur. Transparent background, centred, full body visible with margin.",
+      "negative": "background, scenery, floor, ground shadow, text, watermark, grid lines, frame borders, cropped body, cut-off weapon, extra limbs, extra fingers, duplicate character, different outfit, different hairstyle, different weapon, blurry, jpeg artifacts",
+      "direction": "south",
+      "mode": "pixel"
+    },
+    "east": {
+      "positive": "Character: Chibi Adventurer. Chibi fantasy adventurer, 2.5-head proportions. Proportions: head_to_body 1:2.5, height_px 48 Clothing: red hood, red cape, brown adventurer tunic, brown boots Accessories: leather belt Weapon (keep exact geometry and grip): type: short sword, hand: right, blade: straight steel, 0.6x body height Must keep: blonde hair visible under the hood; same sword in every direction Character master reference, neutral standing pose, full body, facing screen-right (east, side profile). Style: chibi pixel art, 1px dark outline; crisp pixel art, hard 1px outline, limited palette, no anti-aliasing, no blur. Transparent background, centred, full body visible with margin.",
+      "negative": "background, scenery, floor, ground shadow, text, watermark, grid lines, frame borders, cropped body, cut-off weapon, extra limbs, extra fingers, duplicate character, different outfit, different hairstyle, different weapon, blurry, jpeg artifacts",
+      "direction": "east",
+      "mode": "pixel"
+    },
+    "north": {
+      "positive": "Character: Chibi Adventurer. Chibi fantasy adventurer, 2.5-head proportions. Proportions: head_to_body 1:2.5, height_px 48 Clothing: red hood, red cape, brown adventurer tunic, brown boots Accessories: leather belt Weapon (keep exact geometry and grip): type: short sword, hand: right, blade: straight steel, 0.6x body height Must keep: blonde hair visible under the hood; same sword in every direction Character master reference, neutral standing pose, full body, facing away from the camera (back / north). Style: chibi pixel art, 1px dark outline; crisp pixel art, hard 1px outline, limited palette, no anti-aliasing, no blur. Transparent background, centred, full body visible with margin.",
+      "negative": "background, scenery, floor, ground shadow, text, watermark, grid lines, frame borders, cropped body, cut-off weapon, extra limbs, extra fingers, duplicate character, different outfit, different hairstyle, different weapon, blurry, jpeg artifacts",
+      "direction": "north",
+      "mode": "pixel"
+    },
+    "west": {
+      "positive": "Character: Chibi Adventurer. Chibi fantasy adventurer, 2.5-head proportions. Proportions: head_to_body 1:2.5, height_px 48 Clothing: red hood, red cape, brown adventurer tunic, brown boots Accessories: leather belt Weapon (keep exact geometry and grip): type: short sword, hand: right, blade: straight steel, 0.6x body height Must keep: blonde hair visible under the hood; same sword in every direction Character master reference, neutral standing pose, full body, facing screen-left (west, side profile, drawn independently). Style: chibi pixel art, 1px dark outline; crisp pixel art, hard 1px outline, limited palette, no anti-aliasing, no blur. Transparent background, centred, full body visible with margin.",
+      "negative": "background, scenery, floor, ground shadow, text, watermark, grid lines, frame borders, cropped body, cut-off weapon, extra limbs, extra fingers, duplicate character, different outfit, different hairstyle, different weapon, blurry, jpeg artifacts",
+      "direction": "west",
+      "mode": "pixel"
+    }
+  },
+  "idle": {
+    "south": {
+      "positive": "Character: Chibi Adventurer. Chibi fantasy adventurer, 2.5-head proportions. Proportions: head_to_body 1:2.5, height_px 48 Clothing: red hood, red cape, brown adventurer tunic, brown boots Accessories: leather belt Weapon (keep exact geometry and grip): type: short sword, hand: right, blade: straight steel, 0.6x body height Must keep: blonde hair visible under the hood; same sword in every direction Action: idle. three-quarter RPG view, facing the camera (front / south). Style: chibi pixel art, 1px dark outline; crisp pixel art, hard 1px outline, limited palette, no anti-aliasing, no blur. One transparent PNG sprite sheet, 6 cells in a single row, equal cell size, left to right in this order: 1: neutral stance; 2: inhale, chest rises 1px; 3: peak; 4: neutral; 5: exhale, slight settle; 6: low point. Exactly one complete character per cell, same scale and ground line in every cell, generous empty margin around body, weapon and effects. Identical face, hair, outfit, proportions and weapon to the reference image.",
+      "negative": "background, scenery, floor, ground shadow, text, watermark, grid lines, frame borders, cropped body, cut-off weapon, extra limbs, extra fingers, duplicate character, different outfit, different hairstyle, different weapon, blurry, jpeg artifacts, shield, helmet, different hair colour",
+      "template": "idle",
+      "direction": "south",
+      "mode": "pixel"
+    },
+    "east": {
+      "positive": "Character: Chibi Adventurer. Chibi fantasy adventurer, 2.5-head proportions. Proportions: head_to_body 1:2.5, height_px 48 Clothing: red hood, red cape, brown adventurer tunic, brown boots Accessories: leather belt Weapon (keep exact geometry and grip): type: short sword, hand: right, blade: straight steel, 0.6x body height Must keep: blonde hair visible under the hood; same sword in every direction Action: idle. three-quarter RPG view, facing screen-right (east, side profile). Style: chibi pixel art, 1px dark outline; crisp pixel art, hard 1px outline, limited palette, no anti-aliasing, no blur. One transparent PNG sprite sheet, 6 cells in a single row, equal cell size, left to right in this order: 1: neutral stance; 2: inhale, chest rises 1px; 3: peak; 4: neutral; 5: exhale, slight settle; 6: low point. Exactly one complete character per cell, same scale and ground line in every cell, generous empty margin around body, weapon and effects. Identical face, hair, outfit, proportions and weapon to the reference image.",
+      "negative": "background, scenery, floor, ground shadow, text, watermark, grid lines, frame borders, cropped body, cut-off weapon, extra limbs, extra fingers, duplicate character, different outfit, different hairstyle, different weapon, blurry, jpeg artifacts, shield, helmet, different hair colour",
+      "template": "idle",
+      "direction": "east",
+      "mode": "pixel"
+    },
+    "north": {
+      "positive": "Character: Chibi Adventurer. Chibi fantasy adventurer, 2.5-head proportions. Proportions: head_to_body 1:2.5, height_px 48 Clothing: red hood, red cape, brown adventurer tunic, brown boots Accessories: leather belt Weapon (keep exact geometry and grip): type: short sword, hand: right, blade: straight steel, 0.6x body height Must keep: blonde hair visible under the hood; same sword in every direction Action: idle. three-quarter RPG view, facing away from the camera (back / north). Style: chibi pixel art, 1px dark outline; crisp pixel art, hard 1px outline, limited palette, no anti-aliasing, no blur. One transparent PNG sprite sheet, 6 cells in a single row, equal cell size, left to right in this order: 1: neutral stance; 2: inhale, chest rises 1px; 3: peak; 4: neutral; 5: exhale, slight settle; 6: low point. Exactly one complete character per cell, same scale and ground line in every cell, generous empty margin around body, weapon and effects. Identical face, hair, outfit, proportions and weapon to the reference image.",
+      "negative": "background, scenery, floor, ground shadow, text, watermark, grid lines, frame borders, cropped body, cut-off weapon, extra limbs, extra fingers, duplicate character, different outfit, different hairstyle, different weapon, blurry, jpeg artifacts, shield, helmet, different hair colour",
+      "template": "idle",
+      "direction": "north",
+      "mode": "pixel"
+    },
+    "west": {
+      "positive": "Character: Chibi Adventurer. Chibi fantasy adventurer, 2.5-head proportions. Proportions: head_to_body 1:2.5, height_px 48 Clothing: red hood, red cape, brown adventurer tunic, brown boots Accessories: leather belt Weapon (keep exact geometry and grip): type: short sword, hand: right, blade: straight steel, 0.6x body height Must keep: blonde hair visible under the hood; same sword in every direction Action: idle. three-quarter RPG view, facing screen-left (west, side profile, drawn independently). Style: chibi pixel art, 1px dark outline; crisp pixel art, hard 1px outline, limited palette, no anti-aliasing, no blur. One transparent PNG sprite sheet, 6 cells in a single row, equal cell size, left to right in this order: 1: neutral stance; 2: inhale, chest rises 1px; 3: peak; 4: neutral; 5: exhale, slight settle; 6: low point. Exactly one complete character per cell, same scale and ground line in every cell, generous empty margin around body, weapon and effects. Identical face, hair, outfit, proportions and weapon to the reference image.",
+      "negative": "background, scenery, floor, ground shadow, text, watermark, grid lines, frame borders, cropped body, cut-off weapon, extra limbs, extra fingers, duplicate character, different outfit, different hairstyle, different weapon, blurry, jpeg artifacts, shield, helmet, different hair colour",
+      "template": "idle",
+      "direction": "west",
+      "mode": "pixel"
+    }
+  },
+  "walk": {
+    "south": {
+      "positive": "Character: Chibi Adventurer. Chibi fantasy adventurer, 2.5-head proportions. Proportions: head_to_body 1:2.5, height_px 48 Clothing: red hood, red cape, brown adventurer tunic, brown boots Accessories: leather belt Weapon (keep exact geometry and grip): type: short sword, hand: right, blade: straight steel, 0.6x body height Must keep: blonde hair visible under the hood; same sword in every direction Action: walk. three-quarter RPG view, facing the camera (front / south). Style: chibi pixel art, 1px dark outline; crisp pixel art, hard 1px outline, limited palette, no anti-aliasing, no blur. One transparent PNG sprite sheet, 8 cells in a single row, equal cell size, left to right in this order: 1: contact (right foot forward); 2: down; 3: passing; 4: up; 5: contact (left foot forward); 6: down; 7: passing; 8: up. Exactly one complete character per cell, same scale and ground line in every cell, generous empty margin around body, weapon and effects. Identical face, hair, outfit, proportions and weapon to the reference image.",
+      "negative": "background, scenery, floor, ground shadow, text, watermark, grid lines, frame borders, cropped body, cut-off weapon, extra limbs, extra fingers, duplicate character, different outfit, different hairstyle, different weapon, blurry, jpeg artifacts, shield, helmet, different hair colour",
+      "template": "walk",
+      "direction": "south",
+      "mode": "pixel"
+    },
+    "east": {
+      "positive": "Character: Chibi Adventurer. Chibi fantasy adventurer, 2.5-head proportions. Proportions: head_to_body 1:2.5, height_px 48 Clothing: red hood, red cape, brown adventurer tunic, brown boots Accessories: leather belt Weapon (keep exact geometry and grip): type: short sword, hand: right, blade: straight steel, 0.6x body height Must keep: blonde hair visible under the hood; same sword in every direction Action: walk. three-quarter RPG view, facing screen-right (east, side profile). Style: chibi pixel art, 1px dark outline; crisp pixel art, hard 1px outline, limited palette, no anti-aliasing, no blur. One transparent PNG sprite sheet, 8 cells in a single row, equal cell size, left to right in this order: 1: contact (right foot forward); 2: down; 3: passing; 4: up; 5: contact (left foot forward); 6: down; 7: passing; 8: up. Exactly one complete character per cell, same scale and ground line in every cell, generous empty margin around body, weapon and effects. Identical face, hair, outfit, proportions and weapon to the reference image.",
+      "negative": "background, scenery, floor, ground shadow, text, watermark, grid lines, frame borders, cropped body, cut-off weapon, extra limbs, extra fingers, duplicate character, different outfit, different hairstyle, different weapon, blurry, jpeg artifacts, shield, helmet, different hair colour",
+      "template": "walk",
+      "direction": "east",
+      "mode": "pixel"
+    },
+    "north": {
+      "positive": "Character: Chibi Adventurer. Chibi fantasy adventurer, 2.5-head proportions. Proportions: head_to_body 1:2.5, height_px 48 Clothing: red hood, red cape, brown adventurer tunic, brown boots Accessories: leather belt Weapon (keep exact geometry and grip): type: short sword, hand: right, blade: straight steel, 0.6x body height Must keep: blonde hair visible under the hood; same sword in every direction Action: walk. three-quarter RPG view, facing away from the camera (back / north). Style: chibi pixel art, 1px dark outline; crisp pixel art, hard 1px outline, limited palette, no anti-aliasing, no blur. One transparent PNG sprite sheet, 8 cells in a single row, equal cell size, left to right in this order: 1: contact (right foot forward); 2: down; 3: passing; 4: up; 5: contact (left foot forward); 6: down; 7: passing; 8: up. Exactly one complete character per cell, same scale and ground line in every cell, generous empty margin around body, weapon and effects. Identical face, hair, outfit, proportions and weapon to the reference image.",
+      "negative": "background, scenery, floor, ground shadow, text, watermark, grid lines, frame borders, cropped body, cut-off weapon, extra limbs, extra fingers, duplicate character, different outfit, different hairstyle, different weapon, blurry, jpeg artifacts, shield, helmet, different hair colour",
+      "template": "walk",
+      "direction": "north",
+      "mode": "pixel"
+    },
+    "west": {
+      "positive": "Character: Chibi Adventurer. Chibi fantasy adventurer, 2.5-head proportions. Proportions: head_to_body 1:2.5, height_px 48 Clothing: red hood, red cape, brown adventurer tunic, brown boots Accessories: leather belt Weapon (keep exact geometry and grip): type: short sword, hand: right, blade: straight steel, 0.6x body height Must keep: blonde hair visible under the hood; same sword in every direction Action: walk. three-quarter RPG view, facing screen-left (west, side profile, drawn independently). Style: chibi pixel art, 1px dark outline; crisp pixel art, hard 1px outline, limited palette, no anti-aliasing, no blur. One transparent PNG sprite sheet, 8 cells in a single row, equal cell size, left to right in this order: 1: contact (right foot forward); 2: down; 3: passing; 4: up; 5: contact (left foot forward); 6: down; 7: passing; 8: up. Exactly one complete character per cell, same scale and ground line in every cell, generous empty margin around body, weapon and effects. Identical face, hair, outfit, proportions and weapon to the reference image.",
+      "negative": "background, scenery, floor, ground shadow, text, watermark, grid lines, frame borders, cropped body, cut-off weapon, extra limbs, extra fingers, duplicate character, different outfit, different hairstyle, different weapon, blurry, jpeg artifacts, shield, helmet, different hair colour",
+      "template": "walk",
+      "direction": "west",
+      "mode": "pixel"
+    }
+  },
+  "attack": {
+    "south": {
+      "positive": "Character: Chibi Adventurer. Chibi fantasy adventurer, 2.5-head proportions. Proportions: head_to_body 1:2.5, height_px 48 Clothing: red hood, red cape, brown adventurer tunic, brown boots Accessories: leather belt Weapon (keep exact geometry and grip): type: short sword, hand: right, blade: straight steel, 0.6x body height Must keep: blonde hair visible under the hood; same sword in every direction Action: attack. three-quarter RPG view, facing the camera (front / south). Style: chibi pixel art, 1px dark outline; crisp pixel art, hard 1px outline, limited palette, no anti-aliasing, no blur. One transparent PNG sprite sheet, 8 cells in a single row, equal cell size, left to right in this order: 1: ready; 2: anticipation wind-up; 3: anticipation peak; 4: action swing; 5: impact; 6: follow-through; 7: recovery; 8: return to ready. Exactly one complete character per cell, same scale and ground line in every cell, generous empty margin around body, weapon and effects. Identical face, hair, outfit, proportions and weapon to the reference image.",
+      "negative": "background, scenery, floor, ground shadow, text, watermark, grid lines, frame borders, cropped body, cut-off weapon, extra limbs, extra fingers, duplicate character, different outfit, different hairstyle, different weapon, blurry, jpeg artifacts, shield, helmet, different hair colour",
+      "template": "attack",
+      "direction": "south",
+      "mode": "pixel"
+    },
+    "east": {
+      "positive": "Character: Chibi Adventurer. Chibi fantasy adventurer, 2.5-head proportions. Proportions: head_to_body 1:2.5, height_px 48 Clothing: red hood, red cape, brown adventurer tunic, brown boots Accessories: leather belt Weapon (keep exact geometry and grip): type: short sword, hand: right, blade: straight steel, 0.6x body height Must keep: blonde hair visible under the hood; same sword in every direction Action: attack. three-quarter RPG view, facing screen-right (east, side profile). Style: chibi pixel art, 1px dark outline; crisp pixel art, hard 1px outline, limited palette, no anti-aliasing, no blur. One transparent PNG sprite sheet, 8 cells in a single row, equal cell size, left to right in this order: 1: ready; 2: anticipation wind-up; 3: anticipation peak; 4: action swing; 5: impact; 6: follow-through; 7: recovery; 8: return to ready. Exactly one complete character per cell, same scale and ground line in every cell, generous empty margin around body, weapon and effects. Identical face, hair, outfit, proportions and weapon to the reference image.",
+      "negative": "background, scenery, floor, ground shadow, text, watermark, grid lines, frame borders, cropped body, cut-off weapon, extra limbs, extra fingers, duplicate character, different outfit, different hairstyle, different weapon, blurry, jpeg artifacts, shield, helmet, different hair colour",
+      "template": "attack",
+      "direction": "east",
+      "mode": "pixel"
+    },
+    "north": {
+      "positive": "Character: Chibi Adventurer. Chibi fantasy adventurer, 2.5-head proportions. Proportions: head_to_body 1:2.5, height_px 48 Clothing: red hood, red cape, brown adventurer tunic, brown boots Accessories: leather belt Weapon (keep exact geometry and grip): type: short sword, hand: right, blade: straight steel, 0.6x body height Must keep: blonde hair visible under the hood; same sword in every direction Action: attack. three-quarter RPG view, facing away from the camera (back / north). Style: chibi pixel art, 1px dark outline; crisp pixel art, hard 1px outline, limited palette, no anti-aliasing, no blur. One transparent PNG sprite sheet, 8 cells in a single row, equal cell size, left to right in this order: 1: ready; 2: anticipation wind-up; 3: anticipation peak; 4: action swing; 5: impact; 6: follow-through; 7: recovery; 8: return to ready. Exactly one complete character per cell, same scale and ground line in every cell, generous empty margin around body, weapon and effects. Identical face, hair, outfit, proportions and weapon to the reference image.",
+      "negative": "background, scenery, floor, ground shadow, text, watermark, grid lines, frame borders, cropped body, cut-off weapon, extra limbs, extra fingers, duplicate character, different outfit, different hairstyle, different weapon, blurry, jpeg artifacts, shield, helmet, different hair colour",
+      "template": "attack",
+      "direction": "north",
+      "mode": "pixel"
+    },
+    "west": {
+      "positive": "Character: Chibi Adventurer. Chibi fantasy adventurer, 2.5-head proportions. Proportions: head_to_body 1:2.5, height_px 48 Clothing: red hood, red cape, brown adventurer tunic, brown boots Accessories: leather belt Weapon (keep exact geometry and grip): type: short sword, hand: right, blade: straight steel, 0.6x body height Must keep: blonde hair visible under the hood; same sword in every direction Action: attack. three-quarter RPG view, facing screen-left (west, side profile, drawn independently). Style: chibi pixel art, 1px dark outline; crisp pixel art, hard 1px outline, limited palette, no anti-aliasing, no blur. One transparent PNG sprite sheet, 8 cells in a single row, equal cell size, left to right in this order: 1: ready; 2: anticipation wind-up; 3: anticipation peak; 4: action swing; 5: impact; 6: follow-through; 7: recovery; 8: return to ready. Exactly one complete character per cell, same scale and ground line in every cell, generous empty margin around body, weapon and effects. Identical face, hair, outfit, proportions and weapon to the reference image.",
+      "negative": "background, scenery, floor, ground shadow, text, watermark, grid lines, frame borders, cropped body, cut-off weapon, extra limbs, extra fingers, duplicate character, different outfit, different hairstyle, different weapon, blurry, jpeg artifacts, shield, helmet, different hair colour",
+      "template": "attack",
+      "direction": "west",
+      "mode": "pixel"
+    }
+  }
+}

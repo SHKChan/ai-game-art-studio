@@ -1,0 +1,179 @@
+{
+  "schema": 1,
+  "name": "sword-slash-azure",
+  "w": 64,
+  "h": 64,
+  "palette": [
+    [
+      12,
+      22,
+      54,
+      255
+    ],
+    [
+      29,
+      63,
+      143,
+      255
+    ],
+    [
+      50,
+      121,
+      224,
+      255
+    ],
+    [
+      120,
+      196,
+      255,
+      255
+    ],
+    [
+      198,
+      240,
+      255,
+      255
+    ],
+    [
+      255,
+      255,
+      255,
+      255
+    ]
+  ],
+  "layers": [
+    {
+      "name": "trail",
+      "opacity": 255,
+      "visible": true,
+      "blend": "normal"
+    },
+    {
+      "name": "sparks",
+      "opacity": 255,
+      "visible": true,
+      "blend": "normal"
+    }
+  ],
+  "frames": [
+    {
+      "duration_ms": 90
+    },
+    {
+      "duration_ms": 40
+    },
+    {
+      "duration_ms": 40
+    },
+    {
+      "duration_ms": 40
+    },
+    {
+      "duration_ms": 60
+    },
+    {
+      "duration_ms": 60
+    },
+    {
+      "duration_ms": 70
+    },
+    {
+      "duration_ms": 80
+    }
+  ],
+  "tags": [
+    {
+      "name": "slash",
+      "from": 0,
+      "to": 7,
+      "direction": "forward"
+    }
+  ],
+  "cels": [
+    {
+      "layer": 0,
+      "frame": 1,
+      "x": 0,
+      "y": 0,
+      "file": "cels/L0_F1.png"
+    },
+    {
+      "layer": 0,
+      "frame": 2,
+      "x": 0,
+      "y": 0,
+      "file": "cels/L0_F2.png"
+    },
+    {
+      "layer": 0,
+      "frame": 3,
+      "x": 0,
+      "y": 0,
+      "file": "cels/L0_F3.png"
+    },
+    {
+      "layer": 0,
+      "frame": 4,
+      "x": 0,
+      "y": 0,
+      "file": "cels/L0_F4.png"
+    },
+    {
+      "layer": 0,
+      "frame": 5,
+      "x": 0,
+      "y": 0,
+      "file": "cels/L0_F5.png"
+    },
+    {
+      "layer": 0,
+      "frame": 6,
+      "x": 0,
+      "y": 0,
+      "file": "cels/L0_F6.png"
+    },
+    {
+      "layer": 0,
+      "frame": 7,
+      "x": 0,
+      "y": 0,
+      "file": "cels/L0_F7.png"
+    },
+    {
+      "layer": 1,
+      "frame": 0,
+      "x": 0,
+      "y": 0,
+      "file": "cels/L1_F0.png"
+    },
+    {
+      "layer": 1,
+      "frame": 4,
+      "x": 0,
+      "y": 0,
+      "file": "cels/L1_F4.png"
+    },
+    {
+      "layer": 1,
+      "frame": 5,
+      "x": 0,
+      "y": 0,
+      "file": "cels/L1_F5.png"
+    },
+    {
+      "layer": 1,
+      "frame": 6,
+      "x": 0,
+      "y": 0,
+      "file": "cels/L1_F6.png"
+    },
+    {
+      "layer": 1,
+      "frame": 7,
+      "x": 0,
+      "y": 0,
+      "file": "cels/L1_F7.png"
+    }
+  ],
+  "reference": null
+}

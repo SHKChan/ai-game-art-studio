@@ -1,0 +1,179 @@
+{
+  "schema": "artstudio.comfy-workflow/1",
+  "id": "svd-image-to-video",
+  "name": "Image to video (Stable Video Diffusion core nodes)",
+  "category": "image_to_video",
+  "verification": "unverified",
+  "description": "Motion from a single keyframe. Output is an animated WebP; import it in the Import Studio for frame extraction.",
+  "workflow": {
+    "1": {
+      "class_type": "ImageOnlyCheckpointLoader",
+      "inputs": {
+        "ckpt_name": "SET_VIDEO_CHECKPOINT_PARAMETER"
+      }
+    },
+    "2": {
+      "class_type": "LoadImage",
+      "inputs": {
+        "image": "keyframe.png"
+      }
+    },
+    "3": {
+      "class_type": "SVD_img2vid_Conditioning",
+      "inputs": {
+        "clip_vision": [
+          "1",
+          1
+        ],
+        "init_image": [
+          "2",
+          0
+        ],
+        "vae": [
+          "1",
+          2
+        ],
+        "width": 576,
+        "height": 576,
+        "video_frames": 14,
+        "motion_bucket_id": 60,
+        "fps": 8,
+        "augmentation_level": 0.0
+      }
+    },
+    "4": {
+      "class_type": "VideoLinearCFGGuidance",
+      "inputs": {
+        "model": [
+          "1",
+          0
+        ],
+        "min_cfg": 1.0
+      }
+    },
+    "5": {
+      "class_type": "KSampler",
+      "inputs": {
+        "seed": 0,
+        "steps": 20,
+        "cfg": 2.5,
+        "sampler_name": "euler",
+        "scheduler": "karras",
+        "denoise": 1.0,
+        "model": [
+          "4",
+          0
+        ],
+        "positive": [
+          "3",
+          0
+        ],
+        "negative": [
+          "3",
+          1
+        ],
+        "latent_image": [
+          "3",
+          2
+        ]
+      }
+    },
+    "6": {
+      "class_type": "VAEDecode",
+      "inputs": {
+        "samples": [
+          "5",
+          0
+        ],
+        "vae": [
+          "1",
+          2
+        ]
+      }
+    },
+    "7": {
+      "class_type": "SaveAnimatedWEBP",
+      "inputs": {
+        "images": [
+          "6",
+          0
+        ],
+        "filename_prefix": "artstudio_video",
+        "fps": 8.0,
+        "lossless": true,
+        "quality": 90,
+        "method": "default"
+      }
+    }
+  },
+  "inputs": {
+    "video_checkpoint": {
+      "type": "model",
+      "required": true,
+      "model_folder": "checkpoints"
+    },
+    "reference_image": {
+      "type": "image",
+      "required": true
+    },
+    "seed": {
+      "type": "seed",
+      "required": false
+    },
+    "video_frames": {
+      "type": "int",
+      "required": false,
+      "minimum": 2,
+      "maximum": 64
+    }
+  },
+  "mappings": {
+    "video_checkpoint": [
+      {
+        "node": "1",
+        "input": "ckpt_name"
+      }
+    ],
+    "reference_image": [
+      {
+        "node": "2",
+        "input": "image"
+      }
+    ],
+    "seed": [
+      {
+        "node": "5",
+        "input": "seed"
+      }
+    ],
+    "video_frames": [
+      {
+        "node": "3",
+        "input": "video_frames"
+      }
+    ]
+  },
+  "outputs": [
+    {
+      "node": "7",
+      "kind": "video"
+    }
+  ],
+  "required_nodes": [
+    "ImageOnlyCheckpointLoader",
+    "KSampler",
+    "LoadImage",
+    "SVD_img2vid_Conditioning",
+    "SaveAnimatedWEBP",
+    "VAEDecode",
+    "VideoLinearCFGGuidance"
+  ],
+  "required_models": [
+    {
+      "node": "1",
+      "input": "ckpt_name",
+      "param": "video_checkpoint"
+    }
+  ],
+  "notes": "Experimental: video models drift identity; use for effects/secondary motion, review frame by frame."
+}

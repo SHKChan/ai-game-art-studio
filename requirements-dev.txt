@@ -1,0 +1,3 @@
+-r requirements.txt
+# Optional: browser UI smoke test (tests/ui_playwright.py)
+playwright>=1.40

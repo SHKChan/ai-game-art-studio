@@ -1,0 +1,96 @@
+# Deployment on Windows + Stage B (production) acceptance
+
+Stage A (offline engineering acceptance) was completed on the development computer.
+**Stage B has NOT been run.** It must be performed on a Windows computer with a working ComfyUI.
+
+## 1. Install
+
+1. Install **Python 3.10+** (python.org, tick *Add python.exe to PATH*). Optional: **ffmpeg** (video import) —
+   put `ffmpeg.exe` on PATH or set `ARTSTUDIO_FFMPEG`.
+2. Copy the whole `ai-game-art-studio` folder (including `upstream/`) to the target computer.
+3. Build Atelier (Procedural Studio): install Rust from https://rustup.rs, then
+   `powershell -ExecutionPolicy Bypass -File .\scripts\build-atelier.ps1`.
+   Without it the studio still runs; Atelier shows as *unavailable*.
+4. Start: `powershell -ExecutionPolicy Bypass -File .\start.ps1` (first run creates `.venv` and installs
+   `requirements.txt`; opens http://127.0.0.1:8870/).
+   Options: `-Port 8870 -Workspace D:\Art\studio-ws -ComfyUrl http://127.0.0.1:8188 -NoBrowser`.
+
+**Offline dependency install.** On a connected machine: `pip download -r requirements.txt -d wheels --platform win_amd64
+--python-version 3.12 --only-binary=:all:`; on the target: `.venv\Scripts\pip install --no-index --find-links wheels -r requirements.txt`.
+
+**Encoding.** Always start through `start.ps1` (or `python -m artstudio`, which switches itself to UTF-8 mode).
+To open the original Pixel Atelier workbench use `scripts\start-pixel-atelier.ps1` — running `python bridge\server.py`
+directly on a GBK/cp1252 Windows locale can corrupt or fail on its Chinese project files.
+
+## 2. Configure
+
+Copy `studio.config.example.json` → `studio.config.json` and/or `.env.example` → `.env`.
+
+| setting | env | default |
+|---|---|---|
+| workspace | `ARTSTUDIO_WORKSPACE` | `<repo>/workspace` (keep it outside the source tree for production, e.g. `D:\GameArt\ws`) |
+| port | `ARTSTUDIO_PORT` | 8870 |
+| comfyui.url | `COMFYUI_URL` | http://127.0.0.1:8188 |
+| comfyui.job_timeout_s | `COMFYUI_TIMEOUT` | 600 |
+| atelier_bin | `ATELIER_BIN` | auto-detect |
+| comfyui.api_key_env | — | name of an env var holding a bearer token for an authenticating proxy (never the token itself) |
+
+## 3. Connect ComfyUI
+
+- Local: start ComfyUI normally (`python main.py`, default port 8188). Remote: start it with `--listen 0.0.0.0` and
+  use `http://<host>:8188` — only on a trusted network (ComfyUI has no authentication).
+- In the studio *Generation* tab the ComfyUI card must show **available** with your version and GPU. If it shows
+  "(MOCK)" you are connected to the test server.
+- Install the models you intend to use in ComfyUI's own folders; the studio reads what exists from `/object_info`.
+
+## 4. Import workflows
+
+1. In ComfyUI build/load a workflow, then **Workflow → Export (API)** (older UI: enable Dev mode → *Save (API Format)*).
+2. Studio → *Generation* → *Import workflow*: choose the JSON, a name and a category
+   (text_to_image, image_to_image, character_reference, pose_keyframe, inpainting, image_to_video, background_removal).
+3. The studio derives mappings (positive/negative prompt from the sampler's links, seed, size, steps, cfg, denoise,
+   LoadImage → image inputs, model files → `model_<input>_<node>` parameters) and records required nodes/models.
+   Review them (`python -m artstudio workflows show --id <id>`); adjust by re-importing a template JSON with an edited
+   `mappings` block if needed. CLI: `python -m artstudio workflows import --file wf.json --name "My pose" --category pose_keyframe`.
+4. Press **Check** — it validates nodes and model filenames against the live server.
+5. Imported templates start as `unverified`. After a successful production run and human review, mark them verified
+   (edit `"verification": "production-verified"` in `<workspace>/comfyui/workflows/<id>.json`).
+
+Bundled templates (`workflows/comfyui/*.json`) use core nodes only and need parameters such as
+`{"checkpoint": "<your file>.safetensors"}` (pose: also `"controlnet"`; video: `"video_checkpoint"`).
+`rembg-inspyrenet` additionally needs the ComfyUI-Inspyrenet-Rembg custom node and is unverified.
+
+## 5. Stage B — production smoke test
+
+```powershell
+.venv\Scripts\python.exe scripts\production_smoke_test.py --comfy http://127.0.0.1:8188 `
+   --checkpoint <your_checkpoint.safetensors> [--controlnet <openpose.safetensors>] `
+   [--reference D:\refs\hero.png] --budget 4 --steps 20 --size 768
+```
+
+It checks reachability (refuses the mock), node/model discovery, every bundled workflow's compatibility,
+text-to-image, image-to-image → import → QA → export, optional pose keyframe, cancellation and offline fallback, and
+writes `workspace/stage-b-smoke-report/smoke_report.{json,md}` plus contact sheets **for human review**.
+
+Then run the reduced production test of SPECIFICATION §15 Test B in the UI:
+master (south) → approve → walk east (4–8 frames) → attack east (6–10 frames) → review → only then batch the other
+directions with an explicit budget. Record results in `DEVELOPMENT_PROGRESS.md` under Stage B.
+
+Stage B is passed only when: the smoke test passes on the real server, generated sheets import cleanly, a human has
+reviewed identity/proportion consistency, and GPU time per job is acceptable.
+
+## 6. Migration and backup
+
+- Backup: `python -m artstudio backup D:\backups\studio-2026-11-25.zip [--no-exports]` (or copy the workspace folder
+  while the studio is stopped).
+- Restore on another PC: `python -m artstudio restore backup.zip D:\GameArt\ws` (target must be empty), then start with
+  `-Workspace D:\GameArt\ws`.
+- Upgrading the app: workspaces carry `schema_version`; the app migrates older ones on open and refuses newer ones.
+- Atelier documents travel inside the workspace (`projects/<pid>/atelier`). Recipes replay only on an Atelier build
+  from the same commit (`upstream/atelier`, 8ac6adf).
+
+## 7. Running the offline test-suite on the target
+
+`.venv\Scripts\python.exe scripts\run_tests.py --upstream` (mock ComfyUI is started in-process; Atelier tests are
+skipped if the binary is missing). UI test: `pip install playwright && playwright install chromium`, start the studio
+with an empty workspace and run `python tests\ui_playwright.py`.

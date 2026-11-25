@@ -1,0 +1,3 @@
+# AI Game Art Studio runtime (Python >= 3.10). Pinned ranges tested: Pillow 12.3, numpy 2.2/2.5.
+Pillow>=10.0,<13
+numpy>=1.24,<3

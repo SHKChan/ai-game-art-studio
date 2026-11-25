@@ -1,0 +1,281 @@
+{
+  "schema": 1,
+  "name": "fireball",
+  "w": 64,
+  "h": 64,
+  "palette": [
+    [
+      43,
+      11,
+      18,
+      255
+    ],
+    [
+      110,
+      20,
+      20,
+      255
+    ],
+    [
+      184,
+      38,
+      26,
+      255
+    ],
+    [
+      236,
+      90,
+      22,
+      255
+    ],
+    [
+      255,
+      154,
+      42,
+      255
+    ],
+    [
+      255,
+      214,
+      90,
+      255
+    ],
+    [
+      255,
+      246,
+      200,
+      255
+    ],
+    [
+      255,
+      255,
+      255,
+      255
+    ]
+  ],
+  "layers": [
+    {
+      "name": "embers",
+      "opacity": 255,
+      "visible": true,
+      "blend": "normal"
+    },
+    {
+      "name": "flame",
+      "opacity": 255,
+      "visible": true,
+      "blend": "normal"
+    },
+    {
+      "name": "core",
+      "opacity": 255,
+      "visible": true,
+      "blend": "normal"
+    }
+  ],
+  "frames": [
+    {
+      "duration_ms": 100
+    },
+    {
+      "duration_ms": 80
+    },
+    {
+      "duration_ms": 80
+    },
+    {
+      "duration_ms": 80
+    },
+    {
+      "duration_ms": 80
+    },
+    {
+      "duration_ms": 80
+    },
+    {
+      "duration_ms": 80
+    },
+    {
+      "duration_ms": 80
+    }
+  ],
+  "tags": [
+    {
+      "name": "fly",
+      "from": 0,
+      "to": 7,
+      "direction": "forward"
+    }
+  ],
+  "cels": [
+    {
+      "layer": 0,
+      "frame": 0,
+      "x": 0,
+      "y": 0,
+      "file": "cels/L0_F0.png"
+    },
+    {
+      "layer": 0,
+      "frame": 1,
+      "x": 0,
+      "y": 0,
+      "file": "cels/L0_F1.png"
+    },
+    {
+      "layer": 0,
+      "frame": 2,
+      "x": 0,
+      "y": 0,
+      "file": "cels/L0_F2.png"
+    },
+    {
+      "layer": 0,
+      "frame": 3,
+      "x": 0,
+      "y": 0,
+      "file": "cels/L0_F3.png"
+    },
+    {
+      "layer": 0,
+      "frame": 4,
+      "x": 0,
+      "y": 0,
+      "file": "cels/L0_F4.png"
+    },
+    {
+      "layer": 0,
+      "frame": 5,
+      "x": 0,
+      "y": 0,
+      "file": "cels/L0_F5.png"
+    },
+    {
+      "layer": 0,
+      "frame": 6,
+      "x": 0,
+      "y": 0,
+      "file": "cels/L0_F6.png"
+    },
+    {
+      "layer": 0,
+      "frame": 7,
+      "x": 0,
+      "y": 0,
+      "file": "cels/L0_F7.png"
+    },
+    {
+      "layer": 1,
+      "frame": 0,
+      "x": 0,
+      "y": 0,
+      "file": "cels/L1_F0.png"
+    },
+    {
+      "layer": 1,
+      "frame": 1,
+      "x": 0,
+      "y": 0,
+      "file": "cels/L1_F1.png"
+    },
+    {
+      "layer": 1,
+      "frame": 2,
+      "x": 0,
+      "y": 0,
+      "file": "cels/L1_F2.png"
+    },
+    {
+      "layer": 1,
+      "frame": 3,
+      "x": 0,
+      "y": 0,
+      "file": "cels/L1_F3.png"
+    },
+    {
+      "layer": 1,
+      "frame": 4,
+      "x": 0,
+      "y": 0,
+      "file": "cels/L1_F4.png"
+    },
+    {
+      "layer": 1,
+      "frame": 5,
+      "x": 0,
+      "y": 0,
+      "file": "cels/L1_F5.png"
+    },
+    {
+      "layer": 1,
+      "frame": 6,
+      "x": 0,
+      "y": 0,
+      "file": "cels/L1_F6.png"
+    },
+    {
+      "layer": 1,
+      "frame": 7,
+      "x": 0,
+      "y": 0,
+      "file": "cels/L1_F7.png"
+    },
+    {
+      "layer": 2,
+      "frame": 0,
+      "x": 0,
+      "y": 0,
+      "file": "cels/L2_F0.png"
+    },
+    {
+      "layer": 2,
+      "frame": 1,
+      "x": 0,
+      "y": 0,
+      "file": "cels/L2_F1.png"
+    },
+    {
+      "layer": 2,
+      "frame": 2,
+      "x": 0,
+      "y": 0,
+      "file": "cels/L2_F2.png"
+    },
+    {
+      "layer": 2,
+      "frame": 3,
+      "x": 0,
+      "y": 0,
+      "file": "cels/L2_F3.png"
+    },
+    {
+      "layer": 2,
+      "frame": 4,
+      "x": 0,
+      "y": 0,
+      "file": "cels/L2_F4.png"
+    },
+    {
+      "layer": 2,
+      "frame": 5,
+      "x": 0,
+      "y": 0,
+      "file": "cels/L2_F5.png"
+    },
+    {
+      "layer": 2,
+      "frame": 6,
+      "x": 0,
+      "y": 0,
+      "file": "cels/L2_F6.png"
+    },
+    {
+      "layer": 2,
+      "frame": 7,
+      "x": 0,
+      "y": 0,
+      "file": "cels/L2_F7.png"
+    }
+  ],
+  "reference": null
+}

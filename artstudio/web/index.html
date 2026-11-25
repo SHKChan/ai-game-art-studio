@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI Game Art Studio</title>
+<link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><span class="logo">◆</span> AI Game Art Studio</div>
+  <label class="proj">Project
+    <select id="projectSelect" aria-label="Project"></select>
+  </label>
+  <button id="newProjectBtn" class="ghost">+ Project</button>
+  <div class="spacer"></div>
+  <div id="providerPills" class="pills" aria-label="Provider status"></div>
+  <button id="themeBtn" class="ghost" title="Toggle light/dark">◐</button>
+</header>
+<nav class="tabs" role="tablist">
+  <button data-tab="library" class="active">Library</button>
+  <button data-tab="character">Character Studio</button>
+  <button data-tab="animation">Animation Studio</button>
+  <button data-tab="procedural">Procedural Studio</button>
+  <button data-tab="import">Import &amp; Processing</button>
+  <button data-tab="generate">Generation</button>
+  <button data-tab="export">Export Studio</button>
+</nav>
+<main>
+  <section id="tab-library" class="tab active"></section>
+  <section id="tab-character" class="tab"></section>
+  <section id="tab-animation" class="tab"></section>
+  <section id="tab-procedural" class="tab"></section>
+  <section id="tab-import" class="tab"></section>
+  <section id="tab-generate" class="tab"></section>
+  <section id="tab-export" class="tab"></section>
+</main>
+<aside id="jobsDock" class="dock">
+  <div class="dock-head"><b>Jobs</b><button id="jobsToggle" class="ghost small">▾</button></div>
+  <div id="jobsList"></div>
+</aside>
+<div id="toast" role="status" aria-live="polite"></div>
+<script type="module" src="/static/app.js"></script>
+</body>
+</html>

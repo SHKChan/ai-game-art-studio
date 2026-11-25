@@ -1,0 +1,63 @@
+{
+  "schema": "artstudio.comfy-workflow/1",
+  "id": "rembg-inspyrenet",
+  "name": "Background removal (custom node: ComfyUI-Inspyrenet-Rembg)",
+  "category": "background_removal",
+  "verification": "unverified",
+  "description": "Matting for complex backgrounds. Requires the custom node pack; the app checks /object_info before running.",
+  "workflow": {
+    "1": {
+      "class_type": "LoadImage",
+      "inputs": {
+        "image": "input.png"
+      }
+    },
+    "2": {
+      "class_type": "InspyrenetRembg",
+      "inputs": {
+        "image": [
+          "1",
+          0
+        ],
+        "torchscript_jit": "default"
+      }
+    },
+    "3": {
+      "class_type": "SaveImage",
+      "inputs": {
+        "images": [
+          "2",
+          0
+        ],
+        "filename_prefix": "artstudio_rembg"
+      }
+    }
+  },
+  "inputs": {
+    "reference_image": {
+      "type": "image",
+      "required": true
+    }
+  },
+  "mappings": {
+    "reference_image": [
+      {
+        "node": "1",
+        "input": "image"
+      }
+    ]
+  },
+  "outputs": [
+    {
+      "node": "3",
+      "kind": "image"
+    }
+  ],
+  "required_nodes": [
+    "InspyrenetRembg",
+    "LoadImage",
+    "SaveImage"
+  ],
+  "required_models": [],
+  "notes": "Custom node class name 'InspyrenetRembg' is taken from the ComfyUI-Inspyrenet-Rembg pack and is UNVERIFIED here. The built-in colour-key remover (Import Studio) works offline for solid/checker backgrounds."
+}

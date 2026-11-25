@@ -1,0 +1,178 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-game-art-studio.local/schema/asset/1",
+  "title": "AI Game Art Studio asset manifest",
+  "description": "Engine-independent manifest for one asset (image, animation, icon, tileset, effect...). Version 1.",
+  "type": "object",
+  "required": ["schema_version", "id", "type", "name", "project_id", "art_style", "provider", "status", "versions", "created_at", "updated_at"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "id": {"$ref": "#/$defs/id"},
+    "type": {"enum": ["character_sprite", "animation", "icon", "item", "tileset", "effect", "environment", "ui", "concept", "reference", "other"]},
+    "name": {"type": "string", "minLength": 1, "maxLength": 120},
+    "project_id": {"$ref": "#/$defs/id"},
+    "character_id": {"type": ["string", "null"]},
+    "art_style": {"enum": ["pixel", "hd"]},
+    "tags": {"type": "array", "items": {"type": "string", "maxLength": 40}},
+    "provider": {
+      "type": "object",
+      "required": ["id"],
+      "properties": {
+        "id": {"type": "string"},
+        "kind": {"type": "string"},
+        "is_test_fixture": {"type": "boolean"},
+        "details": {"type": "object"}
+      }
+    },
+    "prompt": {
+      "type": ["object", "null"],
+      "properties": {
+        "positive": {"type": "string"},
+        "negative": {"type": "string"},
+        "template": {"type": "string"}
+      }
+    },
+    "reference_images": {"type": "array", "items": {"type": "string"}},
+    "source_files": {"type": "array", "items": {"$ref": "#/$defs/file"}},
+    "processed_files": {"type": "array", "items": {"$ref": "#/$defs/file"}},
+    "processing": {"type": "object"},
+    "procedural": {
+      "type": ["object", "null"],
+      "properties": {
+        "engine": {"const": "atelier"},
+        "doc_id": {"type": "string"},
+        "recipe": {"type": "string"},
+        "builder": {"type": "string"},
+        "params": {"type": "object"}
+      }
+    },
+    "versions": {"type": "array", "items": {"$ref": "#/$defs/version"}},
+    "status": {"enum": ["draft", "candidate", "approved", "rejected", "locked"]},
+    "qa": {
+      "type": "object",
+      "properties": {
+        "deterministic": {"type": "object"},
+        "visual": {
+          "type": "object",
+          "properties": {
+            "status": {"enum": ["not_run", "pending", "passed", "failed", "unavailable"]},
+            "kind": {"const": "probabilistic"},
+            "notes": {"type": "string"}
+          }
+        },
+        "manual": {
+          "type": "object",
+          "properties": {
+            "decision": {"enum": ["pending", "approved", "rejected"]},
+            "note": {"type": "string"},
+            "at": {"type": ["number", "null"]}
+          }
+        }
+      }
+    },
+    "animation": {"$ref": "#/$defs/animation"},
+    "exports": {"type": "array", "items": {"type": "object", "required": ["id", "format", "path"]}},
+    "created_at": {"type": "number"},
+    "updated_at": {"type": "number"}
+  },
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$"},
+    "pt": {"type": "array", "items": {"type": "integer"}, "minItems": 2, "maxItems": 2},
+    "rect": {"type": ["array", "null"], "items": {"type": "integer"}, "minItems": 4, "maxItems": 4},
+    "file": {
+      "type": "object",
+      "required": ["path"],
+      "properties": {
+        "path": {"type": "string"},
+        "sha256": {"type": "string"},
+        "role": {"type": "string"},
+        "origin": {"type": "string"},
+        "width": {"type": "integer"},
+        "height": {"type": "integer"}
+      }
+    },
+    "version": {
+      "type": "object",
+      "required": ["version", "created_at"],
+      "properties": {
+        "version": {"type": "integer", "minimum": 1},
+        "created_at": {"type": "number"},
+        "note": {"type": "string"},
+        "snapshot": {"type": "string"},
+        "status": {"type": "string"}
+      }
+    },
+    "frame": {
+      "type": "object",
+      "required": ["id", "file", "duration_ms", "offset"],
+      "properties": {
+        "id": {"type": "string"},
+        "file": {"type": "string"},
+        "source_file": {"type": ["string", "null"]},
+        "duration_ms": {"type": "integer", "minimum": 1, "maximum": 60000},
+        "offset": {"$ref": "#/$defs/pt"},
+        "source_rect": {"$ref": "#/$defs/rect"},
+        "source_size": {"type": ["array", "null"]},
+        "trimmed_rect": {"$ref": "#/$defs/rect"},
+        "origin": {"enum": ["generated", "imported", "procedural", "manual", "fixture"]},
+        "status": {"enum": ["ok", "rejected", "regenerating", "candidate"]},
+        "phase": {"type": ["string", "null"]},
+        "airborne": {"type": "boolean"},
+        "generation": {"type": ["object", "null"]}
+      }
+    },
+    "event": {
+      "type": "object",
+      "required": ["frame", "type"],
+      "properties": {
+        "frame": {"type": "integer", "minimum": 0},
+        "type": {"type": "string", "pattern": "^[a-z][a-z0-9_]{0,31}$"},
+        "name": {"type": "string"},
+        "data": {"type": "object"}
+      }
+    },
+    "layer": {
+      "type": "object",
+      "required": ["name", "asset_id"],
+      "properties": {
+        "name": {"type": "string"},
+        "asset_id": {"type": "string"},
+        "role": {"enum": ["body", "weapon", "effect", "shadow", "other"]},
+        "offset": {"$ref": "#/$defs/pt"},
+        "z": {"type": "integer"},
+        "start_ms": {"type": "integer", "minimum": 0},
+        "anchor_to_event": {"type": ["string", "null"]},
+        "event_offset_ms": {"type": "integer"}
+      }
+    },
+    "animation": {
+      "type": "object",
+      "required": ["name", "direction", "canvas", "pivot", "frames", "loop"],
+      "properties": {
+        "name": {"type": "string", "pattern": "^[a-z][a-z0-9_-]{0,39}$"},
+        "template": {"type": ["string", "null"]},
+        "direction": {"enum": ["none", "left", "right", "north", "east", "south", "west", "north_east", "north_west", "south_east", "south_west"]},
+        "mirror_of": {"type": ["string", "null"]},
+        "canvas": {"$ref": "#/$defs/pt"},
+        "pivot": {"$ref": "#/$defs/pt"},
+        "anchor": {
+          "type": "object",
+          "properties": {
+            "kind": {"enum": ["root", "ground", "support_foot", "torso", "custom", "source"]},
+            "ground_y": {"type": "integer"},
+            "point": {"$ref": "#/$defs/pt"}
+          }
+        },
+        "loop": {
+          "type": "object",
+          "required": ["enabled"],
+          "properties": {"enabled": {"type": "boolean"}, "ping_pong": {"type": "boolean"}, "hold_last": {"type": "boolean"}}
+        },
+        "frames": {"type": "array", "items": {"$ref": "#/$defs/frame"}},
+        "events": {"type": "array", "items": {"$ref": "#/$defs/event"}},
+        "layers": {"type": "array", "items": {"$ref": "#/$defs/layer"}},
+        "phases": {"type": "array", "items": {"type": "object"}}
+      }
+    }
+  }
+}

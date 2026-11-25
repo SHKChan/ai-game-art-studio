@@ -1,0 +1,1259 @@
+{
+  "schema": "artstudio.export/1",
+  "app_version": "0.1.0",
+  "export_id": "exp-b9b9328254b0",
+  "name": "test_d_hybrid",
+  "created_at": 1795609597.961,
+  "project_id": "poc-fantasy-rpg",
+  "character_id": "knight",
+  "contains_test_fixtures": false,
+  "coordinate_notes": "Pixel coords: origin top-left, y down. pivot_norm uses y-up (Cocos/Unity anchor convention).",
+  "animations": [
+    {
+      "key": "heavy_right",
+      "asset_id": "knight-heavy-b064f3",
+      "name": "heavy",
+      "direction": "right",
+      "art_style": "pixel",
+      "loop": {
+        "enabled": false,
+        "ping_pong": false,
+        "hold_last": false
+      },
+      "canvas": [
+        160,
+        160
+      ],
+      "pivot_px": [
+        80,
+        132
+      ],
+      "duration_ms": 2100,
+      "frames": [
+        {
+          "name": "heavy_right_00",
+          "index": 0,
+          "duration_ms": 100,
+          "start_ms": 0,
+          "trim_offset": [
+            31,
+            67
+          ],
+          "trimmed_size": [
+            79,
+            66
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.620253,
+            0.015152
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 0,
+            "y": 0,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 2,
+            "y": 266,
+            "w": 79,
+            "h": 66,
+            "page": 0
+          }
+        },
+        {
+          "name": "heavy_right_01",
+          "index": 1,
+          "duration_ms": 120,
+          "start_ms": 100,
+          "trim_offset": [
+            30,
+            67
+          ],
+          "trimmed_size": [
+            77,
+            66
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.649351,
+            0.015152
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 160,
+            "y": 0,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 164,
+            "y": 266,
+            "w": 77,
+            "h": 66,
+            "page": 0
+          }
+        },
+        {
+          "name": "heavy_right_02",
+          "index": 2,
+          "duration_ms": 140,
+          "start_ms": 220,
+          "trim_offset": [
+            33,
+            61
+          ],
+          "trimmed_size": [
+            67,
+            72
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.701493,
+            0.013889
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 320,
+            "y": 0,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 177,
+            "y": 191,
+            "w": 67,
+            "h": 72,
+            "page": 0
+          }
+        },
+        {
+          "name": "heavy_right_03",
+          "index": 3,
+          "duration_ms": 160,
+          "start_ms": 360,
+          "trim_offset": [
+            34,
+            54
+          ],
+          "trimmed_size": [
+            68,
+            79
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.676471,
+            0.012658
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 480,
+            "y": 0,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 70,
+            "y": 108,
+            "w": 68,
+            "h": 79,
+            "page": 0
+          }
+        },
+        {
+          "name": "heavy_right_04",
+          "index": 4,
+          "duration_ms": 180,
+          "start_ms": 520,
+          "trim_offset": [
+            35,
+            52
+          ],
+          "trimmed_size": [
+            66,
+            81
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.681818,
+            0.012346
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 640,
+            "y": 0,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 277,
+            "y": 2,
+            "w": 66,
+            "h": 81,
+            "page": 0
+          }
+        },
+        {
+          "name": "heavy_right_05",
+          "index": 5,
+          "duration_ms": 180,
+          "start_ms": 700,
+          "trim_offset": [
+            36,
+            52
+          ],
+          "trimmed_size": [
+            66,
+            81
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.666667,
+            0.012346
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 800,
+            "y": 0,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 2,
+            "y": 108,
+            "w": 66,
+            "h": 81,
+            "page": 0
+          }
+        },
+        {
+          "name": "heavy_right_06",
+          "index": 6,
+          "duration_ms": 180,
+          "start_ms": 880,
+          "trim_offset": [
+            35,
+            52
+          ],
+          "trimmed_size": [
+            67,
+            81
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.671642,
+            0.012346
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 960,
+            "y": 0,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 208,
+            "y": 2,
+            "w": 67,
+            "h": 81,
+            "page": 0
+          }
+        },
+        {
+          "name": "heavy_right_07",
+          "index": 7,
+          "duration_ms": 180,
+          "start_ms": 1060,
+          "trim_offset": [
+            35,
+            52
+          ],
+          "trimmed_size": [
+            68,
+            81
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.661765,
+            0.012346
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 1120,
+            "y": 0,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 138,
+            "y": 2,
+            "w": 68,
+            "h": 81,
+            "page": 0
+          }
+        },
+        {
+          "name": "heavy_right_08",
+          "index": 8,
+          "duration_ms": 80,
+          "start_ms": 1240,
+          "trim_offset": [
+            35,
+            54
+          ],
+          "trimmed_size": [
+            68,
+            79
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.661765,
+            0.012658
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 0,
+            "y": 160,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 140,
+            "y": 108,
+            "w": 68,
+            "h": 79,
+            "page": 0
+          }
+        },
+        {
+          "name": "heavy_right_09",
+          "index": 9,
+          "duration_ms": 40,
+          "start_ms": 1320,
+          "trim_offset": [
+            53,
+            48
+          ],
+          "trimmed_size": [
+            64,
+            86
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.421875,
+            0.023256
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 160,
+            "y": 160,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 72,
+            "y": 2,
+            "w": 64,
+            "h": 86,
+            "page": 0
+          }
+        },
+        {
+          "name": "heavy_right_10",
+          "index": 10,
+          "duration_ms": 60,
+          "start_ms": 1360,
+          "trim_offset": [
+            53,
+            60
+          ],
+          "trimmed_size": [
+            93,
+            73
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.290323,
+            0.013699
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 320,
+            "y": 160,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 2,
+            "y": 191,
+            "w": 93,
+            "h": 73,
+            "page": 0
+          }
+        },
+        {
+          "name": "heavy_right_11",
+          "index": 11,
+          "duration_ms": 100,
+          "start_ms": 1420,
+          "trim_offset": [
+            52,
+            79
+          ],
+          "trimmed_size": [
+            93,
+            55
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.301075,
+            0.036364
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 480,
+            "y": 160,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 2,
+            "y": 334,
+            "w": 93,
+            "h": 55,
+            "page": 0
+          }
+        },
+        {
+          "name": "heavy_right_12",
+          "index": 12,
+          "duration_ms": 120,
+          "start_ms": 1520,
+          "trim_offset": [
+            52,
+            79
+          ],
+          "trimmed_size": [
+            91,
+            54
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.307692,
+            0.018519
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 640,
+            "y": 160,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 97,
+            "y": 334,
+            "w": 91,
+            "h": 54,
+            "page": 0
+          }
+        },
+        {
+          "name": "heavy_right_13",
+          "index": 13,
+          "duration_ms": 120,
+          "start_ms": 1640,
+          "trim_offset": [
+            52,
+            73
+          ],
+          "trimmed_size": [
+            88,
+            60
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.318182,
+            0.016667
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 800,
+            "y": 160,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 243,
+            "y": 266,
+            "w": 88,
+            "h": 60,
+            "page": 0
+          }
+        },
+        {
+          "name": "heavy_right_14",
+          "index": 14,
+          "duration_ms": 140,
+          "start_ms": 1760,
+          "trim_offset": [
+            33,
+            65
+          ],
+          "trimmed_size": [
+            78,
+            68
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.602564,
+            0.014706
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 960,
+            "y": 160,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 246,
+            "y": 191,
+            "w": 78,
+            "h": 68,
+            "page": 0
+          }
+        },
+        {
+          "name": "heavy_right_15",
+          "index": 15,
+          "duration_ms": 200,
+          "start_ms": 1900,
+          "trim_offset": [
+            31,
+            67
+          ],
+          "trimmed_size": [
+            79,
+            66
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.620253,
+            0.015152
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 1120,
+            "y": 160,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 83,
+            "y": 266,
+            "w": 79,
+            "h": 66,
+            "page": 0
+          }
+        }
+      ],
+      "events": [
+        {
+          "frame": 9,
+          "type": "release",
+          "time_ms": 1320
+        },
+        {
+          "frame": 10,
+          "type": "hit",
+          "time_ms": 1360
+        }
+      ],
+      "phases": [],
+      "layers": [
+        {
+          "name": "Gold Slash (layer)",
+          "asset_id": "gold-slash-layer-11e3e6",
+          "role": "effect",
+          "offset": [
+            29,
+            17
+          ],
+          "z": 1,
+          "start_ms": 1180,
+          "anchor_to_event": "hit",
+          "event_offset_ms": -180,
+          "key": "sword_slash"
+        }
+      ],
+      "previews": {
+        "gif": "previews/heavy_right.gif",
+        "apng": "previews/heavy_right.png",
+        "composite_gif": "previews/heavy_right_composite.gif",
+        "composite_note": "Preview only: layers stay separate in the atlas/metadata with their own timing."
+      },
+      "is_test_fixture": false,
+      "provider": "pixel-atelier-example",
+      "character_id": "knight",
+      "mirror_of": null,
+      "atlas": "test_d_hybrid_atlas.png"
+    },
+    {
+      "key": "sword_slash",
+      "asset_id": "gold-slash-layer-11e3e6",
+      "name": "sword_slash",
+      "direction": "none",
+      "art_style": "pixel",
+      "loop": {
+        "enabled": false,
+        "ping_pong": false,
+        "hold_last": false
+      },
+      "canvas": [
+        112,
+        108
+      ],
+      "pivot_px": [
+        56,
+        106
+      ],
+      "duration_ms": 480,
+      "frames": [
+        {
+          "name": "sword_slash_00",
+          "index": 0,
+          "duration_ms": 90,
+          "start_ms": 0,
+          "trim_offset": [
+            2,
+            4
+          ],
+          "trimmed_size": [
+            18,
+            18
+          ],
+          "source_size": [
+            112,
+            108
+          ],
+          "pivot_px": [
+            56,
+            106
+          ],
+          "pivot_norm": [
+            0.5,
+            0.018519
+          ],
+          "pivot_norm_trimmed": [
+            3.0,
+            -4.666667
+          ],
+          "phase": null,
+          "origin": "procedural",
+          "sheet": {
+            "x": 0,
+            "y": 0,
+            "w": 112,
+            "h": 108
+          },
+          "atlas": {
+            "x": 306,
+            "y": 334,
+            "w": 18,
+            "h": 18,
+            "page": 0
+          }
+        },
+        {
+          "name": "sword_slash_01",
+          "index": 1,
+          "duration_ms": 40,
+          "start_ms": 90,
+          "trim_offset": [
+            6,
+            2
+          ],
+          "trimmed_size": [
+            34,
+            18
+          ],
+          "source_size": [
+            112,
+            108
+          ],
+          "pivot_px": [
+            56,
+            106
+          ],
+          "pivot_norm": [
+            0.5,
+            0.018519
+          ],
+          "pivot_norm_trimmed": [
+            1.470588,
+            -4.777778
+          ],
+          "phase": null,
+          "origin": "procedural",
+          "sheet": {
+            "x": 112,
+            "y": 0,
+            "w": 112,
+            "h": 108
+          },
+          "atlas": {
+            "x": 270,
+            "y": 334,
+            "w": 34,
+            "h": 18,
+            "page": 0
+          }
+        },
+        {
+          "name": "sword_slash_02",
+          "index": 2,
+          "duration_ms": 40,
+          "start_ms": 130,
+          "trim_offset": [
+            6,
+            2
+          ],
+          "trimmed_size": [
+            78,
+            30
+          ],
+          "source_size": [
+            112,
+            108
+          ],
+          "pivot_px": [
+            56,
+            106
+          ],
+          "pivot_norm": [
+            0.5,
+            0.018519
+          ],
+          "pivot_norm_trimmed": [
+            0.641026,
+            -2.466667
+          ],
+          "phase": null,
+          "origin": "procedural",
+          "sheet": {
+            "x": 224,
+            "y": 0,
+            "w": 112,
+            "h": 108
+          },
+          "atlas": {
+            "x": 190,
+            "y": 334,
+            "w": 78,
+            "h": 30,
+            "page": 0
+          }
+        },
+        {
+          "name": "sword_slash_03",
+          "index": 3,
+          "duration_ms": 40,
+          "start_ms": 170,
+          "trim_offset": [
+            14,
+            2
+          ],
+          "trimmed_size": [
+            78,
+            72
+          ],
+          "source_size": [
+            112,
+            108
+          ],
+          "pivot_px": [
+            56,
+            106
+          ],
+          "pivot_norm": [
+            0.5,
+            0.018519
+          ],
+          "pivot_norm_trimmed": [
+            0.538462,
+            -0.444444
+          ],
+          "phase": null,
+          "origin": "procedural",
+          "sheet": {
+            "x": 336,
+            "y": 0,
+            "w": 112,
+            "h": 108
+          },
+          "atlas": {
+            "x": 97,
+            "y": 191,
+            "w": 78,
+            "h": 72,
+            "page": 0
+          }
+        },
+        {
+          "name": "sword_slash_04",
+          "index": 4,
+          "duration_ms": 60,
+          "start_ms": 210,
+          "trim_offset": [
+            36,
+            2
+          ],
+          "trimmed_size": [
+            68,
+            104
+          ],
+          "source_size": [
+            112,
+            108
+          ],
+          "pivot_px": [
+            56,
+            106
+          ],
+          "pivot_norm": [
+            0.5,
+            0.018519
+          ],
+          "pivot_norm_trimmed": [
+            0.294118,
+            0.0
+          ],
+          "phase": null,
+          "origin": "procedural",
+          "sheet": {
+            "x": 448,
+            "y": 0,
+            "w": 112,
+            "h": 108
+          },
+          "atlas": {
+            "x": 2,
+            "y": 2,
+            "w": 68,
+            "h": 104,
+            "page": 0
+          }
+        },
+        {
+          "name": "sword_slash_05",
+          "index": 5,
+          "duration_ms": 60,
+          "start_ms": 270,
+          "trim_offset": [
+            58,
+            20
+          ],
+          "trimmed_size": [
+            52,
+            78
+          ],
+          "source_size": [
+            112,
+            108
+          ],
+          "pivot_px": [
+            56,
+            106
+          ],
+          "pivot_norm": [
+            0.5,
+            0.018519
+          ],
+          "pivot_norm_trimmed": [
+            -0.038462,
+            -0.102564
+          ],
+          "phase": null,
+          "origin": "procedural",
+          "sheet": {
+            "x": 560,
+            "y": 0,
+            "w": 112,
+            "h": 108
+          },
+          "atlas": {
+            "x": 210,
+            "y": 108,
+            "w": 52,
+            "h": 78,
+            "page": 0
+          }
+        },
+        {
+          "name": "sword_slash_06",
+          "index": 6,
+          "duration_ms": 70,
+          "start_ms": 330,
+          "trim_offset": [
+            58,
+            24
+          ],
+          "trimmed_size": [
+            50,
+            74
+          ],
+          "source_size": [
+            112,
+            108
+          ],
+          "pivot_px": [
+            56,
+            106
+          ],
+          "pivot_norm": [
+            0.5,
+            0.018519
+          ],
+          "pivot_norm_trimmed": [
+            -0.04,
+            -0.108108
+          ],
+          "phase": null,
+          "origin": "procedural",
+          "sheet": {
+            "x": 672,
+            "y": 0,
+            "w": 112,
+            "h": 108
+          },
+          "atlas": {
+            "x": 264,
+            "y": 108,
+            "w": 50,
+            "h": 74,
+            "page": 0
+          }
+        },
+        {
+          "name": "sword_slash_07",
+          "index": 7,
+          "duration_ms": 80,
+          "start_ms": 400,
+          "trim_offset": [
+            60,
+            88
+          ],
+          "trimmed_size": [
+            46,
+            8
+          ],
+          "source_size": [
+            112,
+            108
+          ],
+          "pivot_px": [
+            56,
+            106
+          ],
+          "pivot_norm": [
+            0.5,
+            0.018519
+          ],
+          "pivot_norm_trimmed": [
+            -0.086957,
+            -1.25
+          ],
+          "phase": null,
+          "origin": "procedural",
+          "sheet": {
+            "x": 784,
+            "y": 0,
+            "w": 112,
+            "h": 108
+          },
+          "atlas": {
+            "x": 326,
+            "y": 334,
+            "w": 46,
+            "h": 8,
+            "page": 0
+          }
+        }
+      ],
+      "events": [],
+      "phases": [],
+      "layers": [],
+      "previews": {
+        "gif": "previews/sword_slash.gif",
+        "apng": "previews/sword_slash.png"
+      },
+      "is_test_fixture": false,
+      "provider": "atelier",
+      "character_id": null,
+      "mirror_of": null,
+      "atlas": "test_d_hybrid_atlas.png"
+    }
+  ],
+  "direction_map": {
+    "heavy": {
+      "right": {
+        "key": "heavy_right",
+        "flip_x": false
+      }
+    },
+    "sword_slash": {
+      "none": {
+        "key": "sword_slash",
+        "flip_x": false
+      }
+    }
+  },
+  "files": [
+    "frames/heavy_right/00.png",
+    "frames/heavy_right/01.png",
+    "frames/heavy_right/02.png",
+    "frames/heavy_right/03.png",
+    "frames/heavy_right/04.png",
+    "frames/heavy_right/05.png",
+    "frames/heavy_right/06.png",
+    "frames/heavy_right/07.png",
+    "frames/heavy_right/08.png",
+    "frames/heavy_right/09.png",
+    "frames/heavy_right/10.png",
+    "frames/heavy_right/11.png",
+    "frames/heavy_right/12.png",
+    "frames/heavy_right/13.png",
+    "frames/heavy_right/14.png",
+    "frames/heavy_right/15.png",
+    "sheets/heavy_right.png",
+    "previews/heavy_right.gif",
+    "previews/heavy_right.png",
+    "previews/heavy_right_composite.gif",
+    "frames/sword_slash/00.png",
+    "frames/sword_slash/01.png",
+    "frames/sword_slash/02.png",
+    "frames/sword_slash/03.png",
+    "frames/sword_slash/04.png",
+    "frames/sword_slash/05.png",
+    "frames/sword_slash/06.png",
+    "frames/sword_slash/07.png",
+    "sheets/sword_slash.png",
+    "previews/sword_slash.gif",
+    "previews/sword_slash.png",
+    "test_d_hybrid_atlas.png",
+    "test_d_hybrid_atlas.json",
+    "cocos/test_d_hybrid.png",
+    "cocos/test_d_hybrid.plist",
+    "test_d_hybrid.anim.json",
+    "cocos/test_d_hybrid.anim.json",
+    "godot/README.txt",
+    "export_manifest.json"
+  ],
+  "qa": {
+    "status": "passed",
+    "kind": "deterministic",
+    "checked_at": 1795609597.963,
+    "issues": [],
+    "counts": {
+      "error": 0,
+      "warning": 0,
+      "info": 0
+    },
+    "note": "Deterministic pixel/metadata validation only. Identity, anatomy, style and motion quality need visual review."
+  },
+  "zip": "test_d_hybrid.zip"
+}

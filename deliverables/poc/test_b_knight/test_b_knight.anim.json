@@ -1,0 +1,2846 @@
+{
+  "schema": "artstudio.export/1",
+  "app_version": "0.1.0",
+  "export_id": "exp-b2adb2075e04",
+  "name": "test_b_knight",
+  "created_at": 1795609595.697,
+  "project_id": "poc-fantasy-rpg",
+  "character_id": "knight",
+  "contains_test_fixtures": false,
+  "coordinate_notes": "Pixel coords: origin top-left, y down. pivot_norm uses y-up (Cocos/Unity anchor convention).",
+  "animations": [
+    {
+      "key": "idle_right",
+      "asset_id": "knight-idle-cbda8a",
+      "name": "idle",
+      "direction": "right",
+      "art_style": "pixel",
+      "loop": {
+        "enabled": true,
+        "ping_pong": false,
+        "hold_last": false
+      },
+      "canvas": [
+        160,
+        160
+      ],
+      "pivot_px": [
+        80,
+        132
+      ],
+      "duration_ms": 1320,
+      "frames": [
+        {
+          "name": "idle_right_00",
+          "index": 0,
+          "duration_ms": 180,
+          "start_ms": 0,
+          "trim_offset": [
+            34,
+            67
+          ],
+          "trimmed_size": [
+            75,
+            66
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.613333,
+            0.015152
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 0,
+            "y": 0,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 81,
+            "y": 538,
+            "w": 75,
+            "h": 66,
+            "page": 0
+          }
+        },
+        {
+          "name": "idle_right_01",
+          "index": 1,
+          "duration_ms": 160,
+          "start_ms": 180,
+          "trim_offset": [
+            34,
+            66
+          ],
+          "trimmed_size": [
+            75,
+            67
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.613333,
+            0.014925
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 160,
+            "y": 0,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 298,
+            "y": 467,
+            "w": 75,
+            "h": 67,
+            "page": 0
+          }
+        },
+        {
+          "name": "idle_right_02",
+          "index": 2,
+          "duration_ms": 160,
+          "start_ms": 340,
+          "trim_offset": [
+            34,
+            65
+          ],
+          "trimmed_size": [
+            75,
+            68
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.613333,
+            0.014706
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 320,
+            "y": 0,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 152,
+            "y": 467,
+            "w": 75,
+            "h": 68,
+            "page": 0
+          }
+        },
+        {
+          "name": "idle_right_03",
+          "index": 3,
+          "duration_ms": 160,
+          "start_ms": 500,
+          "trim_offset": [
+            34,
+            67
+          ],
+          "trimmed_size": [
+            75,
+            66
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.613333,
+            0.015152
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 480,
+            "y": 0,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 158,
+            "y": 538,
+            "w": 75,
+            "h": 66,
+            "page": 0
+          }
+        },
+        {
+          "name": "idle_right_04",
+          "index": 4,
+          "duration_ms": 160,
+          "start_ms": 660,
+          "trim_offset": [
+            34,
+            67
+          ],
+          "trimmed_size": [
+            75,
+            66
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.613333,
+            0.015152
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 640,
+            "y": 0,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 235,
+            "y": 538,
+            "w": 75,
+            "h": 66,
+            "page": 0
+          }
+        },
+        {
+          "name": "idle_right_05",
+          "index": 5,
+          "duration_ms": 160,
+          "start_ms": 820,
+          "trim_offset": [
+            34,
+            67
+          ],
+          "trimmed_size": [
+            75,
+            66
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.613333,
+            0.015152
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 800,
+            "y": 0,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 312,
+            "y": 538,
+            "w": 75,
+            "h": 66,
+            "page": 0
+          }
+        },
+        {
+          "name": "idle_right_06",
+          "index": 6,
+          "duration_ms": 160,
+          "start_ms": 980,
+          "trim_offset": [
+            34,
+            67
+          ],
+          "trimmed_size": [
+            75,
+            66
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.613333,
+            0.015152
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 960,
+            "y": 0,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 389,
+            "y": 538,
+            "w": 75,
+            "h": 66,
+            "page": 0
+          }
+        },
+        {
+          "name": "idle_right_07",
+          "index": 7,
+          "duration_ms": 180,
+          "start_ms": 1140,
+          "trim_offset": [
+            34,
+            67
+          ],
+          "trimmed_size": [
+            75,
+            66
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.613333,
+            0.015152
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 1120,
+            "y": 0,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 466,
+            "y": 538,
+            "w": 75,
+            "h": 66,
+            "page": 0
+          }
+        }
+      ],
+      "events": [],
+      "phases": [],
+      "layers": [],
+      "previews": {
+        "gif": "previews/idle_right.gif",
+        "apng": "previews/idle_right.png"
+      },
+      "is_test_fixture": false,
+      "provider": "pixel-atelier-example",
+      "character_id": "knight",
+      "mirror_of": null,
+      "atlas": "test_b_knight_atlas.png"
+    },
+    {
+      "key": "run_right",
+      "asset_id": "knight-run-e28038",
+      "name": "run",
+      "direction": "right",
+      "art_style": "pixel",
+      "loop": {
+        "enabled": true,
+        "ping_pong": false,
+        "hold_last": false
+      },
+      "canvas": [
+        160,
+        160
+      ],
+      "pivot_px": [
+        80,
+        132
+      ],
+      "duration_ms": 640,
+      "frames": [
+        {
+          "name": "run_right_00",
+          "index": 0,
+          "duration_ms": 80,
+          "start_ms": 0,
+          "trim_offset": [
+            37,
+            66
+          ],
+          "trimmed_size": [
+            67,
+            67
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.641791,
+            0.014925
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 0,
+            "y": 0,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 445,
+            "y": 467,
+            "w": 67,
+            "h": 67,
+            "page": 0
+          }
+        },
+        {
+          "name": "run_right_01",
+          "index": 1,
+          "duration_ms": 80,
+          "start_ms": 80,
+          "trim_offset": [
+            37,
+            64
+          ],
+          "trimmed_size": [
+            68,
+            67
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.632353,
+            -0.014925
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 160,
+            "y": 0,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 375,
+            "y": 467,
+            "w": 68,
+            "h": 67,
+            "page": 0
+          }
+        },
+        {
+          "name": "run_right_02",
+          "index": 2,
+          "duration_ms": 80,
+          "start_ms": 160,
+          "trim_offset": [
+            37,
+            67
+          ],
+          "trimmed_size": [
+            68,
+            69
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.632353,
+            0.057971
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 320,
+            "y": 0,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 652,
+            "y": 384,
+            "w": 68,
+            "h": 69,
+            "page": 0
+          }
+        },
+        {
+          "name": "run_right_03",
+          "index": 3,
+          "duration_ms": 80,
+          "start_ms": 240,
+          "trim_offset": [
+            36,
+            70
+          ],
+          "trimmed_size": [
+            67,
+            62
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.656716,
+            0.0
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 480,
+            "y": 0,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 124,
+            "y": 606,
+            "w": 67,
+            "h": 62,
+            "page": 0
+          }
+        },
+        {
+          "name": "run_right_04",
+          "index": 4,
+          "duration_ms": 80,
+          "start_ms": 320,
+          "trim_offset": [
+            37,
+            67
+          ],
+          "trimmed_size": [
+            67,
+            71
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.641791,
+            0.084507
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 640,
+            "y": 0,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 583,
+            "y": 384,
+            "w": 67,
+            "h": 71,
+            "page": 0
+          }
+        },
+        {
+          "name": "run_right_05",
+          "index": 5,
+          "duration_ms": 80,
+          "start_ms": 400,
+          "trim_offset": [
+            37,
+            63
+          ],
+          "trimmed_size": [
+            68,
+            69
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.632353,
+            0.0
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 800,
+            "y": 0,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 2,
+            "y": 467,
+            "w": 68,
+            "h": 69,
+            "page": 0
+          }
+        },
+        {
+          "name": "run_right_06",
+          "index": 6,
+          "duration_ms": 80,
+          "start_ms": 480,
+          "trim_offset": [
+            37,
+            64
+          ],
+          "trimmed_size": [
+            67,
+            67
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.641791,
+            -0.014925
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 960,
+            "y": 0,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 514,
+            "y": 467,
+            "w": 67,
+            "h": 67,
+            "page": 0
+          }
+        },
+        {
+          "name": "run_right_07",
+          "index": 7,
+          "duration_ms": 80,
+          "start_ms": 560,
+          "trim_offset": [
+            37,
+            65
+          ],
+          "trimmed_size": [
+            67,
+            68
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.641791,
+            0.014706
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 1120,
+            "y": 0,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 229,
+            "y": 467,
+            "w": 67,
+            "h": 68,
+            "page": 0
+          }
+        }
+      ],
+      "events": [
+        {
+          "frame": 0,
+          "type": "footstep",
+          "time_ms": 0
+        },
+        {
+          "frame": 4,
+          "type": "footstep",
+          "time_ms": 320
+        }
+      ],
+      "phases": [],
+      "layers": [],
+      "previews": {
+        "gif": "previews/run_right.gif",
+        "apng": "previews/run_right.png"
+      },
+      "is_test_fixture": false,
+      "provider": "pixel-atelier-example",
+      "character_id": "knight",
+      "mirror_of": null,
+      "atlas": "test_b_knight_atlas.png"
+    },
+    {
+      "key": "light_right",
+      "asset_id": "knight-light-714f3a",
+      "name": "light",
+      "direction": "right",
+      "art_style": "pixel",
+      "loop": {
+        "enabled": false,
+        "ping_pong": false,
+        "hold_last": false
+      },
+      "canvas": [
+        224,
+        224
+      ],
+      "pivot_px": [
+        112,
+        196
+      ],
+      "duration_ms": 1640,
+      "frames": [
+        {
+          "name": "light_right_00",
+          "index": 0,
+          "duration_ms": 120,
+          "start_ms": 0,
+          "trim_offset": [
+            44,
+            93
+          ],
+          "trimmed_size": [
+            93,
+            104
+          ],
+          "source_size": [
+            224,
+            224
+          ],
+          "pivot_px": [
+            112,
+            196
+          ],
+          "pivot_norm": [
+            0.5,
+            0.125
+          ],
+          "pivot_norm_trimmed": [
+            0.731183,
+            0.009615
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 0,
+            "y": 0,
+            "w": 224,
+            "h": 224
+          },
+          "atlas": {
+            "x": 2,
+            "y": 178,
+            "w": 93,
+            "h": 104,
+            "page": 0
+          }
+        },
+        {
+          "name": "light_right_01",
+          "index": 1,
+          "duration_ms": 120,
+          "start_ms": 120,
+          "trim_offset": [
+            45,
+            96
+          ],
+          "trimmed_size": [
+            89,
+            101
+          ],
+          "source_size": [
+            224,
+            224
+          ],
+          "pivot_px": [
+            112,
+            196
+          ],
+          "pivot_norm": [
+            0.5,
+            0.125
+          ],
+          "pivot_norm_trimmed": [
+            0.752809,
+            0.009901
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 224,
+            "y": 0,
+            "w": 224,
+            "h": 224
+          },
+          "atlas": {
+            "x": 609,
+            "y": 178,
+            "w": 89,
+            "h": 101,
+            "page": 0
+          }
+        },
+        {
+          "name": "light_right_02",
+          "index": 2,
+          "duration_ms": 140,
+          "start_ms": 240,
+          "trim_offset": [
+            51,
+            87
+          ],
+          "trimmed_size": [
+            85,
+            110
+          ],
+          "source_size": [
+            224,
+            224
+          ],
+          "pivot_px": [
+            112,
+            196
+          ],
+          "pivot_norm": [
+            0.5,
+            0.125
+          ],
+          "pivot_norm_trimmed": [
+            0.717647,
+            0.009091
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 448,
+            "y": 0,
+            "w": 224,
+            "h": 224
+          },
+          "atlas": {
+            "x": 300,
+            "y": 2,
+            "w": 85,
+            "h": 110,
+            "page": 0
+          }
+        },
+        {
+          "name": "light_right_03",
+          "index": 3,
+          "duration_ms": 40,
+          "start_ms": 380,
+          "trim_offset": [
+            79,
+            107
+          ],
+          "trimmed_size": [
+            120,
+            91
+          ],
+          "source_size": [
+            224,
+            224
+          ],
+          "pivot_px": [
+            112,
+            196
+          ],
+          "pivot_norm": [
+            0.5,
+            0.125
+          ],
+          "pivot_norm_trimmed": [
+            0.275,
+            0.021978
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 672,
+            "y": 0,
+            "w": 224,
+            "h": 224
+          },
+          "atlas": {
+            "x": 334,
+            "y": 284,
+            "w": 120,
+            "h": 91,
+            "page": 0
+          }
+        },
+        {
+          "name": "light_right_04",
+          "index": 4,
+          "duration_ms": 80,
+          "start_ms": 420,
+          "trim_offset": [
+            79,
+            102
+          ],
+          "trimmed_size": [
+            129,
+            98
+          ],
+          "source_size": [
+            224,
+            224
+          ],
+          "pivot_px": [
+            112,
+            196
+          ],
+          "pivot_norm": [
+            0.5,
+            0.125
+          ],
+          "pivot_norm_trimmed": [
+            0.255814,
+            0.040816
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 896,
+            "y": 0,
+            "w": 224,
+            "h": 224
+          },
+          "atlas": {
+            "x": 2,
+            "y": 284,
+            "w": 129,
+            "h": 98,
+            "page": 0
+          }
+        },
+        {
+          "name": "light_right_05",
+          "index": 5,
+          "duration_ms": 100,
+          "start_ms": 500,
+          "trim_offset": [
+            80,
+            136
+          ],
+          "trimmed_size": [
+            137,
+            64
+          ],
+          "source_size": [
+            224,
+            224
+          ],
+          "pivot_px": [
+            112,
+            196
+          ],
+          "pivot_norm": [
+            0.5,
+            0.125
+          ],
+          "pivot_norm_trimmed": [
+            0.233577,
+            0.0625
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 1120,
+            "y": 0,
+            "w": 224,
+            "h": 224
+          },
+          "atlas": {
+            "x": 543,
+            "y": 538,
+            "w": 137,
+            "h": 64,
+            "page": 0
+          }
+        },
+        {
+          "name": "light_right_06",
+          "index": 6,
+          "duration_ms": 100,
+          "start_ms": 600,
+          "trim_offset": [
+            90,
+            138
+          ],
+          "trimmed_size": [
+            118,
+            60
+          ],
+          "source_size": [
+            224,
+            224
+          ],
+          "pivot_px": [
+            112,
+            196
+          ],
+          "pivot_norm": [
+            0.5,
+            0.125
+          ],
+          "pivot_norm_trimmed": [
+            0.186441,
+            0.033333
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 1344,
+            "y": 0,
+            "w": 224,
+            "h": 224
+          },
+          "atlas": {
+            "x": 193,
+            "y": 606,
+            "w": 118,
+            "h": 60,
+            "page": 0
+          }
+        },
+        {
+          "name": "light_right_07",
+          "index": 7,
+          "duration_ms": 120,
+          "start_ms": 700,
+          "trim_offset": [
+            89,
+            143
+          ],
+          "trimmed_size": [
+            127,
+            54
+          ],
+          "source_size": [
+            224,
+            224
+          ],
+          "pivot_px": [
+            112,
+            196
+          ],
+          "pivot_norm": [
+            0.5,
+            0.125
+          ],
+          "pivot_norm_trimmed": [
+            0.181102,
+            0.018519
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 1568,
+            "y": 0,
+            "w": 224,
+            "h": 224
+          },
+          "atlas": {
+            "x": 498,
+            "y": 606,
+            "w": 127,
+            "h": 54,
+            "page": 0
+          }
+        },
+        {
+          "name": "light_right_08",
+          "index": 8,
+          "duration_ms": 60,
+          "start_ms": 820,
+          "trim_offset": [
+            79,
+            134
+          ],
+          "trimmed_size": [
+            120,
+            63
+          ],
+          "source_size": [
+            224,
+            224
+          ],
+          "pivot_px": [
+            112,
+            196
+          ],
+          "pivot_norm": [
+            0.5,
+            0.125
+          ],
+          "pivot_norm_trimmed": [
+            0.275,
+            0.015873
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 0,
+            "y": 224,
+            "w": 224,
+            "h": 224
+          },
+          "atlas": {
+            "x": 2,
+            "y": 606,
+            "w": 120,
+            "h": 63,
+            "page": 0
+          }
+        },
+        {
+          "name": "light_right_09",
+          "index": 9,
+          "duration_ms": 40,
+          "start_ms": 880,
+          "trim_offset": [
+            81,
+            118
+          ],
+          "trimmed_size": [
+            139,
+            79
+          ],
+          "source_size": [
+            224,
+            224
+          ],
+          "pivot_px": [
+            112,
+            196
+          ],
+          "pivot_norm": [
+            0.5,
+            0.125
+          ],
+          "pivot_norm_trimmed": [
+            0.223022,
+            0.012658
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 224,
+            "y": 224,
+            "w": 224,
+            "h": 224
+          },
+          "atlas": {
+            "x": 138,
+            "y": 384,
+            "w": 139,
+            "h": 79,
+            "page": 0
+          }
+        },
+        {
+          "name": "light_right_10",
+          "index": 10,
+          "duration_ms": 40,
+          "start_ms": 920,
+          "trim_offset": [
+            83,
+            40
+          ],
+          "trimmed_size": [
+            124,
+            157
+          ],
+          "source_size": [
+            224,
+            224
+          ],
+          "pivot_px": [
+            112,
+            196
+          ],
+          "pivot_norm": [
+            0.5,
+            0.125
+          ],
+          "pivot_norm_trimmed": [
+            0.233871,
+            0.006369
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 448,
+            "y": 224,
+            "w": 224,
+            "h": 224
+          },
+          "atlas": {
+            "x": 105,
+            "y": 2,
+            "w": 124,
+            "h": 157,
+            "page": 0
+          }
+        },
+        {
+          "name": "light_right_11",
+          "index": 11,
+          "duration_ms": 60,
+          "start_ms": 960,
+          "trim_offset": [
+            84,
+            23
+          ],
+          "trimmed_size": [
+            101,
+            174
+          ],
+          "source_size": [
+            224,
+            224
+          ],
+          "pivot_px": [
+            112,
+            196
+          ],
+          "pivot_norm": [
+            0.5,
+            0.125
+          ],
+          "pivot_norm_trimmed": [
+            0.277228,
+            0.005747
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 672,
+            "y": 224,
+            "w": 224,
+            "h": 224
+          },
+          "atlas": {
+            "x": 2,
+            "y": 2,
+            "w": 101,
+            "h": 174,
+            "page": 0
+          }
+        },
+        {
+          "name": "light_right_12",
+          "index": 12,
+          "duration_ms": 120,
+          "start_ms": 1020,
+          "trim_offset": [
+            68,
+            46
+          ],
+          "trimmed_size": [
+            67,
+            151
+          ],
+          "source_size": [
+            224,
+            224
+          ],
+          "pivot_px": [
+            112,
+            196
+          ],
+          "pivot_norm": [
+            0.5,
+            0.125
+          ],
+          "pivot_norm_trimmed": [
+            0.656716,
+            0.006623
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 896,
+            "y": 224,
+            "w": 224,
+            "h": 224
+          },
+          "atlas": {
+            "x": 231,
+            "y": 2,
+            "w": 67,
+            "h": 151,
+            "page": 0
+          }
+        },
+        {
+          "name": "light_right_13",
+          "index": 13,
+          "duration_ms": 140,
+          "start_ms": 1140,
+          "trim_offset": [
+            45,
+            104
+          ],
+          "trimmed_size": [
+            95,
+            93
+          ],
+          "source_size": [
+            224,
+            224
+          ],
+          "pivot_px": [
+            112,
+            196
+          ],
+          "pivot_norm": [
+            0.5,
+            0.125
+          ],
+          "pivot_norm_trimmed": [
+            0.705263,
+            0.010753
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 1120,
+            "y": 224,
+            "w": 224,
+            "h": 224
+          },
+          "atlas": {
+            "x": 237,
+            "y": 284,
+            "w": 95,
+            "h": 93,
+            "page": 0
+          }
+        },
+        {
+          "name": "light_right_14",
+          "index": 14,
+          "duration_ms": 160,
+          "start_ms": 1280,
+          "trim_offset": [
+            47,
+            111
+          ],
+          "trimmed_size": [
+            94,
+            86
+          ],
+          "source_size": [
+            224,
+            224
+          ],
+          "pivot_px": [
+            112,
+            196
+          ],
+          "pivot_norm": [
+            0.5,
+            0.125
+          ],
+          "pivot_norm_trimmed": [
+            0.691489,
+            0.011628
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 1344,
+            "y": 224,
+            "w": 224,
+            "h": 224
+          },
+          "atlas": {
+            "x": 456,
+            "y": 284,
+            "w": 94,
+            "h": 86,
+            "page": 0
+          }
+        },
+        {
+          "name": "light_right_15",
+          "index": 15,
+          "duration_ms": 200,
+          "start_ms": 1440,
+          "trim_offset": [
+            44,
+            93
+          ],
+          "trimmed_size": [
+            93,
+            104
+          ],
+          "source_size": [
+            224,
+            224
+          ],
+          "pivot_px": [
+            112,
+            196
+          ],
+          "pivot_norm": [
+            0.5,
+            0.125
+          ],
+          "pivot_norm_trimmed": [
+            0.731183,
+            0.009615
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 1568,
+            "y": 224,
+            "w": 224,
+            "h": 224
+          },
+          "atlas": {
+            "x": 97,
+            "y": 178,
+            "w": 93,
+            "h": 104,
+            "page": 0
+          }
+        }
+      ],
+      "events": [
+        {
+          "frame": 3,
+          "type": "hit",
+          "name": "downward strike",
+          "time_ms": 380
+        },
+        {
+          "frame": 10,
+          "type": "hit",
+          "name": "rising strike",
+          "time_ms": 920
+        }
+      ],
+      "phases": [],
+      "layers": [],
+      "previews": {
+        "gif": "previews/light_right.gif",
+        "apng": "previews/light_right.png"
+      },
+      "is_test_fixture": false,
+      "provider": "pixel-atelier-example",
+      "character_id": "knight",
+      "mirror_of": null,
+      "atlas": "test_b_knight_atlas.png"
+    },
+    {
+      "key": "heavy_right",
+      "asset_id": "knight-heavy-b064f3",
+      "name": "heavy",
+      "direction": "right",
+      "art_style": "pixel",
+      "loop": {
+        "enabled": false,
+        "ping_pong": false,
+        "hold_last": false
+      },
+      "canvas": [
+        160,
+        160
+      ],
+      "pivot_px": [
+        80,
+        132
+      ],
+      "duration_ms": 2100,
+      "frames": [
+        {
+          "name": "heavy_right_00",
+          "index": 0,
+          "duration_ms": 100,
+          "start_ms": 0,
+          "trim_offset": [
+            31,
+            67
+          ],
+          "trimmed_size": [
+            79,
+            66
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.620253,
+            0.015152
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 0,
+            "y": 0,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 583,
+            "y": 467,
+            "w": 79,
+            "h": 66,
+            "page": 0
+          }
+        },
+        {
+          "name": "heavy_right_01",
+          "index": 1,
+          "duration_ms": 120,
+          "start_ms": 100,
+          "trim_offset": [
+            30,
+            67
+          ],
+          "trimmed_size": [
+            77,
+            66
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.649351,
+            0.015152
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 160,
+            "y": 0,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 2,
+            "y": 538,
+            "w": 77,
+            "h": 66,
+            "page": 0
+          }
+        },
+        {
+          "name": "heavy_right_02",
+          "index": 2,
+          "duration_ms": 140,
+          "start_ms": 220,
+          "trim_offset": [
+            33,
+            61
+          ],
+          "trimmed_size": [
+            67,
+            72
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.701493,
+            0.013889
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 320,
+            "y": 0,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 514,
+            "y": 384,
+            "w": 67,
+            "h": 72,
+            "page": 0
+          }
+        },
+        {
+          "name": "heavy_right_03",
+          "index": 3,
+          "duration_ms": 160,
+          "start_ms": 360,
+          "trim_offset": [
+            34,
+            54
+          ],
+          "trimmed_size": [
+            68,
+            79
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.676471,
+            0.012658
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 480,
+            "y": 0,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 279,
+            "y": 384,
+            "w": 68,
+            "h": 79,
+            "page": 0
+          }
+        },
+        {
+          "name": "heavy_right_04",
+          "index": 4,
+          "duration_ms": 180,
+          "start_ms": 520,
+          "trim_offset": [
+            35,
+            52
+          ],
+          "trimmed_size": [
+            66,
+            81
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.681818,
+            0.012346
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 640,
+            "y": 0,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 2,
+            "y": 384,
+            "w": 66,
+            "h": 81,
+            "page": 0
+          }
+        },
+        {
+          "name": "heavy_right_05",
+          "index": 5,
+          "duration_ms": 180,
+          "start_ms": 700,
+          "trim_offset": [
+            36,
+            52
+          ],
+          "trimmed_size": [
+            66,
+            81
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.666667,
+            0.012346
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 800,
+            "y": 0,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 70,
+            "y": 384,
+            "w": 66,
+            "h": 81,
+            "page": 0
+          }
+        },
+        {
+          "name": "heavy_right_06",
+          "index": 6,
+          "duration_ms": 180,
+          "start_ms": 880,
+          "trim_offset": [
+            35,
+            52
+          ],
+          "trimmed_size": [
+            67,
+            81
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.671642,
+            0.012346
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 960,
+            "y": 0,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 688,
+            "y": 284,
+            "w": 67,
+            "h": 81,
+            "page": 0
+          }
+        },
+        {
+          "name": "heavy_right_07",
+          "index": 7,
+          "duration_ms": 180,
+          "start_ms": 1060,
+          "trim_offset": [
+            35,
+            52
+          ],
+          "trimmed_size": [
+            68,
+            81
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.661765,
+            0.012346
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 1120,
+            "y": 0,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 618,
+            "y": 284,
+            "w": 68,
+            "h": 81,
+            "page": 0
+          }
+        },
+        {
+          "name": "heavy_right_08",
+          "index": 8,
+          "duration_ms": 80,
+          "start_ms": 1240,
+          "trim_offset": [
+            35,
+            54
+          ],
+          "trimmed_size": [
+            68,
+            79
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.661765,
+            0.012658
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 0,
+            "y": 160,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 349,
+            "y": 384,
+            "w": 68,
+            "h": 79,
+            "page": 0
+          }
+        },
+        {
+          "name": "heavy_right_09",
+          "index": 9,
+          "duration_ms": 40,
+          "start_ms": 1320,
+          "trim_offset": [
+            53,
+            48
+          ],
+          "trimmed_size": [
+            64,
+            86
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.421875,
+            0.023256
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 160,
+            "y": 160,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 552,
+            "y": 284,
+            "w": 64,
+            "h": 86,
+            "page": 0
+          }
+        },
+        {
+          "name": "heavy_right_10",
+          "index": 10,
+          "duration_ms": 60,
+          "start_ms": 1360,
+          "trim_offset": [
+            53,
+            60
+          ],
+          "trimmed_size": [
+            93,
+            73
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.290323,
+            0.013699
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 320,
+            "y": 160,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 419,
+            "y": 384,
+            "w": 93,
+            "h": 73,
+            "page": 0
+          }
+        },
+        {
+          "name": "heavy_right_11",
+          "index": 11,
+          "duration_ms": 100,
+          "start_ms": 1420,
+          "trim_offset": [
+            52,
+            79
+          ],
+          "trimmed_size": [
+            93,
+            55
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.301075,
+            0.036364
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 480,
+            "y": 160,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 403,
+            "y": 606,
+            "w": 93,
+            "h": 55,
+            "page": 0
+          }
+        },
+        {
+          "name": "heavy_right_12",
+          "index": 12,
+          "duration_ms": 120,
+          "start_ms": 1520,
+          "trim_offset": [
+            52,
+            79
+          ],
+          "trimmed_size": [
+            91,
+            54
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.307692,
+            0.018519
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 640,
+            "y": 160,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 627,
+            "y": 606,
+            "w": 91,
+            "h": 54,
+            "page": 0
+          }
+        },
+        {
+          "name": "heavy_right_13",
+          "index": 13,
+          "duration_ms": 120,
+          "start_ms": 1640,
+          "trim_offset": [
+            52,
+            73
+          ],
+          "trimmed_size": [
+            88,
+            60
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.318182,
+            0.016667
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 800,
+            "y": 160,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 313,
+            "y": 606,
+            "w": 88,
+            "h": 60,
+            "page": 0
+          }
+        },
+        {
+          "name": "heavy_right_14",
+          "index": 14,
+          "duration_ms": 140,
+          "start_ms": 1760,
+          "trim_offset": [
+            33,
+            65
+          ],
+          "trimmed_size": [
+            78,
+            68
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.602564,
+            0.014706
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 960,
+            "y": 160,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 72,
+            "y": 467,
+            "w": 78,
+            "h": 68,
+            "page": 0
+          }
+        },
+        {
+          "name": "heavy_right_15",
+          "index": 15,
+          "duration_ms": 200,
+          "start_ms": 1900,
+          "trim_offset": [
+            31,
+            67
+          ],
+          "trimmed_size": [
+            79,
+            66
+          ],
+          "source_size": [
+            160,
+            160
+          ],
+          "pivot_px": [
+            80,
+            132
+          ],
+          "pivot_norm": [
+            0.5,
+            0.175
+          ],
+          "pivot_norm_trimmed": [
+            0.620253,
+            0.015152
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 1120,
+            "y": 160,
+            "w": 160,
+            "h": 160
+          },
+          "atlas": {
+            "x": 664,
+            "y": 467,
+            "w": 79,
+            "h": 66,
+            "page": 0
+          }
+        }
+      ],
+      "events": [
+        {
+          "frame": 9,
+          "type": "release",
+          "time_ms": 1320
+        },
+        {
+          "frame": 10,
+          "type": "hit",
+          "time_ms": 1360
+        }
+      ],
+      "phases": [],
+      "layers": [],
+      "previews": {
+        "gif": "previews/heavy_right.gif",
+        "apng": "previews/heavy_right.png"
+      },
+      "is_test_fixture": false,
+      "provider": "pixel-atelier-example",
+      "character_id": "knight",
+      "mirror_of": null,
+      "atlas": "test_b_knight_atlas.png"
+    },
+    {
+      "key": "run_right_b6461f",
+      "asset_id": "knight-run-b6461f",
+      "name": "run",
+      "direction": "right",
+      "art_style": "hd",
+      "loop": {
+        "enabled": true,
+        "ping_pong": false,
+        "hold_last": false
+      },
+      "canvas": [
+        114,
+        122
+      ],
+      "pivot_px": [
+        57,
+        118
+      ],
+      "duration_ms": 640,
+      "frames": [
+        {
+          "name": "run_right_b6461f_00",
+          "index": 0,
+          "duration_ms": 80,
+          "start_ms": 0,
+          "trim_offset": [
+            6,
+            8
+          ],
+          "trimmed_size": [
+            102,
+            102
+          ],
+          "source_size": [
+            114,
+            122
+          ],
+          "pivot_px": [
+            57,
+            118
+          ],
+          "pivot_norm": [
+            0.5,
+            0.032787
+          ],
+          "pivot_norm_trimmed": [
+            0.5,
+            -0.078431
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 0,
+            "y": 0,
+            "w": 114,
+            "h": 122
+          },
+          "atlas": {
+            "x": 401,
+            "y": 178,
+            "w": 102,
+            "h": 102,
+            "page": 0
+          }
+        },
+        {
+          "name": "run_right_b6461f_01",
+          "index": 1,
+          "duration_ms": 80,
+          "start_ms": 80,
+          "trim_offset": [
+            6,
+            5
+          ],
+          "trimmed_size": [
+            103,
+            102
+          ],
+          "source_size": [
+            114,
+            122
+          ],
+          "pivot_px": [
+            57,
+            118
+          ],
+          "pivot_norm": [
+            0.5,
+            0.032787
+          ],
+          "pivot_norm_trimmed": [
+            0.495146,
+            -0.107843
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 114,
+            "y": 0,
+            "w": 114,
+            "h": 122
+          },
+          "atlas": {
+            "x": 296,
+            "y": 178,
+            "w": 103,
+            "h": 102,
+            "page": 0
+          }
+        },
+        {
+          "name": "run_right_b6461f_02",
+          "index": 2,
+          "duration_ms": 80,
+          "start_ms": 160,
+          "trim_offset": [
+            6,
+            10
+          ],
+          "trimmed_size": [
+            103,
+            105
+          ],
+          "source_size": [
+            114,
+            122
+          ],
+          "pivot_px": [
+            57,
+            118
+          ],
+          "pivot_norm": [
+            0.5,
+            0.032787
+          ],
+          "pivot_norm_trimmed": [
+            0.495146,
+            -0.028571
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 228,
+            "y": 0,
+            "w": 114,
+            "h": 122
+          },
+          "atlas": {
+            "x": 491,
+            "y": 2,
+            "w": 103,
+            "h": 105,
+            "page": 0
+          }
+        },
+        {
+          "name": "run_right_b6461f_03",
+          "index": 3,
+          "duration_ms": 80,
+          "start_ms": 240,
+          "trim_offset": [
+            4,
+            14
+          ],
+          "trimmed_size": [
+            102,
+            95
+          ],
+          "source_size": [
+            114,
+            122
+          ],
+          "pivot_px": [
+            57,
+            118
+          ],
+          "pivot_norm": [
+            0.5,
+            0.032787
+          ],
+          "pivot_norm_trimmed": [
+            0.519608,
+            -0.094737
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 342,
+            "y": 0,
+            "w": 114,
+            "h": 122
+          },
+          "atlas": {
+            "x": 133,
+            "y": 284,
+            "w": 102,
+            "h": 95,
+            "page": 0
+          }
+        },
+        {
+          "name": "run_right_b6461f_04",
+          "index": 4,
+          "duration_ms": 80,
+          "start_ms": 320,
+          "trim_offset": [
+            6,
+            10
+          ],
+          "trimmed_size": [
+            102,
+            108
+          ],
+          "source_size": [
+            114,
+            122
+          ],
+          "pivot_px": [
+            57,
+            118
+          ],
+          "pivot_norm": [
+            0.5,
+            0.032787
+          ],
+          "pivot_norm_trimmed": [
+            0.5,
+            0.0
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 456,
+            "y": 0,
+            "w": 114,
+            "h": 122
+          },
+          "atlas": {
+            "x": 387,
+            "y": 2,
+            "w": 102,
+            "h": 108,
+            "page": 0
+          }
+        },
+        {
+          "name": "run_right_b6461f_05",
+          "index": 5,
+          "duration_ms": 80,
+          "start_ms": 400,
+          "trim_offset": [
+            6,
+            4
+          ],
+          "trimmed_size": [
+            103,
+            105
+          ],
+          "source_size": [
+            114,
+            122
+          ],
+          "pivot_px": [
+            57,
+            118
+          ],
+          "pivot_norm": [
+            0.5,
+            0.032787
+          ],
+          "pivot_norm_trimmed": [
+            0.495146,
+            -0.085714
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 570,
+            "y": 0,
+            "w": 114,
+            "h": 122
+          },
+          "atlas": {
+            "x": 596,
+            "y": 2,
+            "w": 103,
+            "h": 105,
+            "page": 0
+          }
+        },
+        {
+          "name": "run_right_b6461f_06",
+          "index": 6,
+          "duration_ms": 80,
+          "start_ms": 480,
+          "trim_offset": [
+            6,
+            5
+          ],
+          "trimmed_size": [
+            102,
+            102
+          ],
+          "source_size": [
+            114,
+            122
+          ],
+          "pivot_px": [
+            57,
+            118
+          ],
+          "pivot_norm": [
+            0.5,
+            0.032787
+          ],
+          "pivot_norm_trimmed": [
+            0.5,
+            -0.107843
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 684,
+            "y": 0,
+            "w": 114,
+            "h": 122
+          },
+          "atlas": {
+            "x": 505,
+            "y": 178,
+            "w": 102,
+            "h": 102,
+            "page": 0
+          }
+        },
+        {
+          "name": "run_right_b6461f_07",
+          "index": 7,
+          "duration_ms": 80,
+          "start_ms": 560,
+          "trim_offset": [
+            6,
+            7
+          ],
+          "trimmed_size": [
+            102,
+            103
+          ],
+          "source_size": [
+            114,
+            122
+          ],
+          "pivot_px": [
+            57,
+            118
+          ],
+          "pivot_norm": [
+            0.5,
+            0.032787
+          ],
+          "pivot_norm_trimmed": [
+            0.5,
+            -0.07767
+          ],
+          "phase": null,
+          "origin": "generated",
+          "sheet": {
+            "x": 798,
+            "y": 0,
+            "w": 114,
+            "h": 122
+          },
+          "atlas": {
+            "x": 192,
+            "y": 178,
+            "w": 102,
+            "h": 103,
+            "page": 0
+          }
+        }
+      ],
+      "events": [],
+      "phases": [],
+      "layers": [],
+      "previews": {
+        "gif": "previews/run_right_b6461f.gif",
+        "apng": "previews/run_right_b6461f.png"
+      },
+      "is_test_fixture": false,
+      "provider": "pixel-atelier-example",
+      "character_id": "knight",
+      "mirror_of": null,
+      "atlas": "test_b_knight_atlas.png"
+    }
+  ],
+  "direction_map": {
+    "idle": {
+      "right": {
+        "key": "idle_right",
+        "flip_x": false
+      }
+    },
+    "run": {
+      "right": {
+        "key": "run_right_b6461f",
+        "flip_x": false
+      }
+    },
+    "light": {
+      "right": {
+        "key": "light_right",
+        "flip_x": false
+      }
+    },
+    "heavy": {
+      "right": {
+        "key": "heavy_right",
+        "flip_x": false
+      }
+    }
+  },
+  "files": [
+    "frames/idle_right/00.png",
+    "frames/idle_right/01.png",
+    "frames/idle_right/02.png",
+    "frames/idle_right/03.png",
+    "frames/idle_right/04.png",
+    "frames/idle_right/05.png",
+    "frames/idle_right/06.png",
+    "frames/idle_right/07.png",
+    "sheets/idle_right.png",
+    "previews/idle_right.gif",
+    "previews/idle_right.png",
+    "frames/run_right/00.png",
+    "frames/run_right/01.png",
+    "frames/run_right/02.png",
+    "frames/run_right/03.png",
+    "frames/run_right/04.png",
+    "frames/run_right/05.png",
+    "frames/run_right/06.png",
+    "frames/run_right/07.png",
+    "sheets/run_right.png",
+    "previews/run_right.gif",
+    "previews/run_right.png",
+    "frames/light_right/00.png",
+    "frames/light_right/01.png",
+    "frames/light_right/02.png",
+    "frames/light_right/03.png",
+    "frames/light_right/04.png",
+    "frames/light_right/05.png",
+    "frames/light_right/06.png",
+    "frames/light_right/07.png",
+    "frames/light_right/08.png",
+    "frames/light_right/09.png",
+    "frames/light_right/10.png",
+    "frames/light_right/11.png",
+    "frames/light_right/12.png",
+    "frames/light_right/13.png",
+    "frames/light_right/14.png",
+    "frames/light_right/15.png",
+    "sheets/light_right.png",
+    "previews/light_right.gif",
+    "previews/light_right.png",
+    "frames/heavy_right/00.png",
+    "frames/heavy_right/01.png",
+    "frames/heavy_right/02.png",
+    "frames/heavy_right/03.png",
+    "frames/heavy_right/04.png",
+    "frames/heavy_right/05.png",
+    "frames/heavy_right/06.png",
+    "frames/heavy_right/07.png",
+    "frames/heavy_right/08.png",
+    "frames/heavy_right/09.png",
+    "frames/heavy_right/10.png",
+    "frames/heavy_right/11.png",
+    "frames/heavy_right/12.png",
+    "frames/heavy_right/13.png",
+    "frames/heavy_right/14.png",
+    "frames/heavy_right/15.png",
+    "sheets/heavy_right.png",
+    "previews/heavy_right.gif",
+    "previews/heavy_right.png",
+    "frames/run_right_b6461f/00.png",
+    "frames/run_right_b6461f/01.png",
+    "frames/run_right_b6461f/02.png",
+    "frames/run_right_b6461f/03.png",
+    "frames/run_right_b6461f/04.png",
+    "frames/run_right_b6461f/05.png",
+    "frames/run_right_b6461f/06.png",
+    "frames/run_right_b6461f/07.png",
+    "sheets/run_right_b6461f.png",
+    "previews/run_right_b6461f.gif",
+    "previews/run_right_b6461f.png",
+    "test_b_knight_atlas.png",
+    "test_b_knight_atlas.json",
+    "cocos/test_b_knight.png",
+    "cocos/test_b_knight.plist"
+  ]
+}

@@ -1,0 +1,166 @@
+{
+  "schema": 1,
+  "name": "treasure-chest",
+  "w": 64,
+  "h": 64,
+  "palette": [
+    [
+      27,
+      16,
+      32,
+      255
+    ],
+    [
+      61,
+      31,
+      18,
+      255
+    ],
+    [
+      107,
+      58,
+      31,
+      255
+    ],
+    [
+      154,
+      90,
+      46,
+      255
+    ],
+    [
+      199,
+      132,
+      69,
+      255
+    ],
+    [
+      226,
+      169,
+      100,
+      255
+    ],
+    [
+      53,
+      58,
+      78,
+      255
+    ],
+    [
+      108,
+      118,
+      144,
+      255
+    ],
+    [
+      176,
+      188,
+      212,
+      255
+    ],
+    [
+      138,
+      90,
+      18,
+      255
+    ],
+    [
+      212,
+      154,
+      34,
+      255
+    ],
+    [
+      247,
+      209,
+      74,
+      255
+    ],
+    [
+      255,
+      244,
+      176,
+      255
+    ],
+    [
+      32,
+      12,
+      22,
+      255
+    ],
+    [
+      255,
+      255,
+      255,
+      255
+    ],
+    [
+      255,
+      242,
+      194,
+      255
+    ]
+  ],
+  "layers": [
+    {
+      "name": "outline",
+      "opacity": 255,
+      "visible": true,
+      "blend": "normal"
+    },
+    {
+      "name": "body",
+      "opacity": 255,
+      "visible": true,
+      "blend": "normal"
+    },
+    {
+      "name": "interior",
+      "opacity": 255,
+      "visible": true,
+      "blend": "normal"
+    },
+    {
+      "name": "lid",
+      "opacity": 255,
+      "visible": true,
+      "blend": "normal"
+    },
+    {
+      "name": "fx",
+      "opacity": 255,
+      "visible": true,
+      "blend": "normal"
+    }
+  ],
+  "frames": [
+    {
+      "duration_ms": 100
+    }
+  ],
+  "tags": [],
+  "cels": [
+    {
+      "layer": 0,
+      "frame": 0,
+      "x": 0,
+      "y": 0,
+      "file": "cels/L0_F0.png"
+    },
+    {
+      "layer": 1,
+      "frame": 0,
+      "x": 0,
+      "y": 0,
+      "file": "cels/L1_F0.png"
+    },
+    {
+      "layer": 3,
+      "frame": 0,
+      "x": 0,
+      "y": 0,
+      "file": "cels/L3_F0.png"
+    }
+  ],
+  "reference": null
+}
