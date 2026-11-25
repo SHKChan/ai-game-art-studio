@@ -14,7 +14,7 @@ from .export import contact_sheet, export_assets
 from .jobs import JobQueue
 from .processing import importers
 from .processing.frames import (depixelate, estimate_pixel_scale, remove_background, slice_auto, slice_grid)
-from .prompts import keyframe_prompt, master_prompt
+from .prompts import build_keyframe_prompt, build_master_prompt
 from .providers import Registry
 from .providers.base import GenerationError, GenerationRequest
 from .qa import check_asset, check_animation_set, check_character_directions
@@ -48,9 +48,9 @@ class Studio:
         b = BUILDERS.get(builder)
         if not b:
             raise StudioError(f"Unknown builder {builder}. Available: {sorted(BUILDERS)}")
-        prov = self.registry.get("atelier")
+        prov = self.registry.get("procedural")
         tmp = self.ws.root / "tmp" / new_id("atl")
-        req = GenerationRequest("procedural", {"home": str(self.ws.atelier_home(pid)), "builder": builder,
+        req = GenerationRequest("procedural", {"home": str(self.ws.engine_home(pid)), "builder": builder,
                                                "builder_params": params or {}}, out_dir=tmp)
         res = prov.generate(req, ctx or JobContext())
         frames = [(Image.open(p).convert("RGBA"), d) for p, d in zip(res.images, res.metadata["durations"])]
@@ -58,39 +58,39 @@ class Studio:
             self.ws, pid, name or builder.replace("_", " ").title(), frames, anim_name=builder, mode="pixel",
             params={"mode": "pixel", "anchor": "source", "padding": 0, "canvas": list(frames[0][0].size),
                     "pivot": [frames[0][0].width // 2, frames[0][0].height - 1]},
-            provider={"id": "atelier", "kind": "procedural", "is_test_fixture": False,
-                      "details": {"calls": res.metadata["calls"], "atelier": res.metadata.get("atelier_meta", {})}},
+            provider={"id": "procedural", "kind": "procedural", "is_test_fixture": False,
+                      "details": {"calls": res.metadata["calls"]}},
             character_id=character_id, origin="procedural", asset_type=b.ASSET_TYPE if b.ASSET_TYPE != "animation" else "animation",
-            loop=builder in ("fireball",), tags=["procedural", "atelier", builder])
+            loop=builder in ("fireball",), tags=["procedural", builder])
         d = self.ws.asset_dir(pid, asset["id"])
         rec_dst = d / "source" / "doc.recipe"
         shutil.copyfile(res.metadata["recipe"], rec_dst)
-        asset["procedural"] = {"engine": "atelier", "doc_id": res.metadata["doc_id"], "recipe": "source/doc.recipe",
+        asset["procedural"] = {"engine": "artstudio-pixel", "doc_id": res.metadata["doc_id"], "recipe": "source/doc.recipe",
                                "builder": builder, "params": params or {}}
-        asset["source_files"].append({"path": "source/doc.recipe", "role": "atelier-recipe", "origin": "procedural"})
+        asset["source_files"].append({"path": "source/doc.recipe", "role": "engine-recipe", "origin": "procedural"})
         shutil.rmtree(tmp, ignore_errors=True)
         self.ws.save_asset(asset)
         check_asset(self.ws, asset)
         return self.ws.get_asset(pid, asset["id"])
 
     def draw_calls(self, pid: str, calls: list[dict], name: str, asset_type: str = "item", ctx=None) -> dict:
-        """Run an agent-authored list of Atelier tool calls ({"name","arguments"}, "$DOC" = new doc id).
+        """Run an agent-authored list of pixel-engine tool calls ({"name","arguments"}, "$DOC" = new doc id).
         Lets any item/effect/icon/tile be drawn without writing a builder."""
         from .providers.base import JobContext
         if not calls or calls[0].get("name") != "doc_new":
             raise StudioError("The first call must be doc_new")
-        prov = self.registry.get("atelier")
+        prov = self.registry.get("procedural")
         tmp = self.ws.root / "tmp" / new_id("drw")
-        res = prov.generate(GenerationRequest("procedural", {"home": str(self.ws.atelier_home(pid)), "calls": calls}, out_dir=tmp), ctx or JobContext())
+        res = prov.generate(GenerationRequest("procedural", {"home": str(self.ws.engine_home(pid)), "calls": calls}, out_dir=tmp), ctx or JobContext())
         frames = [(Image.open(p).convert("RGBA"), d) for p, d in zip(res.images, res.metadata["durations"])]
         w, h = frames[0][0].size
         a = create_animation_asset(self.ws, pid, name, frames, anim_name="drawn", mode="pixel",
                                    params={"mode": "pixel", "anchor": "source", "padding": 0, "canvas": [w, h], "pivot": [w // 2, h - 1]},
-                                   provider={"id": "atelier", "kind": "procedural", "is_test_fixture": False},
-                                   origin="procedural", asset_type=asset_type, tags=["atelier", "agent-drawn"])
+                                   provider={"id": "procedural", "kind": "procedural", "is_test_fixture": False},
+                                   origin="procedural", asset_type=asset_type, tags=["procedural", "agent-drawn"])
         d = self.ws.asset_dir(pid, a["id"])
         shutil.copyfile(res.metadata["recipe"], d / "source" / "doc.recipe")
-        a["procedural"] = {"engine": "atelier", "doc_id": res.metadata["doc_id"], "recipe": "source/doc.recipe", "builder": "agent-calls", "params": {}}
+        a["procedural"] = {"engine": "artstudio-pixel", "doc_id": res.metadata["doc_id"], "recipe": "source/doc.recipe", "builder": "agent-calls", "params": {}}
         shutil.rmtree(tmp, ignore_errors=True)
         self.ws.save_asset(a)
         check_asset(self.ws, a)
@@ -98,18 +98,18 @@ class Studio:
 
     def replay_recipe(self, pid: str, recipe: Path, name: str, ctx=None) -> dict:
         from .providers.base import JobContext
-        prov = self.registry.get("atelier")
+        prov = self.registry.get("procedural")
         tmp = self.ws.root / "tmp" / new_id("rpl")
-        res = prov.generate(GenerationRequest("procedural", {"home": str(self.ws.atelier_home(pid)), "recipe": str(recipe)}, out_dir=tmp), ctx or JobContext())
+        res = prov.generate(GenerationRequest("procedural", {"home": str(self.ws.engine_home(pid)), "recipe": str(recipe)}, out_dir=tmp), ctx or JobContext())
         frames = [(Image.open(p).convert("RGBA"), d) for p, d in zip(res.images, res.metadata["durations"])]
         w, h = frames[0][0].size
         a = create_animation_asset(self.ws, pid, name, frames, anim_name="replay", mode="pixel",
                                    params={"mode": "pixel", "anchor": "source", "padding": 0, "canvas": [w, h], "pivot": [w // 2, h - 1]},
-                                   provider={"id": "atelier", "kind": "procedural", "is_test_fixture": False},
-                                   origin="procedural", asset_type="effect", tags=["atelier", "replay"])
+                                   provider={"id": "procedural", "kind": "procedural", "is_test_fixture": False},
+                                   origin="procedural", asset_type="effect", tags=["procedural", "replay"])
         d = self.ws.asset_dir(pid, a["id"])
         shutil.copyfile(recipe, d / "source" / "doc.recipe")
-        a["procedural"] = {"engine": "atelier", "doc_id": res.metadata["doc_id"], "recipe": "source/doc.recipe", "builder": "replay", "params": {}}
+        a["procedural"] = {"engine": "artstudio-pixel", "doc_id": res.metadata["doc_id"], "recipe": "source/doc.recipe", "builder": "replay", "params": {}}
         shutil.rmtree(tmp, ignore_errors=True)
         return self.ws.save_asset(a)
 
@@ -175,8 +175,8 @@ class Studio:
                                       origin=origin, processing_note={"import": steps})
 
     # ------------------------------------------------------------------ Engine B
-    def import_pixel_atelier_knight(self, pid: str, character_id: str, actions: list[str] | None = None, mode: str = "pixel") -> list[dict]:
-        """Bring Pixel Atelier's genuine knight example (whole-character, side view, right-facing) into the studio."""
+    def import_knight_sample(self, pid: str, character_id: str, actions: list[str] | None = None, mode: str = "pixel") -> list[dict]:
+        """Bring the bundled knight sample (whole-character, side view, right-facing; AI-generated) into the studio."""
         mapping = {"idle": "idle", "run": "run", "dash": "dash", "light": "combo_attack", "heavy": "attack", "jump": "jump",
                    "hurt": "hit", "knockdown": "death"}
         out = []
@@ -190,20 +190,20 @@ class Studio:
                 self.ws, pid, f"Knight {meta['id']}", list(zip(frames, durs)), anim_name=meta["id"], direction="right", mode=mode,
                 params={"mode": mode, "anchor": "source", "padding": 2, "canvas": list(meta["frame_size"]), "pivot": list(pv),
                         "source_pivot": list(pv)},
-                provider={"id": "pixel-atelier-example", "kind": "ai_generated_upstream", "is_test_fixture": False,
-                          "details": {"source": f"upstream/pixel-atelier/examples/knight/{meta['id']}/atlas.png",
-                                      "provenance": "Pixel Atelier knight sample; per upstream README generated with Codex built-in imagegen and processed by Pixel Atelier",
-                                      "upstream_pivot": pv}},
+                provider={"id": "knight-sample", "kind": "ai_generated_sample", "is_test_fixture": False,
+                          "details": {"source": f"samples/knight/{meta['id']}/atlas.png",
+                                      "provenance": "Pixel Atelier knight sample: generated with Codex built-in imagegen and processed by Pixel Atelier (see samples/knight/NOTICE.md)",
+                                      "sample_pivot": pv}},
                 character_id=character_id, template=None, origin="generated",
                 source_file=Path(meta["atlas_path"]), source_rects=[f["rect"] for f in meta["frames"]],
-                events=[], loop=meta["id"] in ("idle", "run"), tags=["pixel-atelier", "knight", f"action:{mapping.get(meta['id'], meta['id'])}"])
+                events=[], loop=meta["id"] in ("idle", "run"), tags=["sample", "knight", f"action:{mapping.get(meta['id'], meta['id'])}"])
             out.append(a)
         return out
 
     def generate(self, pid: str, provider_id: str, *, kind: str = "keyframes", character_id: str | None = None,
                  template: str = "idle", direction: str = "none", workflow_id: str | None = None, params: dict | None = None,
                  reference: str | None = None, layout: dict | None = None, mode: str | None = None, note: str = "",
-                 name: str | None = None, ctx=None, budget=None) -> dict:
+                 name: str | None = None, ctx=None, budget=None, prompt_language: str | None = None) -> dict:
         """Reference-driven generation. kind: master_candidate | keyframes (sheet -> animation)."""
         from .providers.base import JobContext
         ctx = ctx or JobContext()
@@ -220,10 +220,11 @@ class Studio:
             m = c["masters"].get(direction) or c["masters"].get("primary") or next(iter(c["masters"].values()), None)
             if m:
                 refs.append(self.ws.char_dir(pid, c["id"]) / m["file"])
+        lang = prompt_language or self.ws.get_project(pid).get("prompt_language") or self.cfg.prompt_language
         if kind == "master_candidate":
-            pr = master_prompt(c, direction if direction != "none" else "south") if c else {"positive": note, "negative": ""}
+            pr = build_master_prompt(c, direction if direction != "none" else "south", lang) if c else {"positive": note, "negative": ""}
         else:
-            pr = keyframe_prompt(c, template, direction, mode, note=note) if c else {"positive": note or template, "negative": ""}
+            pr = build_keyframe_prompt(c, template, direction, mode, note=note, language=lang) if c else {"positive": note or template, "negative": ""}
         if budget is not None and prov.counts_toward_budget:
             budget.spend(1)
         out = self.ws.root / "tmp" / new_id("gen")
@@ -275,7 +276,9 @@ class Studio:
             m = c["masters"].get(anim["direction"]) or next(iter(c["masters"].values()))
             refs.insert(0, self.ws.char_dir(pid, c["id"]) / m["file"])
         tpl = anim.get("template") or "idle"
-        pr = keyframe_prompt(c, tpl, anim["direction"], a["art_style"], frame_index=min(index, len(TEMPLATES[tpl]["poses"]) - 1), note=note) if c else {"positive": note, "negative": ""}
+        lang = self.ws.get_project(pid).get("prompt_language") or self.cfg.prompt_language
+        pr = build_keyframe_prompt(c, tpl, anim["direction"], a["art_style"], frame_index=min(index, len(TEMPLATES[tpl]["poses"]) - 1), note=note,
+                                   language=lang) if c else {"positive": note, "negative": ""}
         out = self.ws.root / "tmp" / new_id("regen")
         res = prov.generate(GenerationRequest("pose_keyframe", dict(params or {}), pr["positive"], pr["negative"], refs, None, workflow_id, out), ctx or JobContext())
         with Image.open(res.images[0]) as im:
@@ -312,7 +315,7 @@ class Studio:
 
     def status(self) -> dict:
         return {"workspace": self.ws.summary(), "providers": self.registry.describe(),
-                "ffmpeg": importers.video_to_gif_check(self.ffmpeg), "pixel_atelier": adapters.available(), "time": now()}
+                "ffmpeg": importers.video_to_gif_check(self.ffmpeg), "samples": adapters.available(), "time": now()}
 
     # ------------------------------------------------------------------ job handlers
     def _job_procedural(self, p, ctx, budget, job):

@@ -20,7 +20,12 @@ Image.MAX_IMAGE_PIXELS = MAX_PIXELS
 
 
 class StudioError(ValueError):
-    """User-facing validation or processing error."""
+    """User-facing validation or processing error. `code` selects a translated message (artstudio.i18n)."""
+
+    def __init__(self, message: str, code: str | None = None, **params):
+        super().__init__(message)
+        self.code = code
+        self.params = params
 
 
 def new_id(prefix: str = "") -> str:

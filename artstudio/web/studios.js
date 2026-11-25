@@ -1,4 +1,5 @@
 // Character, Procedural, Import & Processing, Generation and Export studios.
+import { t } from './i18n.js';
 import { S, api, el, toast, guard, emit, fileUrl, charUrl, exportUrl, badge, fixtureBadge, refreshProject, select, readFile, waitJob, assetsOfProject, field, DIRS } from './core.js';
 
 const lines = (v) => (v || '').split('\n').map(s => s.trim()).filter(Boolean);
@@ -86,8 +87,8 @@ export async function renderCharacter(root) {
 }
 
 function newCharacterForm(root) {
-  const name = el('input', { value: 'Adventurer' }), mode = select([['four', '4 directions'], ['eight', '8 directions'], ['side2', 'side-scroller (L/R)']], 'four');
-  const style = select(['pixel', 'hd'], S.data.project.default_style), desc = el('textarea', {}, 'Chibi fantasy adventurer with a red hood, blonde hair, red cape, brown adventurer outfit, brown boots and a sword.');
+  const name = el('input', { value: t('Adventurer') }), mode = select([['four', '4 directions'], ['eight', '8 directions'], ['side2', 'side-scroller (L/R)']], 'four');
+  const style = select(['pixel', 'hd'], S.data.project.default_style), desc = el('textarea', {}, t('Chibi fantasy adventurer with a red hood, blonde hair, red cape, brown adventurer outfit, brown boots and a sword.'));
   return el('div', { class: 'card' }, el('h3', {}, 'New character'), el('div', { class: 'form' }, ...field('Name', name), ...field('Directions', mode), ...field('Art style', style), ...field('Description', desc)),
     el('button', { class: 'primary', onclick: () => guard(async () => {
       const c = await api(`/api/projects/${S.project}/characters`, { body: { name: name.value, direction_mode: mode.value, art_style: style.value, description: desc.value } });
@@ -98,7 +99,7 @@ function newCharacterForm(root) {
 export async function renderProcedural(root) {
   if (needProject(root)) return;
   root.innerHTML = '';
-  const atl = S.providers.find(p => p.id === 'atelier');
+  const atl = S.providers.find(p => p.id === 'procedural');
   const builders = S.templates.builders;
   const bsel = select(Object.keys(builders), Object.keys(builders)[0]);
   const form = el('div', { class: 'form' });
@@ -119,20 +120,20 @@ export async function renderProcedural(root) {
     el('div', { class: 'thumb checker' }, el('img', { src: fileUrl(a, a.animation.frames[0].file) })), el('div', { class: 'name' }, a.name), el('div', { class: 'small muted' }, `${a.procedural.builder} · ${a.animation.frames.length}f`))));
   const inspector = el('div', { class: 'card' }, el('h3', {}, 'Document inspector'), el('p', { class: 'muted' }, 'Select a procedural asset.'));
   root.append(el('div', { class: 'grid cols3' },
-    el('div', { class: 'card' }, el('h3', {}, 'Atelier recipe'), !atl?.status.available ? el('div', { class: 'warnbox' }, 'Atelier unavailable: ' + atl?.status.reason) : el('div', { class: 'small muted' }, atl.status.details.version),
+    el('div', { class: 'card' }, el('h3', {}, 'Pixel engine recipe'), !atl?.status.available ? el('div', { class: 'warnbox' }, atl?.status.reason || 'unavailable') : el('div', { class: 'small muted' }, `${atl.status.details.tools.length} tools`),
       el('div', { class: 'form' }, el('label', {}, 'Builder'), bsel), form, el('div', { class: 'form' }, el('label', {}, 'Name'), name),
       el('button', { class: 'primary', disabled: !atl?.status.available, onclick: () => guard(async () => {
         const params = {}; for (const [k, i] of Object.entries(inputs)) params[k] = i.type === 'number' ? +i.value : i.value;
         const job = await api(`/api/projects/${S.project}/procedural`, { body: { builder: bsel.value, params, name: name.value || null } });
-        await waitJob(job, async (j) => { toast('Drawn by Atelier'); S.procAsset = j.result.asset_id; await refreshProject(); renderProcedural(root); }); }) }, 'Run with Atelier'),
-      el('h4', {}, 'Replay an Atelier .recipe'), (() => { const f = el('input', { type: 'file', accept: '.recipe' }); f.onchange = () => guard(async () => {
+        await waitJob(job, async (j) => { toast('Drawn by the pixel engine'); S.procAsset = j.result.asset_id; await refreshProject(); renderProcedural(root); }); }) }, 'Run with pixel engine'),
+      el('h4', {}, 'Replay a .recipe'), (() => { const f = el('input', { type: 'file', accept: '.recipe' }); f.onchange = () => guard(async () => {
         const job = await api(`/api/projects/${S.project}/import`, { body: { filename: f.files[0].name, data: await readFile(f.files[0]), name: f.files[0].name } });
         await waitJob(job, async (j) => { S.procAsset = j.result.asset_id; await refreshProject(); renderProcedural(root); }); }); return f; })()),
     el('div', { class: 'card' }, el('h3', {}, 'Procedural assets'), list), inspector));
   if (S.procAsset) {
     const a = await api(`/api/projects/${S.project}/assets/${S.procAsset}`).catch(() => null);
     if (!a) return;
-    const info = await api(`/api/projects/${S.project}/assets/${a.id}/atelier`).catch(e => ({ error: e.message }));
+    const info = await api(`/api/projects/${S.project}/assets/${a.id}/document`).catch(e => ({ error: e.message }));
     inspector.innerHTML = '';
     inspector.append(el('h3', {}, a.name), el('div', { class: 'row' }, el('button', { onclick: () => emit('open-asset', a.id) }, 'Open in Animation Studio'),
       el('button', { onclick: () => guard(async () => { const job = await api(`/api/projects/${S.project}/assets/${a.id}/replay`, { body: {} });
@@ -140,11 +141,11 @@ export async function renderProcedural(root) {
       el('a', { href: fileUrl(a, a.procedural.recipe), target: '_blank' }, 'doc.recipe')));
     if (info.error) { inspector.append(el('div', { class: 'warnbox' }, info.error)); return; }
     const doc = info.doc;
-    inspector.append(el('div', { class: 'small muted' }, `doc ${info.doc_id} · ${doc.w}×${doc.h} · revision ${doc.revision} · ${info.recipe_lines} recipe calls`),
-      el('h4', {}, 'Palette'), el('div', {}, ...(doc.palette || []).map(c => el('span', { class: 'swatch', title: JSON.stringify(c), style: `background:${Array.isArray(c) ? `rgba(${c[0]},${c[1]},${c[2]},${(c[3] ?? 255) / 255})` : c}` }))),
-      el('h4', {}, 'Layers'), el('div', {}, ...doc.layers.map((l, li) => el('div', { class: 'small' }, `L${li} ${l.name} · ${l.blend} · opacity ${l.opacity}${l.visible ? '' : ' · hidden'}`))),
+    inspector.append(el('div', { class: 'small muted', 'data-no-i18n': '' }, `doc ${info.doc_id} · ${doc.w}×${doc.h} · revision ${doc.revision} · ${info.recipe_lines} recipe calls`),
+      el('h4', {}, 'Palette'), el('div', {}, ...(doc.palette || []).map(c => el('span', { class: 'swatch', title: JSON.stringify(c), style: `background:${Array.isArray(c) ? `rgba(${c[0]},${c[1]},${c[2]},${(c[3] ?? 255) / 255})` : c.slice(0, 7)}` }))),
+      el('h4', {}, 'Layers'), el('div', {}, ...doc.layers.map((l, li) => el('div', { class: 'small', 'data-no-i18n': '' }, `L${li} ${l.name} · ${l.blend} · opacity ${l.opacity}${l.visible ? '' : ' · hidden'}`))),
       el('h4', {}, `Frames (${doc.frames.length})`), el('div', { class: 'small mono' }, doc.frames.map(f => f.duration_ms + 'ms').join(' · ')),
-      el('h4', {}, 'Cels (editable source)'), el('div', { class: 'cels' }, ...info.cels.slice(0, 120).map(n => el('figure', { class: '' }, el('img', { class: 'checker', src: `/files/${S.project}/atelier/${info.doc_id}/cels/${n}` }), el('figcaption', {}, n.replace('.png', ''))))),
+      el('h4', {}, 'Cels (editable source)'), el('div', { class: 'cels' }, ...info.cels.slice(0, 120).map(n => el('figure', { class: '' }, el('img', { class: 'checker', src: `/files/${S.project}/engine/${info.doc_id}/cels/${n}` }), el('figcaption', {}, n.replace('.png', ''))))),
       el('h4', {}, 'Tool calls'), el('div', { class: 'small mono issues' }, Object.entries(info.recipe_head.reduce((m, n) => (m[n] = (m[n] || 0) + 1, m), {})).map(([k, v]) => `${k} ×${v}`).join('  ')));
   }
 }

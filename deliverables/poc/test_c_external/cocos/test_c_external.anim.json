@@ -1,9 +1,9 @@
 {
   "schema": "artstudio.export/1",
   "app_version": "0.1.0",
-  "export_id": "exp-acb32b6d480e",
+  "export_id": "exp-10fd54d44f88",
   "name": "test_c_external",
-  "created_at": 1795609597.548,
+  "created_at": 1795614244.161,
   "project_id": "poc-fantasy-rpg",
   "character_id": null,
   "contains_test_fixtures": false,
@@ -11,7 +11,7 @@
   "animations": [
     {
       "key": "torch",
-      "asset_id": "torch-imported-gif-7dca8c",
+      "asset_id": "torch-imported-gif-f8a2cc",
       "name": "torch",
       "direction": "none",
       "art_style": "pixel",
@@ -496,7 +496,7 @@
     },
     {
       "key": "run_right",
-      "asset_id": "knight-run-sheet-import-auto-slice-98984b",
+      "asset_id": "knight-run-sheet-import-auto-slice-8fc571",
       "name": "run",
       "direction": "right",
       "art_style": "pixel",
@@ -902,7 +902,7 @@
     },
     {
       "key": "cat",
-      "asset_id": "cat-mp4-green-screen-import-9ee523",
+      "asset_id": "cat-mp4-green-screen-import-e932c5",
       "name": "cat",
       "direction": "none",
       "art_style": "pixel",

@@ -1,9 +1,9 @@
 {
   "schema": "artstudio.export/1",
   "app_version": "0.1.0",
-  "export_id": "exp-b9b9328254b0",
+  "export_id": "exp-7d650fba69bd",
   "name": "test_d_hybrid",
-  "created_at": 1795609597.961,
+  "created_at": 1795614244.574,
   "project_id": "poc-fantasy-rpg",
   "character_id": "knight",
   "contains_test_fixtures": false,
@@ -11,7 +11,7 @@
   "animations": [
     {
       "key": "heavy_right",
-      "asset_id": "knight-heavy-b064f3",
+      "asset_id": "knight-heavy-b783e7",
       "name": "heavy",
       "direction": "right",
       "art_style": "pixel",
@@ -767,7 +767,7 @@
       "layers": [
         {
           "name": "Gold Slash (layer)",
-          "asset_id": "gold-slash-layer-11e3e6",
+          "asset_id": "gold-slash-layer-a481ce",
           "role": "effect",
           "offset": [
             29,
@@ -787,14 +787,14 @@
         "composite_note": "Preview only: layers stay separate in the atlas/metadata with their own timing."
       },
       "is_test_fixture": false,
-      "provider": "pixel-atelier-example",
+      "provider": "knight-sample",
       "character_id": "knight",
       "mirror_of": null,
       "atlas": "test_d_hybrid_atlas.png"
     },
     {
       "key": "sword_slash",
-      "asset_id": "gold-slash-layer-11e3e6",
+      "asset_id": "gold-slash-layer-a481ce",
       "name": "sword_slash",
       "direction": "none",
       "art_style": "pixel",
@@ -1182,7 +1182,7 @@
         "apng": "previews/sword_slash.png"
       },
       "is_test_fixture": false,
-      "provider": "atelier",
+      "provider": "procedural",
       "character_id": null,
       "mirror_of": null,
       "atlas": "test_d_hybrid_atlas.png"

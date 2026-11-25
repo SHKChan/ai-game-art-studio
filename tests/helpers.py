@@ -11,8 +11,8 @@ sys.path.insert(0, str(ROOT / "mock_comfyui"))
 
 from PIL import Image, ImageDraw  # noqa: E402
 
-KNIGHT = ROOT / "upstream" / "pixel-atelier" / "examples" / "knight"
-SHOWCASE_GIF = ROOT / "upstream" / "atelier" / "showcase" / "gifs" / "opus-5.5-xhigh"
+KNIGHT = ROOT / "samples" / "knight"
+SHOWCASE_GIF = ROOT / "tests" / "fixtures" / "showcase"
 
 
 def temp_workspace():

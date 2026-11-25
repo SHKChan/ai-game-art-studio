@@ -1,5 +1,10 @@
 # Upstream analysis
 
+> **Historical record (Stage A research).** Since 2026-11-25 the repository no longer contains these checkouts:
+> Atelier was replaced by the studio's own Engine A (`artstudio/engine`, Atelier-compatible call format, verified
+> pixel-identical on Atelier showcase recipes) and the used Pixel Atelier code was moved into `artstudio/` with its
+> MIT notice. See THIRD_PARTY_NOTICES.md and docs/integration-architecture.md.
+
 Both repositories were supplied locally under `upstream/` (the development computer has no GitHub
 access). Everything below was verified by reading the source and running it, not taken from READMEs.
 

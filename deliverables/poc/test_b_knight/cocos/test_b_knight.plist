@@ -628,7 +628,7 @@
 <key>sourceSize</key>
 <string>{160,160}</string>
 </dict>
-<key>run_right_b6461f_00</key>
+<key>run_right_0fb58b_00</key>
 <dict>
 <key>frame</key>
 <string>{{401,178},{102,102}}</string>
@@ -641,7 +641,7 @@
 <key>sourceSize</key>
 <string>{114,122}</string>
 </dict>
-<key>run_right_b6461f_01</key>
+<key>run_right_0fb58b_01</key>
 <dict>
 <key>frame</key>
 <string>{{296,178},{103,102}}</string>
@@ -654,7 +654,7 @@
 <key>sourceSize</key>
 <string>{114,122}</string>
 </dict>
-<key>run_right_b6461f_02</key>
+<key>run_right_0fb58b_02</key>
 <dict>
 <key>frame</key>
 <string>{{491,2},{103,105}}</string>
@@ -667,7 +667,7 @@
 <key>sourceSize</key>
 <string>{114,122}</string>
 </dict>
-<key>run_right_b6461f_03</key>
+<key>run_right_0fb58b_03</key>
 <dict>
 <key>frame</key>
 <string>{{133,284},{102,95}}</string>
@@ -680,7 +680,7 @@
 <key>sourceSize</key>
 <string>{114,122}</string>
 </dict>
-<key>run_right_b6461f_04</key>
+<key>run_right_0fb58b_04</key>
 <dict>
 <key>frame</key>
 <string>{{387,2},{102,108}}</string>
@@ -693,7 +693,7 @@
 <key>sourceSize</key>
 <string>{114,122}</string>
 </dict>
-<key>run_right_b6461f_05</key>
+<key>run_right_0fb58b_05</key>
 <dict>
 <key>frame</key>
 <string>{{596,2},{103,105}}</string>
@@ -706,7 +706,7 @@
 <key>sourceSize</key>
 <string>{114,122}</string>
 </dict>
-<key>run_right_b6461f_06</key>
+<key>run_right_0fb58b_06</key>
 <dict>
 <key>frame</key>
 <string>{{505,178},{102,102}}</string>
@@ -719,7 +719,7 @@
 <key>sourceSize</key>
 <string>{114,122}</string>
 </dict>
-<key>run_right_b6461f_07</key>
+<key>run_right_0fb58b_07</key>
 <dict>
 <key>frame</key>
 <string>{{192,178},{102,103}}</string>

@@ -187,7 +187,7 @@ class ProcessingTests(unittest.TestCase):
         self.assertEqual(estimate_pixel_scale(im), 6)
         self.assertEqual(depixelate(im, 6).size, (32, 48))
 
-    def test_gif_extraction_from_upstream_showcase(self):
+    def test_gif_extraction_from_showcase_fixture(self):
         frames = extract_animation(SHOWCASE_GIF / "explosion.gif")
         self.assertGreaterEqual(len(frames), 5)
         self.assertTrue(all(d >= 10 for _, d in frames))

@@ -1,9 +1,9 @@
-"""Procedural builders for Engine A. Each builder is a deterministic generator of Atelier tool
-calls (DESCRIPTION, PARAMS, ASSET_TYPE, build(**params) -> list[call]). Atelier executes them,
+"""Procedural builders for Engine A. Each builder is a deterministic generator of pixel-engine tool
+calls (DESCRIPTION, PARAMS, ASSET_TYPE, build(**params) -> list[call]). The engine executes them,
 stores the layered document and records its own replayable `doc.recipe`."""
 from importlib import import_module
 
-_NAMES = ["potion", "chest", "chest_open", "fireball", "sword_slash"]
+_NAMES = ["potion", "chest", "chest_open", "fireball", "sword_slash", "ice_spear"]
 BUILDERS = {}
 for _n in _NAMES:
     try:

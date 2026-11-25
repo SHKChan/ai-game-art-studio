@@ -10,7 +10,6 @@ from dataclasses import dataclass, field, asdict
 from pathlib import Path
 
 APP_ROOT = Path(__file__).resolve().parents[1]
-UPSTREAM = APP_ROOT / "upstream"
 log = logging.getLogger("artstudio")
 
 
@@ -34,12 +33,13 @@ class Config:
     workspace: str = ""
     host: str = "127.0.0.1"
     port: int = 8870
-    atelier_bin: str = ""
     ffmpeg_bin: str = ""
     comfyui: ComfyConfig = field(default_factory=ComfyConfig)
     # Default max paid/remote generation calls per unattended batch; batch jobs must set their own.
     default_generation_budget: int = 0
     log_level: str = "INFO"
+    language: str = "en"            # en | zh-CN — CLI/API message language (UI chooses its own)
+    prompt_language: str = "en"     # en | zh-CN — default generation prompt language
 
     @property
     def workspace_path(self) -> Path:
@@ -73,24 +73,15 @@ def load_config(path: str | os.PathLike | None = None) -> Config:
         cfg.host = env["ARTSTUDIO_HOST"]
     if env.get("ARTSTUDIO_PORT"):
         cfg.port = int(env["ARTSTUDIO_PORT"])
-    if env.get("ATELIER_BIN"):
-        cfg.atelier_bin = env["ATELIER_BIN"]
     if env.get("ARTSTUDIO_FFMPEG"):
         cfg.ffmpeg_bin = env["ARTSTUDIO_FFMPEG"]
+    if env.get("ARTSTUDIO_LANG"):
+        cfg.language = env["ARTSTUDIO_LANG"]
     if env.get("COMFYUI_URL"):
         cfg.comfyui.url = env["COMFYUI_URL"]
     if env.get("COMFYUI_TIMEOUT"):
         cfg.comfyui.job_timeout_s = float(env["COMFYUI_TIMEOUT"])
     return cfg
-
-
-def find_atelier(cfg: Config) -> str | None:
-    exe = "atelier.exe" if sys.platform == "win32" else "atelier"
-    for c in [cfg.atelier_bin, str(UPSTREAM / "atelier" / "target" / "release" / exe),
-              str(UPSTREAM / "atelier" / "target" / "debug" / exe), str(APP_ROOT / "vendor" / "bin" / exe)]:
-        if c and Path(c).is_file():
-            return str(Path(c).resolve())
-    return shutil.which("atelier")
 
 
 def find_ffmpeg(cfg: Config) -> str | None:

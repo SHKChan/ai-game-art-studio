@@ -1,9 +1,9 @@
 {
   "schema": "artstudio.export/1",
   "app_version": "0.1.0",
-  "export_id": "exp-b2adb2075e04",
+  "export_id": "exp-657af809d9a4",
   "name": "test_b_knight",
-  "created_at": 1795609595.697,
+  "created_at": 1795614241.931,
   "project_id": "poc-fantasy-rpg",
   "character_id": "knight",
   "contains_test_fixtures": false,
@@ -11,7 +11,7 @@
   "animations": [
     {
       "key": "idle_right",
-      "asset_id": "knight-idle-cbda8a",
+      "asset_id": "knight-idle-1aad3d",
       "name": "idle",
       "direction": "right",
       "art_style": "pixel",
@@ -399,14 +399,14 @@
         "apng": "previews/idle_right.png"
       },
       "is_test_fixture": false,
-      "provider": "pixel-atelier-example",
+      "provider": "knight-sample",
       "character_id": "knight",
       "mirror_of": null,
       "atlas": "test_b_knight_atlas.png"
     },
     {
       "key": "run_right",
-      "asset_id": "knight-run-e28038",
+      "asset_id": "knight-run-fc40cb",
       "name": "run",
       "direction": "right",
       "art_style": "pixel",
@@ -805,14 +805,14 @@
         "apng": "previews/run_right.png"
       },
       "is_test_fixture": false,
-      "provider": "pixel-atelier-example",
+      "provider": "knight-sample",
       "character_id": "knight",
       "mirror_of": null,
       "atlas": "test_b_knight_atlas.png"
     },
     {
       "key": "light_right",
-      "asset_id": "knight-light-714f3a",
+      "asset_id": "knight-light-7eb4f7",
       "name": "light",
       "direction": "right",
       "art_style": "pixel",
@@ -1573,14 +1573,14 @@
         "apng": "previews/light_right.png"
       },
       "is_test_fixture": false,
-      "provider": "pixel-atelier-example",
+      "provider": "knight-sample",
       "character_id": "knight",
       "mirror_of": null,
       "atlas": "test_b_knight_atlas.png"
     },
     {
       "key": "heavy_right",
-      "asset_id": "knight-heavy-b064f3",
+      "asset_id": "knight-heavy-b783e7",
       "name": "heavy",
       "direction": "right",
       "art_style": "pixel",
@@ -2339,14 +2339,14 @@
         "apng": "previews/heavy_right.png"
       },
       "is_test_fixture": false,
-      "provider": "pixel-atelier-example",
+      "provider": "knight-sample",
       "character_id": "knight",
       "mirror_of": null,
       "atlas": "test_b_knight_atlas.png"
     },
     {
-      "key": "run_right_b6461f",
-      "asset_id": "knight-run-b6461f",
+      "key": "run_right_0fb58b",
+      "asset_id": "knight-run-0fb58b",
       "name": "run",
       "direction": "right",
       "art_style": "hd",
@@ -2366,7 +2366,7 @@
       "duration_ms": 640,
       "frames": [
         {
-          "name": "run_right_b6461f_00",
+          "name": "run_right_0fb58b_00",
           "index": 0,
           "duration_ms": 80,
           "start_ms": 0,
@@ -2411,7 +2411,7 @@
           }
         },
         {
-          "name": "run_right_b6461f_01",
+          "name": "run_right_0fb58b_01",
           "index": 1,
           "duration_ms": 80,
           "start_ms": 80,
@@ -2456,7 +2456,7 @@
           }
         },
         {
-          "name": "run_right_b6461f_02",
+          "name": "run_right_0fb58b_02",
           "index": 2,
           "duration_ms": 80,
           "start_ms": 160,
@@ -2501,7 +2501,7 @@
           }
         },
         {
-          "name": "run_right_b6461f_03",
+          "name": "run_right_0fb58b_03",
           "index": 3,
           "duration_ms": 80,
           "start_ms": 240,
@@ -2546,7 +2546,7 @@
           }
         },
         {
-          "name": "run_right_b6461f_04",
+          "name": "run_right_0fb58b_04",
           "index": 4,
           "duration_ms": 80,
           "start_ms": 320,
@@ -2591,7 +2591,7 @@
           }
         },
         {
-          "name": "run_right_b6461f_05",
+          "name": "run_right_0fb58b_05",
           "index": 5,
           "duration_ms": 80,
           "start_ms": 400,
@@ -2636,7 +2636,7 @@
           }
         },
         {
-          "name": "run_right_b6461f_06",
+          "name": "run_right_0fb58b_06",
           "index": 6,
           "duration_ms": 80,
           "start_ms": 480,
@@ -2681,7 +2681,7 @@
           }
         },
         {
-          "name": "run_right_b6461f_07",
+          "name": "run_right_0fb58b_07",
           "index": 7,
           "duration_ms": 80,
           "start_ms": 560,
@@ -2730,11 +2730,11 @@
       "phases": [],
       "layers": [],
       "previews": {
-        "gif": "previews/run_right_b6461f.gif",
-        "apng": "previews/run_right_b6461f.png"
+        "gif": "previews/run_right_0fb58b.gif",
+        "apng": "previews/run_right_0fb58b.png"
       },
       "is_test_fixture": false,
-      "provider": "pixel-atelier-example",
+      "provider": "knight-sample",
       "character_id": "knight",
       "mirror_of": null,
       "atlas": "test_b_knight_atlas.png"
@@ -2749,7 +2749,7 @@
     },
     "run": {
       "right": {
-        "key": "run_right_b6461f",
+        "key": "run_right_0fb58b",
         "flip_x": false
       }
     },
@@ -2827,17 +2827,17 @@
     "sheets/heavy_right.png",
     "previews/heavy_right.gif",
     "previews/heavy_right.png",
-    "frames/run_right_b6461f/00.png",
-    "frames/run_right_b6461f/01.png",
-    "frames/run_right_b6461f/02.png",
-    "frames/run_right_b6461f/03.png",
-    "frames/run_right_b6461f/04.png",
-    "frames/run_right_b6461f/05.png",
-    "frames/run_right_b6461f/06.png",
-    "frames/run_right_b6461f/07.png",
-    "sheets/run_right_b6461f.png",
-    "previews/run_right_b6461f.gif",
-    "previews/run_right_b6461f.png",
+    "frames/run_right_0fb58b/00.png",
+    "frames/run_right_0fb58b/01.png",
+    "frames/run_right_0fb58b/02.png",
+    "frames/run_right_0fb58b/03.png",
+    "frames/run_right_0fb58b/04.png",
+    "frames/run_right_0fb58b/05.png",
+    "frames/run_right_0fb58b/06.png",
+    "frames/run_right_0fb58b/07.png",
+    "sheets/run_right_0fb58b.png",
+    "previews/run_right_0fb58b.gif",
+    "previews/run_right_0fb58b.png",
     "test_b_knight_atlas.png",
     "test_b_knight_atlas.json",
     "cocos/test_b_knight.png",
@@ -2850,7 +2850,7 @@
   "qa": {
     "status": "passed",
     "kind": "deterministic",
-    "checked_at": 1795609595.702,
+    "checked_at": 1795614241.937,
     "issues": [],
     "counts": {
       "error": 0,

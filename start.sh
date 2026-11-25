@@ -14,7 +14,4 @@ if [[ ! -x .venv/bin/python ]]; then
   .venv/bin/python -m pip install --upgrade pip
   .venv/bin/python -m pip install -r requirements.txt
 fi
-if [[ ! -x upstream/atelier/target/release/atelier && -z "${ATELIER_BIN:-}" ]] && ! command -v atelier >/dev/null; then
-  echo "WARNING: Atelier binary not found; run scripts/build-atelier.sh (needs Rust) for the Procedural Studio." >&2
-fi
 exec .venv/bin/python -m artstudio serve --port "$PORT"

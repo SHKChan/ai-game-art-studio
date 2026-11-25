@@ -1,5 +1,12 @@
 # Implementation report — Stage A (offline engineering acceptance)
 
+> **Update (reorganisation):** the Rust Atelier binary and the `upstream/` checkouts were removed. Engine A is now the
+> studio's own Python engine with Atelier's call format (Atelier showcase recipes replay pixel-identical; builders render
+> identically to the earlier Atelier-based frames). Used Pixel Atelier code lives in `artstudio/` with MIT notices.
+> Encoding is UTF-8 throughout and the tool is bilingual (en / zh-CN). Current numbers: 63 automated tests, Playwright
+> UI pass in both languages. Sections below describe the original Stage A run; see DEVELOPMENT_PROGRESS.md for the
+> current state.
+
 Date: 2026-11-25 · App 0.1.0 · Upstream: Atelier `8ac6adf`, Pixel Atelier `15d199f`
 
 **Stage B (real ComfyUI inference, model compatibility, GPU performance, generated-art quality) has NOT been run

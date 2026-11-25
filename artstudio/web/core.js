@@ -1,8 +1,9 @@
 // Shared state + helpers for the studio UI (no framework, no build step).
+import { getLang, t, tError } from './i18n.js';
 export const S = { project: null, data: null, providers: [], templates: null, workflows: [], jobs: [], asset: null, listeners: {} };
 
 export async function api(path, opts = {}) {
-  const init = { method: opts.method || (opts.body ? 'POST' : 'GET'), headers: {} };
+  const init = { method: opts.method || (opts.body ? 'POST' : 'GET'), headers: { 'X-Studio-Lang': getLang() } };
   if (opts.body !== undefined) { init.body = JSON.stringify(opts.body); init.headers['Content-Type'] = 'application/json'; }
   const r = await fetch(path, init);
   const ct = r.headers.get('content-type') || '';
@@ -27,9 +28,9 @@ export function el(tag, attrs = {}, ...kids) {
 }
 
 export function toast(msg, err = false) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.className = 'show' + (err ? ' err' : '');
-  clearTimeout(t._h); t._h = setTimeout(() => (t.className = ''), err ? 6000 : 2500);
+  const box = document.getElementById('toast');
+  box.textContent = t(String(msg)); box.className = 'show' + (err ? ' err' : '');
+  clearTimeout(box._h); box._h = setTimeout(() => (box.className = ''), err ? 6000 : 2500);
 }
 
 export async function guard(fn) {
@@ -69,7 +70,7 @@ export async function waitJob(job, onDone) {
     const j = await api('/api/jobs/' + job.id);
     if (['succeeded', 'failed', 'cancelled'].includes(j.status)) {
       emit('jobs');
-      if (j.status === 'succeeded') { onDone && onDone(j); } else toast(`${j.label}: ${j.status} — ${j.error || ''}`, true);
+      if (j.status === 'succeeded') { onDone && onDone(j); } else toast(`${j.label}: ${t(j.status)} — ${tError(j.error_code, j.error || '')}`, true);
       return j;
     }
     await new Promise(r => setTimeout(r, 400));

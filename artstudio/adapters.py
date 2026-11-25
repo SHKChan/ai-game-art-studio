@@ -1,79 +1,61 @@
-"""Adapters to Pixel Atelier (upstream/pixel-atelier, used unmodified):
+"""Sample data and pipeline helpers (all local — no upstream checkout needed).
 
-  * spritepipe (portable whole-frame build + technical checker) — `spritepipe_verify()` builds a
-    Pixel Atelier profile from one of our pixel-mode animations and runs upstream build/check,
-    returning its TECHNICAL_VERIFIED / FAIL report.
-  * bridge/production.py — the 8-action character workflow (STEPS, durations, prompt structure);
-    `pixel_atelier_steps()` and `pixel_atelier_prompt()` expose them for Engine B.
-  * examples/knight — genuine AI-generated (Codex imagegen, per upstream README) whole-character
-    animation set used as real Engine B input when no generator is available offline.
+  * `samples/knight` — whole-character knight sample from Pixel Atelier (see samples/knight/NOTICE.md):
+    genuine AI-generated art (Codex built-in imagegen, processed by Pixel Atelier), demonstration use.
+  * `artstudio.pipeline.spritepipe` — whole-character build/check pipeline (derived from Pixel Atelier).
+  * `artstudio.prompts_zh_sheet` — the 8-action Chinese sheet prompt (derived from Pixel Atelier).
 """
 from __future__ import annotations
 
 import json
 import math
-import sys
-from contextlib import contextmanager
 from pathlib import Path
 
 from PIL import Image
 
-from .config import UPSTREAM
+from .config import APP_ROOT
 from .util import StudioError
 
-PA = UPSTREAM / "pixel-atelier"
-
-
-@contextmanager
-def _upstream_path(*parts):
-    p = str(PA.joinpath(*parts))
-    sys.path.insert(0, p)
-    try:
-        yield
-    finally:
-        try:
-            sys.path.remove(p)
-        except ValueError:
-            pass
+KNIGHT = APP_ROOT / "samples" / "knight"
 
 
 def available() -> bool:
-    return (PA / "spritepipe" / "core.py").exists()
+    return (KNIGHT / "manifest.json").is_file()
 
 
 def spritepipe():
-    with _upstream_path():
-        import spritepipe.core as core  # type: ignore
+    from .pipeline import spritepipe as core
     return core
 
 
-def pixel_atelier_steps() -> dict:
-    """Upstream action order, motion briefs (zh), default durations and loop flags."""
-    with _upstream_path("bridge"):
-        import production  # type: ignore
-    return {k: {"label": v[0], "motion": v[1], "durations": v[2], "loop": v[3]} for k, v in production.STEPS.items()}
+def sheet_steps() -> dict:
+    """8 ordered actions with Chinese motion briefs, default durations and loop flags."""
+    from .prompts_zh_sheet import STEPS
+    return {k: {"label": v[0], "motion": v[1], "durations": v[2], "loop": v[3]} for k, v in STEPS.items()}
 
 
-def pixel_atelier_prompt(name: str, action: str, identity: str = "", weapon: str = "", style: str = "", note: str = "") -> str:
-    """Upstream prompt (Chinese) for a 4x2 whole-character pose sheet, unmodified wording."""
-    with _upstream_path("bridge"):
-        import production  # type: ignore
-    project = {"name": name, "spec": {"identity": identity, "weapon": weapon, "style": style}}
-    return production.generation_prompt(project, action, note)
+def sheet_prompt_zh(name: str, action: str, identity: str = "", weapon: str = "", style: str = "", note: str = "") -> str:
+    from .prompts_zh_sheet import generation_prompt
+    return generation_prompt({"name": name, "spec": {"identity": identity, "weapon": weapon, "style": style}}, action, note)
+
+
+# backwards-compatible names
+pixel_atelier_steps = sheet_steps
+pixel_atelier_prompt = sheet_prompt_zh
 
 
 def knight_actions() -> list[dict]:
-    m = PA / "examples" / "knight" / "manifest.json"
+    m = KNIGHT / "manifest.json"
     if not m.exists():
-        raise StudioError("upstream/pixel-atelier/examples/knight missing")
+        raise StudioError("samples/knight is missing", code="sample_missing")
     data = json.loads(m.read_text(encoding="utf-8"))
     for a in data:
-        a["atlas_path"] = str(PA / "examples" / "knight" / a["id"] / "atlas.png")
+        a["atlas_path"] = str(KNIGHT / a["id"] / "atlas.png")
     return data
 
 
 def knight_frames(action: str) -> tuple[list[Image.Image], list[int], dict]:
-    """Slice an upstream knight atlas using its manifest rects (exact)."""
+    """Slice a knight sample atlas using its manifest rects (exact)."""
     meta = next((a for a in knight_actions() if a["id"] == action), None)
     if not meta:
         raise StudioError(f"Unknown knight action {action}")
@@ -89,7 +71,7 @@ def knight_frames(action: str) -> tuple[list[Image.Image], list[int], dict]:
 
 def spritepipe_verify(frames: list[Image.Image], durations: list[int], pivot, workdir: Path, action: str = "anim",
                       palette: list[str] | None = None) -> dict:
-    """Run Pixel Atelier's spritepipe build+check on pixel-mode frames. Returns the upstream QA report."""
+    """Run the whole-character spritepipe build+check on pixel-mode frames. Returns its QA report."""
     core = spritepipe()
     workdir = Path(workdir)
     if workdir.exists():
@@ -98,7 +80,7 @@ def spritepipe_verify(frames: list[Image.Image], durations: list[int], pivot, wo
     w, h = frames[0].size
     cols = 4
     rows = math.ceil(len(frames) / cols)
-    pad = 2  # source poses must not touch their cell edge (upstream rule)
+    pad = 2  # source poses must not touch their cell edge (pipeline rule)
     cw, ch = w + 2 * pad, h + 2 * pad
     sheet = Image.new("RGBA", (cols * cw, rows * ch), (0, 0, 0, 0))
     for i, f in enumerate(frames):

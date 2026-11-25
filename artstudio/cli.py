@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -30,6 +31,7 @@ def build_parser():
     ap = argparse.ArgumentParser(prog="artstudio", description="AI Game Art Studio — agent CLI")
     ap.add_argument("--workspace", help="workspace directory (default: ./workspace or ARTSTUDIO_WORKSPACE)")
     ap.add_argument("--config", help="studio.config.json path")
+    ap.add_argument("--lang", choices=["en", "zh-CN"], help="message language (default: config/ARTSTUDIO_LANG or en)")
     sub = ap.add_subparsers(dest="cmd", required=True)
 
     s = sub.add_parser("serve", help="start the web studio")
@@ -38,7 +40,7 @@ def build_parser():
     s.add_argument("--no-mock", action="store_true", help="hide the mock provider")
 
     sub.add_parser("status", help="workspace + provider availability")
-    sub.add_parser("builders", help="list Atelier procedural builders and animation templates")
+    sub.add_parser("builders", help="list procedural builders and animation templates")
 
     p = sub.add_parser("project")
     p.add_argument("action", choices=["list", "create", "show"])
@@ -63,20 +65,20 @@ def build_parser():
     c.add_argument("--reason", default="")
     c.add_argument("--animations", nargs="*", default=["idle", "walk", "attack"])
 
-    pr = sub.add_parser("procedural", help="draw with Atelier via a builder")
+    pr = sub.add_parser("procedural", help="draw with the pixel engine via a builder")
     pr.add_argument("builder")
     pr.add_argument("--project", required=True)
     pr.add_argument("--params", default="{}")
     pr.add_argument("--name")
     pr.add_argument("--character")
 
-    dr = sub.add_parser("draw", help="run an agent-authored Atelier call list (JSON array or JSONL; \"$DOC\" = the new doc id)")
+    dr = sub.add_parser("draw", help="run an agent-authored pixel-engine call list (JSON array or JSONL; \"$DOC\" = the new doc id)")
     dr.add_argument("file")
     dr.add_argument("--project", required=True)
     dr.add_argument("--name", required=True)
     dr.add_argument("--type", default="item", choices=["item", "icon", "effect", "tileset", "environment", "ui", "other"])
 
-    rp = sub.add_parser("replay", help="replay an Atelier .recipe into a new asset")
+    rp = sub.add_parser("replay", help="replay a .recipe into a new asset")
     rp.add_argument("recipe")
     rp.add_argument("--project", required=True)
     rp.add_argument("--name", default="replay")
@@ -98,6 +100,7 @@ def build_parser():
     g.add_argument("--layout", default='{"method":"auto"}')
     g.add_argument("--reference")
     g.add_argument("--note", default="")
+    g.add_argument("--prompt-language", choices=["en", "zh-CN"])
     g.add_argument("--budget", type=int, help="max generation calls (required for --batch)")
     g.add_argument("--batch-directions", nargs="*")
 
@@ -124,7 +127,7 @@ def build_parser():
     q = sub.add_parser("qa", help="deterministic checks")
     q.add_argument("--project", required=True)
     q.add_argument("--asset", required=True)
-    q.add_argument("--spritepipe", action="store_true", help="also run Pixel Atelier spritepipe build/check")
+    q.add_argument("--spritepipe", action="store_true", help="also run the whole-character spritepipe build/check")
 
     d = sub.add_parser("decide", help="manual approval / rejection")
     d.add_argument("--project", required=True)
@@ -172,14 +175,25 @@ def build_parser():
     rs.add_argument("archive")
     rs.add_argument("target")
 
-    ks = sub.add_parser("knight-sample", help="import Pixel Atelier's knight example as a character")
+    ks = sub.add_parser("knight-sample", help="import the bundled knight sample as a character")
     ks.add_argument("--project", required=True)
     ks.add_argument("--character")
     ks.add_argument("--actions", nargs="*")
     return ap
 
 
+def _fix_arg(a: str) -> str:
+    """POSIX + non-UTF-8 locale: argv bytes arrive as surrogate escapes; recover UTF-8 (e.g. Chinese names)."""
+    if any("\udc80" <= ch <= "\udcff" for ch in a):
+        try:
+            return os.fsencode(a).decode("utf-8")
+        except UnicodeDecodeError:
+            return os.fsencode(a).decode("utf-8", "replace")
+    return a
+
+
 def main(argv=None):
+    argv = [_fix_arg(a) for a in (sys.argv[1:] if argv is None else argv)]
     args = build_parser().parse_args(argv)
     import os
     from .config import load_config, setup_logging
@@ -197,7 +211,9 @@ def main(argv=None):
     try:
         return _run(args, cfg, Studio)
     except (StudioError, GenerationError) as e:
-        _j({"error": str(e), "code": getattr(e, "code", "error"), "details": getattr(e, "details", None)})
+        from .i18n import localize_exc
+        _j({"error": localize_exc(e, args.lang or cfg.language), "code": getattr(e, "code", None) or "error",
+            "detail": str(e), "details": getattr(e, "details", None)})
         return 2
 
 
@@ -263,7 +279,8 @@ def _run(args, cfg, Studio):
         return _j(_brief(s.ws.get_asset(a.project, r["id"])))
     if a.cmd == "generate":
         kw = dict(provider_id=a.provider, kind=a.kind, character_id=a.character, template=a.template, direction=a.direction,
-                  workflow_id=a.workflow, params=json.loads(a.params), reference=a.reference, layout=json.loads(a.layout), note=a.note)
+                  workflow_id=a.workflow, params=json.loads(a.params), reference=a.reference, layout=json.loads(a.layout), note=a.note,
+                  prompt_language=a.prompt_language)
         if a.batch_directions:
             if a.budget is None:
                 raise SystemExit("--budget is required for batch generation")
@@ -289,7 +306,7 @@ def _run(args, cfg, Studio):
             from .animation import load_frames
             from .util import new_id
             pairs = load_frames(s.ws, asset)
-            out["pixel_atelier_spritepipe"] = adapters.spritepipe_verify([im for _, im in pairs], [f["duration_ms"] for f, _ in pairs],
+            out["spritepipe"] = adapters.spritepipe_verify([im for _, im in pairs], [f["duration_ms"] for f, _ in pairs],
                                                                          asset["animation"]["pivot"], s.ws.root / "tmp" / new_id("sp"), asset["animation"]["name"])
         return _j(out)
     if a.cmd == "decide":
@@ -322,8 +339,8 @@ def _run(args, cfg, Studio):
     if a.cmd == "backup":
         return _j({"written": str(s.ws.backup(Path(a.out), not a.no_exports))})
     if a.cmd == "knight-sample":
-        cid = a.character or s.ws.create_character(a.project, "Knight (Pixel Atelier sample)", "side2", "pixel")["id"]
-        return _j({"character_id": cid, "assets": [x["id"] for x in s.import_pixel_atelier_knight(a.project, cid, a.actions)]})
+        cid = a.character or s.ws.create_character(a.project, "Knight (sample)", "side2", "pixel")["id"]
+        return _j({"character_id": cid, "assets": [x["id"] for x in s.import_knight_sample(a.project, cid, a.actions)]})
     return 1
 
 

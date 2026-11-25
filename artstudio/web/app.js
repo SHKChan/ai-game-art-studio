@@ -1,3 +1,4 @@
+import { initI18n, setLang, LANGS, getLang, tError } from './i18n.js';
 import { S, api, el, toast, guard, on, emit, fileUrl, badge, fixtureBadge, refreshProject, select } from './core.js';
 import { renderAnimation, openAsset } from './anim.js';
 import { renderCharacter, renderProcedural, renderImport, renderGenerate, renderExport } from './studios.js';
@@ -61,12 +62,14 @@ function renderLibrary(root) {
     el('a', { href: '#', onclick: (e) => { e.preventDefault(); S.character = c.id; showTab('character'); } }, c.name),
     badge(c.direction_mode, ''), badge(c.art_style, ''), el('span', { class: 'muted small' }, `${Object.keys(c.masters).length}/${c.directions.length} masters`))));
   root.append(el('div', { class: 'grid cols2' },
-    el('div', { class: 'card' }, el('h3', {}, d.project.name), el('p', { class: 'muted small' }, `${d.project.game || ''} · default ${d.project.default_style} · id ${d.project.id}`),
+    el('div', { class: 'card' }, el('h3', { 'data-no-i18n': '' }, d.project.name), el('p', { class: 'muted small', 'data-no-i18n': '' }, `${d.project.game || ''} · ${d.project.default_style} · id ${d.project.id}`),
+      el('div', { class: 'row' }, el('label', {}, 'Prompt language', (() => { const s = select([['en', 'English'], ['zh-CN', '中文']], d.project.prompt_language || 'en');
+        s.onchange = () => guard(async () => { await api(`/api/projects/${S.project}/settings`, { body: { prompt_language: s.value } }); toast('Saved'); await refreshProject(); }); return s; })())),
       el('h4', {}, 'Characters'), chars,
       el('button', { onclick: () => { S.character = null; showTab('character'); } }, '+ Character'),
       el('h4', {}, 'Samples'),
       el('button', { onclick: () => guard(async () => { const r = await api(`/api/projects/${S.project}/knight-sample`, { body: {} }); toast(`Imported ${r.assets.length} knight animations`); await refreshProject(); renderLibrary(root); }) },
-        'Import Pixel Atelier knight sample')),
+        'Import knight sample')),
     el('div', { class: 'card' }, el('div', { class: 'row' }, el('h3', {}, 'Assets'), typeSel, charSel, q), grid)));
   draw();
 }
@@ -99,7 +102,7 @@ async function renderJobs() {
         ['failed', 'cancelled'].includes(j.status) ? el('button', { class: 'small', onclick: () => guard(() => api(`/api/jobs/${j.id}/retry`, { body: {} })) }, 'Retry') : null,
         j.result?.asset_id ? el('button', { class: 'small', onclick: () => emit('open-asset', j.result.asset_id) }, 'Open') : null),
       el('div', { class: 'bar' }, el('i', { style: `width:${Math.round((j.progress || 0) * 100)}%` })),
-      el('div', { class: 'muted' }, j.error ? '⚠ ' + j.error : j.message, j.budget != null ? ` · budget ${j.budget_used}/${j.budget}` : '')));
+      el('div', { class: 'muted' }, j.error ? '⚠ ' + tError(j.error_code, j.error) : j.message, j.budget != null ? ` · budget ${j.budget_used}/${j.budget}` : '')));
   }
   if (!jobs.length) box.append(el('div', { class: 'job muted' }, 'No jobs yet.'));
   const anyLive = jobs.some(j => ['queued', 'running'].includes(j.status));
@@ -110,6 +113,11 @@ async function renderJobs() {
 on('jobs', () => { clearTimeout(renderJobs._t); renderJobs(); });
 
 async function boot() {
+  initI18n();
+  const ls = document.getElementById('langSelect');
+  for (const [k, v] of Object.entries(LANGS)) ls.append(el('option', { value: k }, v));
+  ls.value = getLang();
+  ls.onchange = () => setLang(ls.value);
   document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => showTab(b.dataset.tab));
   document.getElementById('projectSelect').onchange = async (e) => { S.project = e.target.value; S.asset = null; await refreshProject(); showTab(current); renderJobs(); };
   document.getElementById('newProjectBtn').onclick = newProject;

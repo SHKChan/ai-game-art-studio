@@ -2,8 +2,8 @@
 from __future__ import annotations
 
 from ..comfy.workflows import WorkflowLibrary
-from ..config import APP_ROOT, Config, find_atelier, find_ffmpeg
-from .atelier import AtelierProceduralProvider
+from ..config import APP_ROOT, Config, find_ffmpeg
+from .procedural import ProceduralProvider
 from .base import GenerationError, GenerationRequest, GenerationResult, JobContext, Provider, ProviderStatus
 from .comfyui import ComfyUIProvider
 from .others import CodexImageProvider, ExternalAssetProvider, MockGenerationProvider
@@ -18,7 +18,7 @@ class Registry:
         self.cfg = cfg
         self.workflows = WorkflowLibrary(APP_ROOT / "workflows" / "comfyui", workspace_root / "comfyui" / "workflows")
         self.providers: dict[str, Provider] = {
-            "atelier": AtelierProceduralProvider(find_atelier(cfg)),
+            "procedural": ProceduralProvider(),
             "comfyui": ComfyUIProvider(cfg.comfyui, self.workflows),
             "external": ExternalAssetProvider(find_ffmpeg(cfg)),
             "codex": CodexImageProvider(),

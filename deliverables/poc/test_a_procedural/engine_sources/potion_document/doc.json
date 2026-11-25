@@ -1,0 +1,85 @@
+{
+ "schema": 1,
+ "doc_id": "74ba46a4-4877-421a-a123-74dd3660e411",
+ "name": "health-potion",
+ "w": 64,
+ "h": 64,
+ "revision": 14,
+ "layers": [
+  {
+   "index": 0,
+   "name": "outline",
+   "visible": true,
+   "opacity": 255,
+   "blend": "normal"
+  },
+  {
+   "index": 1,
+   "name": "glass",
+   "visible": true,
+   "opacity": 255,
+   "blend": "normal"
+  },
+  {
+   "index": 2,
+   "name": "liquid",
+   "visible": true,
+   "opacity": 255,
+   "blend": "normal"
+  },
+  {
+   "index": 3,
+   "name": "bubbles",
+   "visible": true,
+   "opacity": 255,
+   "blend": "normal"
+  },
+  {
+   "index": 4,
+   "name": "cork",
+   "visible": true,
+   "opacity": 255,
+   "blend": "normal"
+  },
+  {
+   "index": 5,
+   "name": "highlights",
+   "visible": true,
+   "opacity": 255,
+   "blend": "normal"
+  }
+ ],
+ "frames": [
+  {
+   "index": 0,
+   "duration_ms": 100
+  }
+ ],
+ "palette": [
+  "#160d22ff",
+  "#33405eff",
+  "#6f86abff",
+  "#b9d6eaff",
+  "#ffffffff",
+  "#4a0a24ff",
+  "#8c1533ff",
+  "#d42a3cff",
+  "#ff6655ff",
+  "#ffb8a0ff",
+  "#4d2a18ff",
+  "#87532dff",
+  "#c48a52ff",
+  "#e8c45aff",
+  "#9c6a24ff"
+ ],
+ "palette_len": 15,
+ "tags": [],
+ "cels": [
+  "L0_F0",
+  "L1_F0",
+  "L2_F0",
+  "L3_F0",
+  "L4_F0",
+  "L5_F0"
+ ]
+}

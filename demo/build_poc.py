@@ -2,17 +2,17 @@
 
   python demo/build_poc.py [--workspace DIR] [--out deliverables/poc]
 
-Test A  Atelier procedural: potion, chest, 8-frame chest opening, 8-frame fireball, 8-frame sword slash.
+Test A  Pixel engine (Engine A): potion, chest, 8-frame chest opening, 8-frame fireball, 8-frame sword slash.
 Test B  AI character production. No image generator is reachable offline, so:
-          * genuine AI-generated whole-character art from Pixel Atelier's knight example is processed
+          * genuine AI-generated whole-character art (bundled knight sample) is processed
             through the character master system in pixel mode AND HD mode (no regeneration);
           * the requested chibi adventurer is set up as a 4-direction character with complete prompt
             packs for idle/walk/attack; generation itself is BLOCKED until Stage B (ComfyUI);
           * the full generation pipeline is exercised against the mock ComfyUI service in a separate,
             clearly labelled TEST FIXTURE project.
-Test C  External processing: real GIF (Atelier showcase), real sprite sheet (Pixel Atelier knight run atlas)
+Test C  External processing: real GIF (showcase fixture), real sprite sheet (knight run atlas)
         and an MP4 built from a genuine showcase GIF on a green screen -> extraction, keying, alignment, export.
-Test D  Hybrid: knight heavy attack (AI-generated upstream) + Atelier sword-slash layer with independent timing.
+Test D  Hybrid: knight heavy attack (AI-generated sample) + procedural sword-slash layer with independent timing.
 """
 from __future__ import annotations
 
@@ -53,7 +53,7 @@ def copy_export(m, dest: Path):
 
 
 def make_video(ffmpeg: str, gif: Path, out_mp4: Path, scale=4, bg=(0, 177, 64)):
-    """MP4 test input derived from genuine upstream art: GIF frames composited on a solid green screen."""
+    """MP4 test input derived from genuine fixture art: GIF frames composited on a solid green screen."""
     from artstudio.processing.importers import extract_animation
     frames = extract_animation(gif)
     with tempfile.TemporaryDirectory() as td:
@@ -83,29 +83,29 @@ def main():
     from artstudio import adapters
     from artstudio.animation import add_layer, edit_frames, load_frames, reprocess
     from artstudio.config import load_config
-    from artstudio.prompts import keyframe_prompt, master_prompt
+    from artstudio.prompts import build_keyframe_prompt, build_master_prompt
     from artstudio.qa import check_asset
     from artstudio.service import Studio
 
     s = Studio(load_config(), workers=1)
     sheets = out / "contact_sheets"
-    atelier = s.registry.get("atelier").status()
-    REPORT["environment"] = {"atelier": atelier.to_dict(), "ffmpeg": bool(s.ffmpeg), "comfyui_real": s.registry.get("comfyui").status().to_dict()}
+    engine = s.registry.get("procedural").status()
+    REPORT["environment"] = {"pixel_engine": engine.to_dict(), "ffmpeg": bool(s.ffmpeg), "comfyui_real": s.registry.get("comfyui").status().to_dict()}
     p = s.ws.create_project("POC — Fantasy RPG", game="Proof of concept", default_style="pixel", pid="poc-fantasy-rpg")
     pid = p["id"]
 
     # ---------------- Test A
-    log("Test A: Atelier procedural assets")
+    log("Test A: pixel engine assets")
     a_ids, a_rep = {}, {}
-    if atelier.available:
+    if engine.available:
         for b, name in [("potion", "Health Potion 64"), ("chest", "Treasure Chest 64"), ("chest_open", "Chest Opening 8f"),
                         ("fireball", "Fireball 8f"), ("sword_slash", "Sword Slash 8f")]:
             a = s.procedural(pid, b, name=name)
             a_ids[b] = a["id"]
             save_sheet(s, pid, a["id"], sheets, f"A_{b}", 4)
             a_rep[b] = {"asset": a["id"], "frames": len(a["animation"]["frames"]), "canvas": a["animation"]["canvas"],
-                        "qa": a["qa"]["deterministic"]["status"], "atelier_doc": a["procedural"]["doc_id"],
-                        "atelier_calls": a["provider"]["details"]["calls"]}
+                        "qa": a["qa"]["deterministic"]["status"], "engine_doc": a["procedural"]["doc_id"],
+                        "engine_calls": a["provider"]["details"]["calls"]}
             s.ws.set_decision(pid, a["id"], "approved", "visually inspected in POC review")
         # reproducibility: replay a recipe and compare pixels
         a = s.ws.get_asset(pid, a_ids["fireball"])
@@ -117,35 +117,35 @@ def main():
         sp = adapters.spritepipe_verify([im for _, im in load_frames(s.ws, s.ws.get_asset(pid, a_ids["chest_open"]))],
                                         [f["duration_ms"] for f in s.ws.get_asset(pid, a_ids["chest_open"])["animation"]["frames"]],
                                         [32, 63], ws_dir / "tmp" / "spritepipe-chest", "chest_open")
-        a_rep["pixel_atelier_spritepipe_chest_open"] = sp["status"]
+        a_rep["spritepipe_chest_open"] = sp["status"]
         m = s.export(pid, list(a_ids.values()), name="test_a_procedural", preview_scale=4)
         a_rep["export"] = copy_export(m, out / "test_a_procedural")
         # editable sources + recipes
-        src = out / "test_a_procedural" / "atelier_sources"
+        src = out / "test_a_procedural" / "engine_sources"
         src.mkdir(exist_ok=True)
         for b, aid in a_ids.items():
             ad = s.ws.get_asset(pid, aid)
             shutil.copyfile(s.ws.asset_dir(pid, aid) / "source" / "doc.recipe", src / f"{b}.recipe")
-            docdir = s.ws.atelier_home(pid) / "documents" / ad["procedural"]["doc_id"]
+            docdir = s.ws.engine_home(pid) / "documents" / ad["procedural"]["doc_id"]
             shutil.copytree(docdir, src / f"{b}_document", dirs_exist_ok=True)
     else:
-        a_rep["blocked"] = atelier.reason
+        a_rep["blocked"] = engine.reason
     REPORT["tests"]["A_procedural"] = a_rep
 
     # ---------------- Test B
-    log("Test B: character production (genuine upstream AI art; generation blocked offline)")
+    log("Test B: character production (genuine sample AI art; generation blocked offline)")
     b_rep = {}
     knight = s.ws.create_character(pid, "Greatsword Knight", "side2", "pixel", cid="knight",
-                                   description="Blonde knight with dark-blue headband, silver/navy armour, red tassets and an oversized two-handed greatsword (Pixel Atelier example).",
+                                   description="Blonde knight with dark-blue headband, silver/navy armour, red tassets and an oversized two-handed greatsword (bundled sample).",
                                    clothing=["silver and navy plate armour", "red waist cloth", "dark boots"], weapon={"type": "two-handed greatsword", "grip": "both hands on one straight hilt"},
                                    constraints=["same face and hair", "same greatsword length and width"], negative_constraints=["shield", "helmet"])
-    assets = s.import_pixel_atelier_knight(pid, "knight", ["idle", "run", "light", "heavy"])
+    assets = s.import_knight_sample(pid, "knight", ["idle", "run", "light", "heavy"])
     k = {a["animation"]["name"]: a for a in assets}
     # master: idle frame 0 (right). Left is NOT mirrored automatically (asymmetric greatsword).
     from artstudio.animation import frame_path
     c = s.ws.add_character_image(pid, "knight", frame_path(s.ws, k["idle"], k["idle"]["animation"]["frames"][0]), "candidate", "right",
                                  note="idle frame 0", source_asset=k["idle"]["id"])
-    c = s.ws.review_candidate(pid, "knight", c["candidates"][-1]["id"], "approved", "matches upstream master")
+    c = s.ws.review_candidate(pid, "knight", c["candidates"][-1]["id"], "approved", "matches the sample master")
     # events (marked by visual inspection of the frames)
     edit_frames(s.ws, s.ws.get_asset(pid, k["light"]["id"]), "events", events=[{"frame": 3, "type": "hit", "name": "downward strike"}, {"frame": 10, "type": "hit", "name": "rising strike"}])
     edit_frames(s.ws, s.ws.get_asset(pid, k["heavy"]["id"]), "events", events=[{"frame": 9, "type": "release"}, {"frame": 10, "type": "hit"}])
@@ -156,7 +156,7 @@ def main():
         b_rep[f"knight_{name}_pixel"] = {"asset": k[name]["id"], "frames": len(k[name]["animation"]["frames"]), "qa": a["status"],
                                          "issues": sorted({i["code"] for i in a["issues"]})}
     # HD illustration mode on the SAME source frames (no regeneration): 1.5x Lanczos, partial alpha kept.
-    hd = s.import_pixel_atelier_knight(pid, "knight", ["run"], mode="hd")[0]
+    hd = s.import_knight_sample(pid, "knight", ["run"], mode="hd")[0]
     hd = reprocess(s.ws, hd, {"mode": "hd", "scale": 1.5, "canvas": None, "pivot": None, "source_pivot": None, "padding": 4})
     s.ws.save_asset({**hd, "name": "Knight run (HD mode 1.5x)"})
     fr = load_frames(s.ws, s.ws.get_asset(pid, hd["id"]))
@@ -166,7 +166,7 @@ def main():
     sp = adapters.spritepipe_verify([im for _, im in load_frames(s.ws, s.ws.get_asset(pid, k["run"]["id"]))],
                                     [f["duration_ms"] for f in k["run"]["animation"]["frames"]], k["run"]["animation"]["pivot"],
                                     ws_dir / "tmp" / "spritepipe-run", "run")
-    b_rep["pixel_atelier_spritepipe_knight_run"] = sp["status"]
+    b_rep["spritepipe_knight_run"] = sp["status"]
     b_rep["knight_direction_report"] = s.character_report(pid, "knight", ["idle", "run"])
     # Chibi adventurer: 4-direction setup + prompt packs (generation blocked offline)
     adv = s.ws.create_character(pid, "Chibi Adventurer", "four", "pixel", cid="chibi-adventurer",
@@ -175,10 +175,11 @@ def main():
                                 accessories=["leather belt"], weapon={"type": "short sword", "hand": "right", "blade": "straight steel, 0.6x body height"},
                                 constraints=["blonde hair visible under the hood", "same sword in every direction"],
                                 negative_constraints=["shield", "helmet", "different hair colour"])
-    pack = {"master": {d: master_prompt(adv, d) for d in adv["directions"]}}
-    for tpl, n in (("idle", 6), ("walk", 8), ("attack", 8)):
-        pack[tpl] = {d: keyframe_prompt(adv, tpl, d) for d in adv["directions"]}
-    (out / "test_b_prompt_pack_chibi_adventurer.json").write_text(json.dumps(pack, indent=2), encoding="utf-8")
+    for lang, suffix in (("en", ""), ("zh-CN", "_zh-CN")):
+        pack = {"language": lang, "master": {d: build_master_prompt(adv, d, lang) for d in adv["directions"]}}
+        for tpl in ("idle", "walk", "attack"):
+            pack[tpl] = {d: build_keyframe_prompt(adv, tpl, d, language=lang) for d in adv["directions"]}
+        (out / f"test_b_prompt_pack_chibi_adventurer{suffix}.json").write_text(json.dumps(pack, indent=2, ensure_ascii=False), encoding="utf-8")
     b_rep["chibi_adventurer"] = {"status": "BLOCKED — no image-generation backend reachable offline (Stage B on the ComfyUI computer).",
                                  "prepared": "4-direction character record + prompt packs for master/idle/walk/attack",
                                  "plan": "scripts/production_smoke_test.py then: generate master south -> approve -> directional masters -> walk east (reduced test) -> attack east -> remaining directions"}
@@ -189,12 +190,12 @@ def main():
     # ---------------- Test C
     log("Test C: external processing")
     c_rep = {}
-    showcase = ROOT / "upstream" / "atelier" / "showcase" / "gifs" / "opus-5.5-xhigh"
+    showcase = ROOT / "tests" / "fixtures" / "showcase"
     gif = s.import_file(pid, showcase / "torch.gif", name="Torch (imported GIF)", mode="pixel", anim_name="torch")
     gif = check_asset(s.ws, s.ws.get_asset(pid, gif["id"])) and s.ws.get_asset(pid, gif["id"])
     save_sheet(s, pid, gif["id"], sheets, "C_gif_torch", 4)
     c_rep["gif"] = {"asset": gif["id"], "frames": len(gif["animation"]["frames"]), "qa": gif["qa"]["deterministic"]["status"]}
-    sheet = s.import_file(pid, ROOT / "upstream" / "pixel-atelier" / "examples" / "knight" / "run" / "atlas.png", name="Knight run (sheet import, auto-slice)",
+    sheet = s.import_file(pid, ROOT / "samples" / "knight" / "run" / "atlas.png", name="Knight run (sheet import, auto-slice)",
                           mode="pixel", slicing={"method": "auto", "merge_px": 6}, anim_name="run", direction="right", template="run",
                           normalize={"anchor": "support_foot"})
     save_sheet(s, pid, sheet["id"], sheets, "C_sheet_autoslice_support_foot", 1)
@@ -213,7 +214,7 @@ def main():
         orig = [im for im, _ in __import__("artstudio.processing.importers", fromlist=["x"]).extract_animation(showcase / "cat.gif")]
         got = [im for _, im in load_frames(s.ws, v)]
         from artstudio.processing.frames import alpha_bbox
-        c_rep["video"] = {"asset": v["id"], "source": "MP4 built from Atelier showcase cat.gif on #00B140, 4x nearest upscale",
+        c_rep["video"] = {"asset": v["id"], "source": "MP4 built from showcase fixture cat.gif (Atelier showcase art) on #00B140, 4x nearest upscale",
                           "frames_extracted": len(got), "source_frames": n, "qa": qa["status"],
                           "roundtrip_visible_size": [list(alpha_bbox(got[0]))[2] - list(alpha_bbox(got[0]))[0], list(alpha_bbox(got[0]))[3] - list(alpha_bbox(got[0]))[1]],
                           "original_visible_size": [alpha_bbox(orig[0])[2] - alpha_bbox(orig[0])[0], alpha_bbox(orig[0])[3] - alpha_bbox(orig[0])[1]]}
@@ -227,7 +228,7 @@ def main():
     # ---------------- Test D
     log("Test D: hybrid character + effect")
     d_rep = {}
-    if atelier.available:
+    if engine.available:
         fx = s.procedural(pid, "sword_slash", {"color": "gold"}, name="Gold Slash (layer)")
         fx = reprocess(s.ws, fx, {"scale": 2, "canvas": None, "pivot": None, "padding": 2})  # 2x nearest to match the knight's pixel scale
         fx = s.ws.get_asset(pid, fx["id"])
@@ -248,7 +249,7 @@ def main():
         d_rep = {"character_asset": heavy["id"], "effect_asset": fx["id"], "layer": heavy["animation"]["layers"][0],
                  "composite_frames": len(cf), "export": copy_export(m, out / "test_d_hybrid")}
     else:
-        d_rep["blocked"] = "Atelier unavailable"
+        d_rep["blocked"] = "pixel engine unavailable"
     REPORT["tests"]["D_hybrid"] = d_rep
 
     # ---------------- Stage A mock pipeline (clearly labelled fixtures)
@@ -262,14 +263,14 @@ def main():
     r = s.generate(fp["id"], "comfyui", kind="master_candidate", character_id="adv", direction="south", workflow_id="sd-text-to-image",
                    params={"checkpoint": "mock-sd15-fixture.safetensors", "steps": 4})
     walk = s.generate(fp["id"], "comfyui", character_id="adv", template="walk", direction="east", workflow_id="sd-image-to-image",
-                      reference=str(ROOT / "upstream" / "pixel-atelier" / "examples" / "knight" / "idle" / "poster.png"),
+                      reference=str(ROOT / "samples" / "knight" / "idle" / "poster.png"),
                       params={"checkpoint": "mock-sd15-fixture.safetensors", "steps": 4})
     regen = s.regenerate_frame(fp["id"], walk["id"], 2, "comfyui", "sd-pose-keyframe",
                                {"checkpoint": "mock-sd15-fixture.safetensors", "controlnet": "mock-openpose-fixture.safetensors", "steps": 3,
-                                "pose_image": str(ROOT / "upstream" / "pixel-atelier" / "examples" / "knight" / "run" / "poster.png")})
+                                "pose_image": str(ROOT / "samples" / "knight" / "run" / "poster.png")})
     m = s.export(fp["id"], [walk["id"]], name="mock_fixture_walk_east")
     srv.shutdown()
-    REPORT["stage_a_mock_pipeline"] = {"label": "TEST FIXTURES — copies of upstream example art returned by the mock server; NOT AI output of this run",
+    REPORT["stage_a_mock_pipeline"] = {"label": "TEST FIXTURES — copies of the bundled sample art returned by the mock server; NOT AI output of this run",
                                        "candidate_is_fixture": r["character"]["candidates"][-1]["is_test_fixture"],
                                        "walk_asset": walk["id"], "walk_is_fixture": walk["provider"]["is_test_fixture"],
                                        "regenerated_frame_origin": regen["animation"]["frames"][2]["origin"],

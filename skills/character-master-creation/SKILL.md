@@ -7,7 +7,7 @@ description: Establish a locked character identity (master reference) before pro
 
 Establish a locked character identity (master reference) before producing any animation.
 
-CLI: `python -m artstudio <command>` (JSON on stdout). Web: http://127.0.0.1:8870. Atelier tools are reached through the `atelier` provider — never re-implement drawing in Python image code.
+CLI: `python -m artstudio <command>` (JSON on stdout). Web: http://127.0.0.1:8870. Procedural pixels come from Engine A (`procedural` provider, docs/engine-a-guide.md) — never paste pixels in with ad-hoc image code.
 
 ## Required inputs
 Concept or reference image(s); name/description; proportions (head:body, height px); clothing, accessories, weapon geometry and grip; palette; camera; art style (pixel/hd); negative constraints.

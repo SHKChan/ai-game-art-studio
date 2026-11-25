@@ -1,9 +1,5 @@
-"""Entry point. Re-launches itself in Python UTF-8 mode when needed.
-
-Upstream Pixel Atelier (used as a library) reads/writes Chinese JSON with the *locale default* encoding.
-On Windows that is GBK/cp936 or cp1252 and leads to UnicodeEncode/DecodeError or GBK files that other
-machines cannot read. UTF-8 mode (PEP 540) makes every default text encoding UTF-8 without touching upstream.
-"""
+"""Entry point. Runs the studio in Python UTF-8 mode (PEP 540) as a safety net: all studio code already
+uses explicit UTF-8, but third-party code or user scripts may rely on locale defaults (GBK/cp936/cp1252)."""
 import os
 import subprocess
 import sys

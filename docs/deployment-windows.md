@@ -7,20 +7,18 @@ Stage A (offline engineering acceptance) was completed on the development comput
 
 1. Install **Python 3.10+** (python.org, tick *Add python.exe to PATH*). Optional: **ffmpeg** (video import) —
    put `ffmpeg.exe` on PATH or set `ARTSTUDIO_FFMPEG`.
-2. Copy the whole `ai-game-art-studio` folder (including `upstream/`) to the target computer.
-3. Build Atelier (Procedural Studio): install Rust from https://rustup.rs, then
-   `powershell -ExecutionPolicy Bypass -File .\scripts\build-atelier.ps1`.
-   Without it the studio still runs; Atelier shows as *unavailable*.
-4. Start: `powershell -ExecutionPolicy Bypass -File .\start.ps1` (first run creates `.venv` and installs
+2. Copy (or `git clone`) the `ai-game-art-studio` folder to the target computer. Nothing else is needed —
+   the pixel engine is built in (no Rust, no external binaries).
+3. Start: `powershell -ExecutionPolicy Bypass -File .\start.ps1` (first run creates `.venv` and installs
    `requirements.txt`; opens http://127.0.0.1:8870/).
    Options: `-Port 8870 -Workspace D:\Art\studio-ws -ComfyUrl http://127.0.0.1:8188 -NoBrowser`.
 
 **Offline dependency install.** On a connected machine: `pip download -r requirements.txt -d wheels --platform win_amd64
 --python-version 3.12 --only-binary=:all:`; on the target: `.venv\Scripts\pip install --no-index --find-links wheels -r requirements.txt`.
 
-**Encoding.** Always start through `start.ps1` (or `python -m artstudio`, which switches itself to UTF-8 mode).
-To open the original Pixel Atelier workbench use `scripts\start-pixel-atelier.ps1` — running `python bridge\server.py`
-directly on a GBK/cp1252 Windows locale can corrupt or fail on its Chinese project files.
+**Language & encoding.** UI language: top-bar switch (English / 简体中文). CLI/API messages: `ARTSTUDIO_LANG=zh-CN`
+or `--lang zh-CN`. All files are read/written as UTF-8 regardless of the Windows code page (GBK/cp936/cp1252), and the
+launcher additionally enables Python UTF-8 mode.
 
 ## 2. Configure
 
@@ -32,7 +30,8 @@ Copy `studio.config.example.json` → `studio.config.json` and/or `.env.example`
 | port | `ARTSTUDIO_PORT` | 8870 |
 | comfyui.url | `COMFYUI_URL` | http://127.0.0.1:8188 |
 | comfyui.job_timeout_s | `COMFYUI_TIMEOUT` | 600 |
-| atelier_bin | `ATELIER_BIN` | auto-detect |
+| language | `ARTSTUDIO_LANG` | en (`zh-CN` for Chinese CLI/API messages) |
+| prompt_language | — | en (per-project override in the Library) |
 | comfyui.api_key_env | — | name of an env var holding a bearer token for an authenticating proxy (never the token itself) |
 
 ## 3. Connect ComfyUI
@@ -86,11 +85,11 @@ reviewed identity/proportion consistency, and GPU time per job is acceptable.
 - Restore on another PC: `python -m artstudio restore backup.zip D:\GameArt\ws` (target must be empty), then start with
   `-Workspace D:\GameArt\ws`.
 - Upgrading the app: workspaces carry `schema_version`; the app migrates older ones on open and refuses newer ones.
-- Atelier documents travel inside the workspace (`projects/<pid>/atelier`). Recipes replay only on an Atelier build
-  from the same commit (`upstream/atelier`, 8ac6adf).
+- Engine A documents travel inside the workspace (`projects/<pid>/engine`); recipes are plain JSON lines and replay on
+  any machine. Workspaces created before the engine switch keep their rendered frames; replay their recipe to rebuild
+  the editable document.
 
 ## 7. Running the offline test-suite on the target
 
-`.venv\Scripts\python.exe scripts\run_tests.py --upstream` (mock ComfyUI is started in-process; Atelier tests are
-skipped if the binary is missing). UI test: `pip install playwright && playwright install chromium`, start the studio
+`.venv\Scripts\python.exe scripts\run_tests.py` (mock ComfyUI is started in-process; all 63 tests run without external tools). UI test: `pip install playwright && playwright install chromium`, start the studio
 with an empty workspace and run `python tests\ui_playwright.py`.

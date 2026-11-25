@@ -59,9 +59,13 @@ def detect_background(im: Image.Image) -> dict:
     """Classify the background: transparent, solid colour, or a baked-in checkerboard."""
     a = to_np(im)
     border = _border_pixels(a)
-    if (border[:, 3] < 16).mean() > 0.9:
+    transparent = border[:, 3] < 16
+    if transparent.mean() > 0.9:
         return {"kind": "transparent"}
-    rgb = border[:, :3].astype(int)
+    if transparent.mean() > 0.4:
+        # Mostly transparent border with an opaque subject touching it (e.g. a round icon) — not a background.
+        return {"kind": "transparent", "subject_touches_border": True}
+    rgb = border[~transparent][:, :3].astype(int)
     keys, counts = np.unique((rgb // 8), axis=0, return_counts=True)
     order = np.argsort(counts)[::-1]
     top = counts[order[0]] / len(rgb)
@@ -297,7 +301,7 @@ def median_cut_palette(images: list[Image.Image], count: int = 32, alpha_thresho
 
 def apply_palette(im: Image.Image, palette: list[str], alpha_threshold: int = 128) -> Image.Image:
     """Snap opaque pixels to the nearest palette colour (vectorised; equivalent in result to
-    Pixel Atelier's spritepipe.core.map_palette which is used for its own pipeline)."""
+    artstudio.pipeline.spritepipe.map_palette)."""
     cols = np.array([[int(c[i:i + 2], 16) for i in (1, 3, 5)] for c in palette], np.int32)
     a = to_np(im).copy()
     flat = a.reshape(-1, 4)

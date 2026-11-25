@@ -7,23 +7,23 @@ description: Inspect animations: deterministic QA plus a separate, explicitly pr
 
 Inspect animations: deterministic QA plus a separate, explicitly probabilistic visual review.
 
-CLI: `python -m artstudio <command>` (JSON on stdout). Web: http://127.0.0.1:8870. Atelier tools are reached through the `atelier` provider — never re-implement drawing in Python image code.
+CLI: `python -m artstudio <command>` (JSON on stdout). Web: http://127.0.0.1:8870. Procedural pixels come from Engine A (`procedural` provider, docs/engine-a-guide.md) — never paste pixels in with ad-hoc image code.
 
 ## Required inputs
 Animation asset(s); character master; expected directions/animations.
 
 ## Recommended workflow
 1. `qa --project P --asset A` (empty/opaque/background/clipping/canvas/duplicates/scale/anchor/jitter/durations/events).
-2. Pixel-art: optionally `qa --spritepipe` to run Pixel Atelier's TECHNICAL_VERIFIED checker.
+2. Pixel-art: optionally `qa --spritepipe` to run the whole-character spritepipe TECHNICAL_VERIFIED checker.
 3. `contact-sheet` + Animation Studio at game scale, then half speed; onion skin; compare against the master.
 4. Record visual findings (identity drift, clothing, weapon deformation, limbs, proportions, style, motion, transitions) as a visual review — never infer them from deterministic results.
 5. `character report` for missing directions; approve/reject.
 
 ## Tool-selection rules
-artstudio.qa (deterministic), qa.visual (probabilistic record; no model bundled), Pixel Atelier spritepipe.
+artstudio.qa (deterministic), qa.visual (probabilistic record; no model bundled), artstudio.pipeline.spritepipe.
 
 ## Prompt templates
-Visual review checklist (from Pixel Atelier review-checklist): identity, proportions, weapon length/grip, support foot, phases, loop seam, effects not duplicated.
+Visual review checklist (whole-character review checklist): identity, proportions, weapon length/grip, support foot, phases, loop seam, effects not duplicated.
 
 ## Quality criteria
 Deterministic `passed` AND a recorded visual review; technical pass alone is never reported as visual consistency.

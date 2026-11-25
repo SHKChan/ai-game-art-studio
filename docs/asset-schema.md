@@ -17,7 +17,7 @@ external JSON-Schema tool as well.
 <workspace>/projects/<pid>/characters/<cid>/character.json   masters/ candidates/ concept/
 <workspace>/projects/<pid>/assets/<aid>/asset.json           source/ frames_src/ frames/ versions/vN/
 <workspace>/projects/<pid>/exports/<eid>/export_manifest.json + files
-<workspace>/projects/<pid>/atelier/documents/<doc-uuid>/     Atelier's own editable store
+<workspace>/projects/<pid>/engine/documents/<doc-uuid>/      Engine A editable documents (doc.json, cels/, doc.recipe)
 <workspace>/jobs/<jid>.json
 <workspace>/comfyui/workflows/<wid>.json                     user-imported templates
 ```
@@ -33,7 +33,7 @@ external JSON-Schema tool as well.
 | `prompt`, `reference_images` | generation prompt (positive/negative/template) and references used |
 | `source_files`, `processed_files` | `{path, sha256, role, origin, width, height}` |
 | `processing` | `normalize` record (params, scale, canvas, pivot, per-frame offsets) + `import` record |
-| `procedural` | `{engine: atelier, doc_id, recipe, builder, params}` |
+| `procedural` | `{engine: artstudio-pixel (or atelier for legacy assets), doc_id, recipe, builder, params}` |
 | `versions` | `[{version, created_at, note, snapshot: "versions/vN"}]` |
 | `status` | draft / candidate / approved / rejected / locked |
 | `qa.deterministic` | `{status, issues[], counts, checked_at}` |

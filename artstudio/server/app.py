@@ -3,7 +3,7 @@
 Security: binds to loopback by default; Host header allow-list; per-process session token in an
 HttpOnly SameSite=Strict cookie required for /api and /files; Origin check on writes; request size
 limits; all file access through safe_join; no shell execution from UI input (subprocesses use fixed
-argument lists for Atelier/ffmpeg only).
+argument lists for ffmpeg only).
 """
 from __future__ import annotations
 
@@ -22,6 +22,8 @@ from urllib.parse import parse_qs, urlparse
 
 from .. import __version__
 from ..animation import edit_frames, reprocess, replace_frame, template_info
+from ..i18n import localize, localize_exc, normalize
+from ..providers.base import GenerationError
 from ..qa import check_asset
 from ..qa.visual import record_visual_review
 from ..util import StudioError, decode_data_url, new_id, open_image_bytes, read_json, safe_join
@@ -79,6 +81,11 @@ def api_projects(s, h, m, q, body):
 @route("POST", r"/api/projects")
 def api_create_project(s, h, m, q, body):
     return s.ws.create_project(body["name"], body.get("game", ""), body.get("genre", ""), body.get("default_style", "pixel"))
+
+
+@route("POST", r"/api/projects/(?P<pid>[a-z0-9_-]+)/settings")
+def api_project_settings(s, h, m, q, body):
+    return s.ws.update_project(m["pid"], body)
 
 
 @route("GET", r"/api/projects/(?P<pid>[a-z0-9_-]+)")
@@ -169,15 +176,15 @@ def api_meta(s, h, m, q, body):
     return s.ws.save_asset(a, snapshot_note="metadata")
 
 
-@route("GET", r"/api/projects/(?P<pid>[a-z0-9_-]+)/assets/(?P<aid>[a-z0-9_-]+)/atelier")
-def api_atelier_doc(s, h, m, q, body):
+@route("GET", r"/api/projects/(?P<pid>[a-z0-9_-]+)/assets/(?P<aid>[a-z0-9_-]+)/document")
+def api_engine_doc(s, h, m, q, body):
     a = s.ws.get_asset(m["pid"], m["aid"])
     proc = a.get("procedural") or {}
     if not proc.get("doc_id"):
-        raise StudioError("Not a procedural asset")
-    ddir = safe_join(s.ws.atelier_home(m["pid"]), "documents", proc["doc_id"])
+        raise StudioError("Not a procedural asset", code="not_procedural")
+    ddir = safe_join(s.ws.engine_home(m["pid"]), "documents", proc["doc_id"])
     if not (ddir / "doc.json").is_file():
-        raise StudioError("Atelier document not found in this project's store")
+        raise StudioError("Engine document not found in this project (replay the recipe to rebuild it)", code="document_missing")
     doc = read_json(ddir / "doc.json")
     recipe = (ddir / "doc.recipe").read_text(encoding="utf-8").splitlines() if (ddir / "doc.recipe").exists() else []
     cels = sorted(p.name for p in (ddir / "cels").glob("*.png"))
@@ -196,7 +203,7 @@ def api_replay(s, h, m, q, body):
 @route("POST", r"/api/projects/(?P<pid>[a-z0-9_-]+)/procedural")
 def api_procedural(s, h, m, q, body):
     return s.jobs.submit("procedural", {"builder": body["builder"], "params": body.get("params", {}), "name": body.get("name"),
-                                        "character_id": body.get("character_id")}, project_id=m["pid"], label=f"atelier {body['builder']}")
+                                        "character_id": body.get("character_id")}, project_id=m["pid"], label=f"procedural {body['builder']}")
 
 
 @route("POST", r"/api/projects/(?P<pid>[a-z0-9_-]+)/import")
@@ -214,7 +221,7 @@ def api_import(s, h, m, q, body):
 
 @route("POST", r"/api/projects/(?P<pid>[a-z0-9_-]+)/generate")
 def api_generate(s, h, m, q, body):
-    keys = ("provider_id", "kind", "character_id", "template", "direction", "workflow_id", "params", "layout", "mode", "note", "name")
+    keys = ("provider_id", "kind", "character_id", "template", "direction", "workflow_id", "params", "layout", "mode", "note", "name", "prompt_language")
     p = {k: body[k] for k in keys if k in body}
     if body.get("reference_data"):
         p["reference"] = str(_save_upload(s, "ref.png", body["reference_data"]))
@@ -251,10 +258,10 @@ def api_exports(s, h, m, q, body):
 def api_knight(s, h, m, q, body):
     cid = body.get("character_id")
     if not cid:
-        c = s.ws.create_character(m["pid"], "Knight (Pixel Atelier sample)", direction_mode="side2", art_style="pixel",
-                                  description="Blonde greatsword knight from Pixel Atelier's examples (right-facing side view).")
+        c = s.ws.create_character(m["pid"], "Knight (sample)", direction_mode="side2", art_style="pixel",
+                                  description="Blonde greatsword knight from the bundled sample art (right-facing side view).")
         cid = c["id"]
-    assets = s.import_pixel_atelier_knight(m["pid"], cid, body.get("actions"))
+    assets = s.import_knight_sample(m["pid"], cid, body.get("actions"))
     return {"character_id": cid, "assets": [a["id"] for a in assets]}
 
 
@@ -319,11 +326,12 @@ def api_char_report(s, h, m, q, body):
 
 @route("POST", r"/api/prompt-preview")
 def api_prompt_preview(s, h, m, q, body):
-    from ..prompts import keyframe_prompt, master_prompt
+    from ..prompts import build_keyframe_prompt, build_master_prompt
     c = s.ws.get_character(body["project_id"], body["character_id"])
+    lang = body.get("prompt_language") or s.ws.get_project(body["project_id"]).get("prompt_language") or s.cfg.prompt_language
     if body.get("kind") == "master_candidate":
-        return master_prompt(c, body.get("direction", "south"))
-    return keyframe_prompt(c, body.get("template", "idle"), body.get("direction", "none"), body.get("mode"), note=body.get("note", ""))
+        return build_master_prompt(c, body.get("direction", "south"), lang)
+    return build_keyframe_prompt(c, body.get("template", "idle"), body.get("direction", "none"), body.get("mode"), note=body.get("note", ""), language=lang)
 
 
 # jobs
@@ -407,6 +415,9 @@ class Handler(BaseHTTPRequestHandler):
     def _json(self, code, obj):
         self._send(code, json.dumps(obj, ensure_ascii=False, default=str).encode())
 
+    def _lang(self):
+        return normalize(self.headers.get("X-Studio-Lang") or self.headers.get("Accept-Language") or self.studio.cfg.language)
+
     def _host_ok(self):
         return self.headers.get("Host", "") in self.allowed_hosts
 
@@ -448,7 +459,7 @@ class Handler(BaseHTTPRequestHandler):
         if method == "GET" and path == "/health":
             return self._json(200, {"ok": True, "version": __version__})
         if not self._authed():
-            return self._json(401, {"error": "Open the studio at / first (session cookie missing)."})
+            return self._json(401, {"error": localize("Open the studio at / first (session cookie missing).", None, self._lang()), "code": "unauthorized"})
         if method != "GET":
             origin = self.headers.get("Origin")
             if origin and origin != f"http://{self.headers.get('Host')}":
@@ -477,10 +488,12 @@ class Handler(BaseHTTPRequestHandler):
                         return self._send(200, res[0], res[1])
                     return self._json(200, res)
                 except Conflict as e:
-                    return self._json(409, {"error": str(e)})
-                except (StudioError, KeyError, ValueError, TypeError) as e:
+                    return self._json(409, {"error": localize_exc(e, self._lang()), "code": "conflict", "detail": str(e)})
+                except (StudioError, GenerationError, KeyError, ValueError, TypeError) as e:
                     log.info("api error path=%s err=%s", path, e)
-                    return self._json(400, {"error": str(e) if not isinstance(e, KeyError) else f"missing field {e}"})
+                    msg = str(e) if not isinstance(e, KeyError) else f"missing field {e}"
+                    return self._json(400, {"error": localize(msg, getattr(e, "code", None), self._lang()),
+                                            "code": getattr(e, "code", None) or "error", "detail": msg})
                 except Exception as e:  # noqa: BLE001
                     log.error("api crash path=%s %s", path, traceback.format_exc())
                     return self._json(500, {"error": f"internal error: {e}"})
@@ -494,10 +507,10 @@ class Handler(BaseHTTPRequestHandler):
             if len(parts) < 3:
                 raise StudioError("bad path")
             pid, area = parts[0], parts[1]
-            if area not in ("assets", "characters", "exports", "atelier"):
+            if area not in ("assets", "characters", "exports", "engine"):
                 raise StudioError("bad area")
-            if area == "atelier":
-                f = safe_join(self.studio.ws.atelier_home(pid), "documents", *parts[2:])
+            if area == "engine":
+                f = safe_join(self.studio.ws.engine_home(pid), "documents", *parts[2:])
             else:
                 f = safe_join(self.studio.ws.project_dir(pid), area, *parts[2:])
         except StudioError:

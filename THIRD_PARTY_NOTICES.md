@@ -1,31 +1,38 @@
-# Third-party notices
+# Third-party notices / 第三方声明
 
-## Atelier — `upstream/atelier`
-Source: https://github.com/marmikshah/atelier, commit 8ac6adfc784d1e3127060e4f5b58cde1e6c9bf85 (supplied locally).
-Used unmodified as an external engine (CLI/MCP). Showcase GIFs/recipes are used as test inputs.
+This repository no longer contains other projects' git checkouts. Code and data derived from them are kept
+with their original MIT copyright notices, as the licence requires.
 
+## Atelier — https://github.com/marmikshah/atelier (commit 8ac6adfc784d1e3127060e4f5b58cde1e6c9bf85)
 ```
-MIT License
-Copyright (c) 2026 Marmik Shah
+MIT License — Copyright (c) 2026 Marmik Shah
 ```
-Full text: `upstream/atelier/LICENSE`. Rust crate dependencies are listed in `upstream/atelier/Cargo.lock` under their own licences.
+- **Not included as code.** Engine A (`artstudio/engine`) is an independent Python implementation of a subset of
+  Atelier's *tool-call format* (tool and argument names, document/recipe layout) so Atelier recipes replay; primitive
+  semantics (rect, ellipse inflation, paint_grid) follow Atelier's documented behaviour.
+- `tests/fixtures/showcase/{potion,slash,torch,cat,explosion}.gif`, `{potion,slash}.recipe` — showcase art, MIT.
+- Drawing guidance adapted into `skills/` and `docs/engine-a-guide.md`.
 
-## Pixel Atelier — `upstream/pixel-atelier`
-Source: https://github.com/jinxingtaire/pixel-atelier, commit 15d199f68e6657af0873b3c950525c4bf28eed6f (supplied locally).
-Imported unmodified as a library (`spritepipe`, `bridge/production.py`, `bridge/rpc.py`); its knight example art is used
-as genuine sample input and as mock-server fixtures (always labelled).
+## Pixel Atelier — https://github.com/jinxingtaire/pixel-atelier (commit 15d199f68e6657af0873b3c950525c4bf28eed6f)
+```
+MIT License — Copyright (c) 2026 Pixel Character Pipeline contributors
 
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
+rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit
+persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and
+this permission notice shall be included in all copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
 ```
-MIT License
-Copyright (c) 2026 Pixel Character Pipeline contributors
-```
-Full text: `upstream/pixel-atelier/LICENSE`.
+Derived files (modified; header in each file):
+- `artstudio/pipeline/spritepipe.py` ← `spritepipe/core.py` (UTF-8, numpy pixel access)
+- `artstudio/prompts_zh_sheet.py` ← `bridge/production.py` (STEPS, generation_prompt, verbatim)
+- `artstudio/providers/codex_rpc.py` ← `bridge/rpc.py` (UTF-8 pipes)
+- `tests/test_spritepipe.py` ← `tests/test_pipeline.py`
+- `samples/knight/` ← `examples/knight` (sample art: demonstration/reproduction only — see `samples/knight/NOTICE.md`)
 
 ## Python packages
-- Pillow (MIT-CMU / HPND) — image I/O and processing.
-- NumPy (BSD-3-Clause) — array processing.
-- Playwright (Apache-2.0) — optional, UI tests only.
+Pillow (MIT-CMU), NumPy (BSD-3-Clause); Playwright (Apache-2.0, optional, tests only).
 
-## Concepts / formats referenced (no code copied)
-- ComfyUI server API (GPL-3.0 project; only its documented HTTP/WebSocket API is used; no ComfyUI code is included).
-- TexturePacker JSON-hash and cocos2d plist (format 2) atlas formats.
+## Formats / APIs referenced (no code copied)
+ComfyUI server API (the GPL-3.0 ComfyUI code is not included), TexturePacker JSON-hash and cocos2d plist formats.

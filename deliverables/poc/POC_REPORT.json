@@ -1,64 +1,64 @@
 {
-  "started_at": "2026-11-25 22:26:32",
+  "started_at": "2026-11-25 23:43:59",
   "tests": {
     "A_procedural": {
       "potion": {
-        "asset": "health-potion-64-20bc1f",
+        "asset": "health-potion-64-9632c8",
         "frames": 1,
         "canvas": [
           64,
           64
         ],
         "qa": "passed",
-        "atelier_doc": "a11af22b-8a44-45ad-867f-15471bec072a",
-        "atelier_calls": 15
+        "engine_doc": "74ba46a4-4877-421a-a123-74dd3660e411",
+        "engine_calls": 14
       },
       "chest": {
-        "asset": "treasure-chest-64-0e28c4",
+        "asset": "treasure-chest-64-1d11f8",
         "frames": 1,
         "canvas": [
           64,
           64
         ],
         "qa": "passed",
-        "atelier_doc": "c155487a-d1b6-4921-9fb6-1891ff39e815",
-        "atelier_calls": 12
+        "engine_doc": "1f734663-9da9-46b8-beb6-94be5dd65a14",
+        "engine_calls": 11
       },
       "chest_open": {
-        "asset": "chest-opening-8f-24af63",
+        "asset": "chest-opening-8f-7ea18b",
         "frames": 8,
         "canvas": [
           64,
           64
         ],
         "qa": "passed",
-        "atelier_doc": "1bfc0073-f11e-4ed7-a259-c55127ea7a05",
-        "atelier_calls": 53
+        "engine_doc": "1a44600b-d7f6-4a87-8824-323e0a0818d6",
+        "engine_calls": 52
       },
       "fireball": {
-        "asset": "fireball-8f-588f4d",
+        "asset": "fireball-8f-a53b9c",
         "frames": 8,
         "canvas": [
           64,
           64
         ],
         "qa": "passed",
-        "atelier_doc": "692f97d7-8e53-4da1-95cf-d6ad587c35dd",
-        "atelier_calls": 32
+        "engine_doc": "367668ab-9398-47e7-a0e4-f26c20ee053f",
+        "engine_calls": 31
       },
       "sword_slash": {
-        "asset": "sword-slash-8f-49d103",
+        "asset": "sword-slash-8f-6b19ac",
         "frames": 8,
         "canvas": [
           64,
           64
         ],
         "qa": "passed",
-        "atelier_doc": "908017fe-f948-475b-bc7e-20f63d66c319",
-        "atelier_calls": 27
+        "engine_doc": "887918e2-eea0-43ae-8582-50062abc44de",
+        "engine_calls": 26
       },
       "recipe_replay_identical": true,
-      "pixel_atelier_spritepipe_chest_open": "TECHNICAL_VERIFIED",
+      "spritepipe_chest_open": "TECHNICAL_VERIFIED",
       "export": {
         "files": 49,
         "qa": "passed",
@@ -68,13 +68,13 @@
     },
     "B_character": {
       "knight_idle_pixel": {
-        "asset": "knight-idle-cbda8a",
+        "asset": "knight-idle-1aad3d",
         "frames": 8,
         "qa": "passed",
         "issues": []
       },
       "knight_run_pixel": {
-        "asset": "knight-run-e28038",
+        "asset": "knight-run-fc40cb",
         "frames": 8,
         "qa": "warnings",
         "issues": [
@@ -82,7 +82,7 @@
         ]
       },
       "knight_light_pixel": {
-        "asset": "knight-light-714f3a",
+        "asset": "knight-light-7eb4f7",
         "frames": 16,
         "qa": "warnings",
         "issues": [
@@ -91,20 +91,20 @@
         ]
       },
       "knight_heavy_pixel": {
-        "asset": "knight-heavy-b064f3",
+        "asset": "knight-heavy-b783e7",
         "frames": 16,
         "qa": "passed",
         "issues": []
       },
       "knight_run_hd": {
-        "asset": "knight-run-b6461f",
+        "asset": "knight-run-0fb58b",
         "canvas": [
           114,
           122
         ],
         "partial_alpha_preserved": true
       },
-      "pixel_atelier_spritepipe_knight_run": "TECHNICAL_VERIFIED",
+      "spritepipe_knight_run": "TECHNICAL_VERIFIED",
       "knight_direction_report": {
         "masters": [
           {
@@ -144,17 +144,17 @@
     },
     "C_external": {
       "gif": {
-        "asset": "torch-imported-gif-7dca8c",
+        "asset": "torch-imported-gif-f8a2cc",
         "frames": 10,
         "qa": "warnings"
       },
       "sprite_sheet_auto": {
-        "asset": "knight-run-sheet-import-auto-slice-98984b",
+        "asset": "knight-run-sheet-import-auto-slice-8fc571",
         "frames": 8
       },
       "video": {
-        "asset": "cat-mp4-green-screen-import-9ee523",
-        "source": "MP4 built from Atelier showcase cat.gif on #00B140, 4x nearest upscale",
+        "asset": "cat-mp4-green-screen-import-e932c5",
+        "source": "MP4 built from showcase fixture cat.gif (Atelier showcase art) on #00B140, 4x nearest upscale",
         "frames_extracted": 10,
         "source_frames": 10,
         "qa": "warnings",
@@ -175,11 +175,11 @@
       }
     },
     "D_hybrid": {
-      "character_asset": "knight-heavy-b064f3",
-      "effect_asset": "gold-slash-layer-11e3e6",
+      "character_asset": "knight-heavy-b783e7",
+      "effect_asset": "gold-slash-layer-a481ce",
       "layer": {
         "name": "Gold Slash (layer)",
-        "asset_id": "gold-slash-layer-11e3e6",
+        "asset_id": "gold-slash-layer-a481ce",
         "role": "effect",
         "offset": [
           29,
@@ -200,12 +200,28 @@
     }
   },
   "environment": {
-    "atelier": {
+    "pixel_engine": {
       "available": true,
       "reason": "",
       "details": {
-        "binary": "/root/studio/upstream/atelier/target/release/atelier",
-        "version": "atelier 0.2.0"
+        "engine": "artstudio-pixel",
+        "tools": [
+          "delete_doc",
+          "doc_add_tag",
+          "doc_draw",
+          "doc_export",
+          "doc_frame",
+          "doc_fx",
+          "doc_info",
+          "doc_layer",
+          "doc_look",
+          "doc_new",
+          "doc_paint_grid",
+          "doc_palette",
+          "doc_region",
+          "doc_rescale",
+          "list_docs"
+        ]
       }
     },
     "ffmpeg": true,
@@ -218,13 +234,13 @@
     }
   },
   "stage_a_mock_pipeline": {
-    "label": "TEST FIXTURES \u2014 copies of upstream example art returned by the mock server; NOT AI output of this run",
+    "label": "TEST FIXTURES \u2014 copies of the bundled sample art returned by the mock server; NOT AI output of this run",
     "candidate_is_fixture": true,
-    "walk_asset": "chibi-adventurer-fixture-run-walk-east-0faf26",
+    "walk_asset": "chibi-adventurer-fixture-run-walk-east-4e8d2e",
     "walk_is_fixture": true,
     "regenerated_frame_origin": "fixture",
     "export_contains_test_fixtures": true
   },
   "workspace_backup": "deliverables/poc/poc_workspace_backup.zip",
-  "finished_at": "2026-11-25 22:26:39"
+  "finished_at": "2026-11-25 23:44:07"
 }

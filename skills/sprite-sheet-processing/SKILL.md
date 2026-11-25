@@ -7,7 +7,7 @@ description: Turn an external sprite sheet into a clean, aligned animation (Engi
 
 Turn an external sprite sheet into a clean, aligned animation (Engine C).
 
-CLI: `python -m artstudio <command>` (JSON on stdout). Web: http://127.0.0.1:8870. Atelier tools are reached through the `atelier` provider — never re-implement drawing in Python image code.
+CLI: `python -m artstudio <command>` (JSON on stdout). Web: http://127.0.0.1:8870. Procedural pixels come from Engine A (`procedural` provider, docs/engine-a-guide.md) — never paste pixels in with ad-hoc image code.
 
 ## Required inputs
 Sheet PNG; grid (cols×rows/cell size) or auto-detect; background type; art mode; anchor policy.

@@ -1,0 +1,110 @@
+{
+ "schema": 1,
+ "doc_id": "367668ab-9398-47e7-a0e4-f26c20ee053f",
+ "name": "fireball",
+ "w": 64,
+ "h": 64,
+ "revision": 31,
+ "layers": [
+  {
+   "index": 0,
+   "name": "embers",
+   "visible": true,
+   "opacity": 255,
+   "blend": "normal"
+  },
+  {
+   "index": 1,
+   "name": "flame",
+   "visible": true,
+   "opacity": 255,
+   "blend": "normal"
+  },
+  {
+   "index": 2,
+   "name": "core",
+   "visible": true,
+   "opacity": 255,
+   "blend": "normal"
+  }
+ ],
+ "frames": [
+  {
+   "index": 0,
+   "duration_ms": 100
+  },
+  {
+   "index": 1,
+   "duration_ms": 80
+  },
+  {
+   "index": 2,
+   "duration_ms": 80
+  },
+  {
+   "index": 3,
+   "duration_ms": 80
+  },
+  {
+   "index": 4,
+   "duration_ms": 80
+  },
+  {
+   "index": 5,
+   "duration_ms": 80
+  },
+  {
+   "index": 6,
+   "duration_ms": 80
+  },
+  {
+   "index": 7,
+   "duration_ms": 80
+  }
+ ],
+ "palette": [
+  "#2b0b12ff",
+  "#6e1414ff",
+  "#b8261aff",
+  "#ec5a16ff",
+  "#ff9a2aff",
+  "#ffd65aff",
+  "#fff6c8ff",
+  "#ffffffff"
+ ],
+ "palette_len": 8,
+ "tags": [
+  {
+   "name": "fly",
+   "from": 0,
+   "to": 7,
+   "direction": "forward"
+  }
+ ],
+ "cels": [
+  "L0_F0",
+  "L0_F1",
+  "L0_F2",
+  "L0_F3",
+  "L0_F4",
+  "L0_F5",
+  "L0_F6",
+  "L0_F7",
+  "L1_F0",
+  "L1_F1",
+  "L1_F2",
+  "L1_F3",
+  "L1_F4",
+  "L1_F5",
+  "L1_F6",
+  "L1_F7",
+  "L2_F0",
+  "L2_F1",
+  "L2_F2",
+  "L2_F3",
+  "L2_F4",
+  "L2_F5",
+  "L2_F6",
+  "L2_F7"
+ ]
+}

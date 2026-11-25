@@ -33,15 +33,15 @@ def main():
         page.locator("#projectForm input").first.fill("UI Test RPG")
         page.get_by_role("button", name="Create project").click()
         expect(page.locator("#tab-library h3").first).to_have_text("UI Test RPG")
-        # Procedural: run chest_open with Atelier
+        # Procedural: run chest_open with the pixel engine
         page.get_by_role("button", name="Procedural Studio").click()
         page.locator("#tab-procedural select").first.select_option("chest_open")
-        page.get_by_role("button", name="Run with Atelier").click()
+        page.get_by_role("button", name="Run with pixel engine").click()
         page.wait_for_selector("#tab-procedural .cels img", timeout=60000)
         shot(page, "01_procedural")
         # Library: import knight sample
         page.get_by_role("button", name="Library").click()
-        page.get_by_role("button", name="Import Pixel Atelier knight sample").click()
+        page.get_by_role("button", name="Import knight sample").click()
         page.wait_for_selector("text=Knight light", timeout=60000)
         shot(page, "02_library")
         # Animation studio: open the attack animation, play, onion skin, compare
@@ -63,9 +63,9 @@ def main():
         page.get_by_role("button", name="Delete", exact=True).click()
         expect(page.locator(".tframe")).to_have_count(n0, timeout=20000)
         # Hybrid: attach the chest? use procedural effect if present
-        # Import & processing: upload a real GIF from Atelier's showcase
+        # Import & processing: upload a real GIF (showcase fixture)
         page.get_by_role("button", name="Import & Processing").click()
-        gif = ROOT / "upstream" / "atelier" / "showcase" / "gifs" / "opus-5.5-xhigh" / "explosion.gif"
+        gif = ROOT / "tests" / "fixtures" / "showcase" / "explosion.gif"
         page.locator("#tab-import input[type=file]").set_input_files(str(gif))
         page.get_by_role("button", name="Import & process", exact=True).click()
         page.wait_for_selector("text=Before / after", timeout=60000)
@@ -91,6 +91,18 @@ def main():
         # Theme toggle
         page.locator("#themeBtn").click()
         shot(page, "08_light_theme")
+        page.locator("#themeBtn").click()
+        # Chinese UI: switch language (persists and reloads), every workspace must render translated
+        page.select_option("#langSelect", "zh-CN")
+        page.wait_for_selector("text=资源库")
+        expect(page.get_by_role("button", name="动画工作室")).to_be_visible()
+        for i, (tab, marker) in enumerate([("角色工作室", "新建角色"), ("动画工作室", "选择一个动画"), ("程序化绘制", "像素引擎配方"),
+                                           ("导入与处理", "导入并处理"), ("AI 生成", "生成动画关键帧"), ("导出", "导出记录")]):
+            page.get_by_role("button", name=tab, exact=True).first.click()
+            page.locator(f"text={marker} >> visible=true").first.wait_for(timeout=20000)
+            shot(page, f"zh_{i:02d}")
+        page.select_option("#langSelect", "en")
+        page.wait_for_selector("text=Library")
         b.close()
     if errors:
         print("Console errors:", *errors, sep="\n  ")

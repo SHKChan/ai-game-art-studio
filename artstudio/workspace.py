@@ -7,7 +7,7 @@ Layout (all JSON is atomic-written; binary art is plain PNG):
   <workspace>/projects/<pid>/characters/<cid>/character.json   (+ masters/, candidates/)
   <workspace>/projects/<pid>/assets/<aid>/asset.json           (+ source/, frames/, versions/)
   <workspace>/projects/<pid>/exports/<eid>/...
-  <workspace>/projects/<pid>/atelier/                           (Atelier document store, --home)
+  <workspace>/projects/<pid>/engine/                            (pixel engine document store)
   <workspace>/jobs/<jid>.json
   <workspace>/comfyui/workflows/<wid>.json
 """
@@ -112,8 +112,8 @@ class Workspace:
         if d.exists():
             raise StudioError("Project already exists")
         p = {"schema_version": SCHEMA_VERSION, "id": pid, "name": name, "game": game, "genre": genre,
-             "default_style": default_style, "created_at": now(), "updated_at": now()}
-        for sub in ("assets", "characters", "exports", "atelier"):
+             "default_style": default_style, "prompt_language": "en", "created_at": now(), "updated_at": now()}
+        for sub in ("assets", "characters", "exports", "engine"):
             (d / sub).mkdir(parents=True, exist_ok=True)
         write_json(d / "project.json", p)
         return p
@@ -124,8 +124,21 @@ class Workspace:
             raise StudioError(f"Unknown project {pid}")
         return read_json(f)
 
-    def atelier_home(self, pid: str) -> Path:
-        d = self.project_dir(pid) / "atelier"
+    def update_project(self, pid: str, patch: dict) -> dict:
+        allowed = {"name", "game", "genre", "default_style", "prompt_language"}
+        bad = set(patch) - allowed
+        if bad:
+            raise StudioError(f"Fields not editable: {sorted(bad)}")
+        if "prompt_language" in patch and patch["prompt_language"] not in ("en", "zh-CN"):
+            raise StudioError("prompt_language must be en or zh-CN")
+        p = self.get_project(pid)
+        p.update(patch)
+        p["updated_at"] = now()
+        write_json(self.project_dir(pid) / "project.json", p)
+        return p
+
+    def engine_home(self, pid: str) -> Path:
+        d = self.project_dir(pid) / "engine"
         d.mkdir(parents=True, exist_ok=True)
         return d
 

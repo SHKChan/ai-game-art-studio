@@ -1,4 +1,5 @@
 {
+  "language": "en",
   "master": {
     "south": {
       "positive": "Character: Chibi Adventurer. Chibi fantasy adventurer, 2.5-head proportions. Proportions: head_to_body 1:2.5, height_px 48 Clothing: red hood, red cape, brown adventurer tunic, brown boots Accessories: leather belt Weapon (keep exact geometry and grip): type: short sword, hand: right, blade: straight steel, 0.6x body height Must keep: blonde hair visible under the hood; same sword in every direction Character master reference, neutral standing pose, full body, facing the camera (front / south). Style: chibi pixel art, 1px dark outline; crisp pixel art, hard 1px outline, limited palette, no anti-aliasing, no blur. Transparent background, centred, full body visible with margin.",

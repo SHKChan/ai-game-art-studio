@@ -7,7 +7,7 @@ description: Create a looping idle (breathing) animation that keeps the feet pla
 
 Create a looping idle (breathing) animation that keeps the feet planted.
 
-CLI: `python -m artstudio <command>` (JSON on stdout). Web: http://127.0.0.1:8870. Atelier tools are reached through the `atelier` provider — never re-implement drawing in Python image code.
+CLI: `python -m artstudio <command>` (JSON on stdout). Web: http://127.0.0.1:8870. Procedural pixels come from Engine A (`procedural` provider, docs/engine-a-guide.md) — never paste pixels in with ad-hoc image code.
 
 ## Required inputs
 Locked master for the direction; frame count (4-8); timing; loop=true.

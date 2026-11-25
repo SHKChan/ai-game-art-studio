@@ -296,7 +296,7 @@ def replace_frame(ws: Workspace, a: dict, index: int, image: Image.Image, origin
 
 def add_layer(ws: Workspace, a: dict, layer_asset_id: str, role: str = "effect", offset=(0, 0), z: int = 1,
               start_ms: int = 0, anchor_to_event: str | None = None, name: str | None = None, event_offset_ms: int = 0) -> dict:
-    """Attach an independently-timed layer (e.g. Atelier effect) to a character animation."""
+    """Attach an independently-timed layer (e.g. procedural effect) to a character animation."""
     other = ws.get_asset(a["project_id"], layer_asset_id)
     if "animation" not in other:
         raise StudioError("Layer asset must be an animation")

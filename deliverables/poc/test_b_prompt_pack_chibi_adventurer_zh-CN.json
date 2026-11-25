@@ -1,0 +1,135 @@
+{
+  "language": "zh-CN",
+  "master": {
+    "south": {
+      "positive": "角色：Chibi Adventurer。Chibi fantasy adventurer, 2.5-head proportions. 比例：head_to_body 1:2.5，height_px 48 服装：red hood、red cape、brown adventurer tunic、brown boots 配饰：leather belt 武器（保持形状与握法不变）：type：short sword，hand：right，blade：straight steel, 0.6x body height 必须保持：blonde hair visible under the hood；same sword in every direction 角色母版参考图，自然站立，全身，面向镜头（正面/南）。画风：chibi pixel art, 1px dark outline；清晰硬边像素画，1 像素描边，有限调色板，无抗锯齿、无模糊。透明背景，居中，全身完整可见并留白。",
+      "negative": "背景，场景，地面，地面阴影，文字，水印，网格线，边框，身体被裁切，武器被裁切，多余肢体，多余手指，重复角色，服装改变，发型改变，武器改变，模糊，压缩噪点",
+      "direction": "south",
+      "mode": "pixel",
+      "language": "zh-CN"
+    },
+    "east": {
+      "positive": "角色：Chibi Adventurer。Chibi fantasy adventurer, 2.5-head proportions. 比例：head_to_body 1:2.5，height_px 48 服装：red hood、red cape、brown adventurer tunic、brown boots 配饰：leather belt 武器（保持形状与握法不变）：type：short sword，hand：right，blade：straight steel, 0.6x body height 必须保持：blonde hair visible under the hood；same sword in every direction 角色母版参考图，自然站立，全身，朝画面右侧（东，侧面）。画风：chibi pixel art, 1px dark outline；清晰硬边像素画，1 像素描边，有限调色板，无抗锯齿、无模糊。透明背景，居中，全身完整可见并留白。",
+      "negative": "背景，场景，地面，地面阴影，文字，水印，网格线，边框，身体被裁切，武器被裁切，多余肢体，多余手指，重复角色，服装改变，发型改变，武器改变，模糊，压缩噪点",
+      "direction": "east",
+      "mode": "pixel",
+      "language": "zh-CN"
+    },
+    "north": {
+      "positive": "角色：Chibi Adventurer。Chibi fantasy adventurer, 2.5-head proportions. 比例：head_to_body 1:2.5，height_px 48 服装：red hood、red cape、brown adventurer tunic、brown boots 配饰：leather belt 武器（保持形状与握法不变）：type：short sword，hand：right，blade：straight steel, 0.6x body height 必须保持：blonde hair visible under the hood；same sword in every direction 角色母版参考图，自然站立，全身，背对镜头（背面/北）。画风：chibi pixel art, 1px dark outline；清晰硬边像素画，1 像素描边，有限调色板，无抗锯齿、无模糊。透明背景，居中，全身完整可见并留白。",
+      "negative": "背景，场景，地面，地面阴影，文字，水印，网格线，边框，身体被裁切，武器被裁切，多余肢体，多余手指，重复角色，服装改变，发型改变，武器改变，模糊，压缩噪点",
+      "direction": "north",
+      "mode": "pixel",
+      "language": "zh-CN"
+    },
+    "west": {
+      "positive": "角色：Chibi Adventurer。Chibi fantasy adventurer, 2.5-head proportions. 比例：head_to_body 1:2.5，height_px 48 服装：red hood、red cape、brown adventurer tunic、brown boots 配饰：leather belt 武器（保持形状与握法不变）：type：short sword，hand：right，blade：straight steel, 0.6x body height 必须保持：blonde hair visible under the hood；same sword in every direction 角色母版参考图，自然站立，全身，朝画面左侧（西，侧面，单独绘制）。画风：chibi pixel art, 1px dark outline；清晰硬边像素画，1 像素描边，有限调色板，无抗锯齿、无模糊。透明背景，居中，全身完整可见并留白。",
+      "negative": "背景，场景，地面，地面阴影，文字，水印，网格线，边框，身体被裁切，武器被裁切，多余肢体，多余手指，重复角色，服装改变，发型改变，武器改变，模糊，压缩噪点",
+      "direction": "west",
+      "mode": "pixel",
+      "language": "zh-CN"
+    }
+  },
+  "idle": {
+    "south": {
+      "positive": "角色：Chibi Adventurer。Chibi fantasy adventurer, 2.5-head proportions. 比例：head_to_body 1:2.5，height_px 48 服装：red hood、red cape、brown adventurer tunic、brown boots 配饰：leather belt 武器（保持形状与握法不变）：type：short sword，hand：right，blade：straight steel, 0.6x body height 必须保持：blonde hair visible under the hood；same sword in every direction 动作：idle。四分之三 RPG 视角，面向镜头（正面/南）。画风：chibi pixel art, 1px dark outline；清晰硬边像素画，1 像素描边，有限调色板，无抗锯齿、无模糊。一张透明背景 PNG 精灵图表，单行 6 格，等宽等高，严格从左到右：1：自然站姿；2：吸气，胸口上抬 1 像素；3：最高点；4：回到自然站姿；5：呼气，略微下沉；6：最低点。每格只有一个完整角色，各格人物比例和地面线一致，身体、武器和特效四周留出充足空白。脸、发型、服装、比例和武器必须与参考图完全一致。",
+      "negative": "背景，场景，地面，地面阴影，文字，水印，网格线，边框，身体被裁切，武器被裁切，多余肢体，多余手指，重复角色，服装改变，发型改变，武器改变，模糊，压缩噪点，shield，helmet，different hair colour",
+      "template": "idle",
+      "direction": "south",
+      "mode": "pixel",
+      "language": "zh-CN"
+    },
+    "east": {
+      "positive": "角色：Chibi Adventurer。Chibi fantasy adventurer, 2.5-head proportions. 比例：head_to_body 1:2.5，height_px 48 服装：red hood、red cape、brown adventurer tunic、brown boots 配饰：leather belt 武器（保持形状与握法不变）：type：short sword，hand：right，blade：straight steel, 0.6x body height 必须保持：blonde hair visible under the hood；same sword in every direction 动作：idle。四分之三 RPG 视角，朝画面右侧（东，侧面）。画风：chibi pixel art, 1px dark outline；清晰硬边像素画，1 像素描边，有限调色板，无抗锯齿、无模糊。一张透明背景 PNG 精灵图表，单行 6 格，等宽等高，严格从左到右：1：自然站姿；2：吸气，胸口上抬 1 像素；3：最高点；4：回到自然站姿；5：呼气，略微下沉；6：最低点。每格只有一个完整角色，各格人物比例和地面线一致，身体、武器和特效四周留出充足空白。脸、发型、服装、比例和武器必须与参考图完全一致。",
+      "negative": "背景，场景，地面，地面阴影，文字，水印，网格线，边框，身体被裁切，武器被裁切，多余肢体，多余手指，重复角色，服装改变，发型改变，武器改变，模糊，压缩噪点，shield，helmet，different hair colour",
+      "template": "idle",
+      "direction": "east",
+      "mode": "pixel",
+      "language": "zh-CN"
+    },
+    "north": {
+      "positive": "角色：Chibi Adventurer。Chibi fantasy adventurer, 2.5-head proportions. 比例：head_to_body 1:2.5，height_px 48 服装：red hood、red cape、brown adventurer tunic、brown boots 配饰：leather belt 武器（保持形状与握法不变）：type：short sword，hand：right，blade：straight steel, 0.6x body height 必须保持：blonde hair visible under the hood；same sword in every direction 动作：idle。四分之三 RPG 视角，背对镜头（背面/北）。画风：chibi pixel art, 1px dark outline；清晰硬边像素画，1 像素描边，有限调色板，无抗锯齿、无模糊。一张透明背景 PNG 精灵图表，单行 6 格，等宽等高，严格从左到右：1：自然站姿；2：吸气，胸口上抬 1 像素；3：最高点；4：回到自然站姿；5：呼气，略微下沉；6：最低点。每格只有一个完整角色，各格人物比例和地面线一致，身体、武器和特效四周留出充足空白。脸、发型、服装、比例和武器必须与参考图完全一致。",
+      "negative": "背景，场景，地面，地面阴影，文字，水印，网格线，边框，身体被裁切，武器被裁切，多余肢体，多余手指，重复角色，服装改变，发型改变，武器改变，模糊，压缩噪点，shield，helmet，different hair colour",
+      "template": "idle",
+      "direction": "north",
+      "mode": "pixel",
+      "language": "zh-CN"
+    },
+    "west": {
+      "positive": "角色：Chibi Adventurer。Chibi fantasy adventurer, 2.5-head proportions. 比例：head_to_body 1:2.5，height_px 48 服装：red hood、red cape、brown adventurer tunic、brown boots 配饰：leather belt 武器（保持形状与握法不变）：type：short sword，hand：right，blade：straight steel, 0.6x body height 必须保持：blonde hair visible under the hood；same sword in every direction 动作：idle。四分之三 RPG 视角，朝画面左侧（西，侧面，单独绘制）。画风：chibi pixel art, 1px dark outline；清晰硬边像素画，1 像素描边，有限调色板，无抗锯齿、无模糊。一张透明背景 PNG 精灵图表，单行 6 格，等宽等高，严格从左到右：1：自然站姿；2：吸气，胸口上抬 1 像素；3：最高点；4：回到自然站姿；5：呼气，略微下沉；6：最低点。每格只有一个完整角色，各格人物比例和地面线一致，身体、武器和特效四周留出充足空白。脸、发型、服装、比例和武器必须与参考图完全一致。",
+      "negative": "背景，场景，地面，地面阴影，文字，水印，网格线，边框，身体被裁切，武器被裁切，多余肢体，多余手指，重复角色，服装改变，发型改变，武器改变，模糊，压缩噪点，shield，helmet，different hair colour",
+      "template": "idle",
+      "direction": "west",
+      "mode": "pixel",
+      "language": "zh-CN"
+    }
+  },
+  "walk": {
+    "south": {
+      "positive": "角色：Chibi Adventurer。Chibi fantasy adventurer, 2.5-head proportions. 比例：head_to_body 1:2.5，height_px 48 服装：red hood、red cape、brown adventurer tunic、brown boots 配饰：leather belt 武器（保持形状与握法不变）：type：short sword，hand：right，blade：straight steel, 0.6x body height 必须保持：blonde hair visible under the hood；same sword in every direction 动作：walk。四分之三 RPG 视角，面向镜头（正面/南）。画风：chibi pixel art, 1px dark outline；清晰硬边像素画，1 像素描边，有限调色板，无抗锯齿、无模糊。一张透明背景 PNG 精灵图表，单行 8 格，等宽等高，严格从左到右：1：接触（右脚在前）；2：下沉；3：交叉；4：上升；5：接触（左脚在前）；6：下沉；7：交叉；8：上升。每格只有一个完整角色，各格人物比例和地面线一致，身体、武器和特效四周留出充足空白。脸、发型、服装、比例和武器必须与参考图完全一致。",
+      "negative": "背景，场景，地面，地面阴影，文字，水印，网格线，边框，身体被裁切，武器被裁切，多余肢体，多余手指，重复角色，服装改变，发型改变，武器改变，模糊，压缩噪点，shield，helmet，different hair colour",
+      "template": "walk",
+      "direction": "south",
+      "mode": "pixel",
+      "language": "zh-CN"
+    },
+    "east": {
+      "positive": "角色：Chibi Adventurer。Chibi fantasy adventurer, 2.5-head proportions. 比例：head_to_body 1:2.5，height_px 48 服装：red hood、red cape、brown adventurer tunic、brown boots 配饰：leather belt 武器（保持形状与握法不变）：type：short sword，hand：right，blade：straight steel, 0.6x body height 必须保持：blonde hair visible under the hood；same sword in every direction 动作：walk。四分之三 RPG 视角，朝画面右侧（东，侧面）。画风：chibi pixel art, 1px dark outline；清晰硬边像素画，1 像素描边，有限调色板，无抗锯齿、无模糊。一张透明背景 PNG 精灵图表，单行 8 格，等宽等高，严格从左到右：1：接触（右脚在前）；2：下沉；3：交叉；4：上升；5：接触（左脚在前）；6：下沉；7：交叉；8：上升。每格只有一个完整角色，各格人物比例和地面线一致，身体、武器和特效四周留出充足空白。脸、发型、服装、比例和武器必须与参考图完全一致。",
+      "negative": "背景，场景，地面，地面阴影，文字，水印，网格线，边框，身体被裁切，武器被裁切，多余肢体，多余手指，重复角色，服装改变，发型改变，武器改变，模糊，压缩噪点，shield，helmet，different hair colour",
+      "template": "walk",
+      "direction": "east",
+      "mode": "pixel",
+      "language": "zh-CN"
+    },
+    "north": {
+      "positive": "角色：Chibi Adventurer。Chibi fantasy adventurer, 2.5-head proportions. 比例：head_to_body 1:2.5，height_px 48 服装：red hood、red cape、brown adventurer tunic、brown boots 配饰：leather belt 武器（保持形状与握法不变）：type：short sword，hand：right，blade：straight steel, 0.6x body height 必须保持：blonde hair visible under the hood；same sword in every direction 动作：walk。四分之三 RPG 视角，背对镜头（背面/北）。画风：chibi pixel art, 1px dark outline；清晰硬边像素画，1 像素描边，有限调色板，无抗锯齿、无模糊。一张透明背景 PNG 精灵图表，单行 8 格，等宽等高，严格从左到右：1：接触（右脚在前）；2：下沉；3：交叉；4：上升；5：接触（左脚在前）；6：下沉；7：交叉；8：上升。每格只有一个完整角色，各格人物比例和地面线一致，身体、武器和特效四周留出充足空白。脸、发型、服装、比例和武器必须与参考图完全一致。",
+      "negative": "背景，场景，地面，地面阴影，文字，水印，网格线，边框，身体被裁切，武器被裁切，多余肢体，多余手指，重复角色，服装改变，发型改变，武器改变，模糊，压缩噪点，shield，helmet，different hair colour",
+      "template": "walk",
+      "direction": "north",
+      "mode": "pixel",
+      "language": "zh-CN"
+    },
+    "west": {
+      "positive": "角色：Chibi Adventurer。Chibi fantasy adventurer, 2.5-head proportions. 比例：head_to_body 1:2.5，height_px 48 服装：red hood、red cape、brown adventurer tunic、brown boots 配饰：leather belt 武器（保持形状与握法不变）：type：short sword，hand：right，blade：straight steel, 0.6x body height 必须保持：blonde hair visible under the hood；same sword in every direction 动作：walk。四分之三 RPG 视角，朝画面左侧（西，侧面，单独绘制）。画风：chibi pixel art, 1px dark outline；清晰硬边像素画，1 像素描边，有限调色板，无抗锯齿、无模糊。一张透明背景 PNG 精灵图表，单行 8 格，等宽等高，严格从左到右：1：接触（右脚在前）；2：下沉；3：交叉；4：上升；5：接触（左脚在前）；6：下沉；7：交叉；8：上升。每格只有一个完整角色，各格人物比例和地面线一致，身体、武器和特效四周留出充足空白。脸、发型、服装、比例和武器必须与参考图完全一致。",
+      "negative": "背景，场景，地面，地面阴影，文字，水印，网格线，边框，身体被裁切，武器被裁切，多余肢体，多余手指，重复角色，服装改变，发型改变，武器改变，模糊，压缩噪点，shield，helmet，different hair colour",
+      "template": "walk",
+      "direction": "west",
+      "mode": "pixel",
+      "language": "zh-CN"
+    }
+  },
+  "attack": {
+    "south": {
+      "positive": "角色：Chibi Adventurer。Chibi fantasy adventurer, 2.5-head proportions. 比例：head_to_body 1:2.5，height_px 48 服装：red hood、red cape、brown adventurer tunic、brown boots 配饰：leather belt 武器（保持形状与握法不变）：type：short sword，hand：right，blade：straight steel, 0.6x body height 必须保持：blonde hair visible under the hood；same sword in every direction 动作：attack。四分之三 RPG 视角，面向镜头（正面/南）。画风：chibi pixel art, 1px dark outline；清晰硬边像素画，1 像素描边，有限调色板，无抗锯齿、无模糊。一张透明背景 PNG 精灵图表，单行 8 格，等宽等高，严格从左到右：1：准备；2：蓄势；3：蓄势顶点；4：挥击；5：命中；6：随挥；7：回收；8：回到准备姿势。每格只有一个完整角色，各格人物比例和地面线一致，身体、武器和特效四周留出充足空白。脸、发型、服装、比例和武器必须与参考图完全一致。",
+      "negative": "背景，场景，地面，地面阴影，文字，水印，网格线，边框，身体被裁切，武器被裁切，多余肢体，多余手指，重复角色，服装改变，发型改变，武器改变，模糊，压缩噪点，shield，helmet，different hair colour",
+      "template": "attack",
+      "direction": "south",
+      "mode": "pixel",
+      "language": "zh-CN"
+    },
+    "east": {
+      "positive": "角色：Chibi Adventurer。Chibi fantasy adventurer, 2.5-head proportions. 比例：head_to_body 1:2.5，height_px 48 服装：red hood、red cape、brown adventurer tunic、brown boots 配饰：leather belt 武器（保持形状与握法不变）：type：short sword，hand：right，blade：straight steel, 0.6x body height 必须保持：blonde hair visible under the hood；same sword in every direction 动作：attack。四分之三 RPG 视角，朝画面右侧（东，侧面）。画风：chibi pixel art, 1px dark outline；清晰硬边像素画，1 像素描边，有限调色板，无抗锯齿、无模糊。一张透明背景 PNG 精灵图表，单行 8 格，等宽等高，严格从左到右：1：准备；2：蓄势；3：蓄势顶点；4：挥击；5：命中；6：随挥；7：回收；8：回到准备姿势。每格只有一个完整角色，各格人物比例和地面线一致，身体、武器和特效四周留出充足空白。脸、发型、服装、比例和武器必须与参考图完全一致。",
+      "negative": "背景，场景，地面，地面阴影，文字，水印，网格线，边框，身体被裁切，武器被裁切，多余肢体，多余手指，重复角色，服装改变，发型改变，武器改变，模糊，压缩噪点，shield，helmet，different hair colour",
+      "template": "attack",
+      "direction": "east",
+      "mode": "pixel",
+      "language": "zh-CN"
+    },
+    "north": {
+      "positive": "角色：Chibi Adventurer。Chibi fantasy adventurer, 2.5-head proportions. 比例：head_to_body 1:2.5，height_px 48 服装：red hood、red cape、brown adventurer tunic、brown boots 配饰：leather belt 武器（保持形状与握法不变）：type：short sword，hand：right，blade：straight steel, 0.6x body height 必须保持：blonde hair visible under the hood；same sword in every direction 动作：attack。四分之三 RPG 视角，背对镜头（背面/北）。画风：chibi pixel art, 1px dark outline；清晰硬边像素画，1 像素描边，有限调色板，无抗锯齿、无模糊。一张透明背景 PNG 精灵图表，单行 8 格，等宽等高，严格从左到右：1：准备；2：蓄势；3：蓄势顶点；4：挥击；5：命中；6：随挥；7：回收；8：回到准备姿势。每格只有一个完整角色，各格人物比例和地面线一致，身体、武器和特效四周留出充足空白。脸、发型、服装、比例和武器必须与参考图完全一致。",
+      "negative": "背景，场景，地面，地面阴影，文字，水印，网格线，边框，身体被裁切，武器被裁切，多余肢体，多余手指，重复角色，服装改变，发型改变，武器改变，模糊，压缩噪点，shield，helmet，different hair colour",
+      "template": "attack",
+      "direction": "north",
+      "mode": "pixel",
+      "language": "zh-CN"
+    },
+    "west": {
+      "positive": "角色：Chibi Adventurer。Chibi fantasy adventurer, 2.5-head proportions. 比例：head_to_body 1:2.5，height_px 48 服装：red hood、red cape、brown adventurer tunic、brown boots 配饰：leather belt 武器（保持形状与握法不变）：type：short sword，hand：right，blade：straight steel, 0.6x body height 必须保持：blonde hair visible under the hood；same sword in every direction 动作：attack。四分之三 RPG 视角，朝画面左侧（西，侧面，单独绘制）。画风：chibi pixel art, 1px dark outline；清晰硬边像素画，1 像素描边，有限调色板，无抗锯齿、无模糊。一张透明背景 PNG 精灵图表，单行 8 格，等宽等高，严格从左到右：1：准备；2：蓄势；3：蓄势顶点；4：挥击；5：命中；6：随挥；7：回收；8：回到准备姿势。每格只有一个完整角色，各格人物比例和地面线一致，身体、武器和特效四周留出充足空白。脸、发型、服装、比例和武器必须与参考图完全一致。",
+      "negative": "背景，场景，地面，地面阴影，文字，水印，网格线，边框，身体被裁切，武器被裁切，多余肢体，多余手指，重复角色，服装改变，发型改变，武器改变，模糊，压缩噪点，shield，helmet，different hair colour",
+      "template": "attack",
+      "direction": "west",
+      "mode": "pixel",
+      "language": "zh-CN"
+    }
+  }
+}

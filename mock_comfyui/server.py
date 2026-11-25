@@ -4,8 +4,8 @@ Implements the documented ComfyUI server contracts used by ComfyUIProvider:
   GET /system_stats, GET /object_info[/{class}], POST /upload/image, POST /prompt, GET /queue,
   POST /queue {delete|clear}, POST /interrupt, GET /history[/{id}], GET /view, WS /ws?clientId=
 
-It does not run any model. "Outputs" are copies of genuine existing artwork from the upstream
-repositories (Pixel Atelier knight example), and every response identifies itself as a mock:
+It does not run any model. "Outputs" are copies of the bundled knight sample art
+(samples/knight), and every response identifies itself as a mock:
 system_stats.system.comfyui_version contains "mock", and history entries carry
 "artstudio_mock": "TEST FIXTURE". Never present these results as AI-generated artwork.
 
@@ -33,9 +33,9 @@ from urllib.parse import parse_qs, urlparse
 
 ROOT = Path(__file__).resolve().parents[1]
 FIXTURES = {
-    "sheet": ROOT / "upstream" / "pixel-atelier" / "examples" / "knight" / "run" / "atlas.png",
-    "pose": ROOT / "upstream" / "pixel-atelier" / "examples" / "knight" / "idle" / "poster.png",
-    "attack": ROOT / "upstream" / "pixel-atelier" / "examples" / "knight" / "light" / "atlas.png",
+    "sheet": ROOT / "samples" / "knight" / "run" / "atlas.png",
+    "pose": ROOT / "samples" / "knight" / "idle" / "poster.png",
+    "attack": ROOT / "samples" / "knight" / "light" / "atlas.png",
 }
 CKPTS = ["mock-sd15-fixture.safetensors", "mock-sdxl-fixture.safetensors"]
 CONTROLNETS = ["mock-openpose-fixture.safetensors"]

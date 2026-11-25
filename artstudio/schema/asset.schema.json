@@ -39,7 +39,7 @@
     "procedural": {
       "type": ["object", "null"],
       "properties": {
-        "engine": {"const": "atelier"},
+        "engine": {"enum": ["atelier", "artstudio-pixel"]},
         "doc_id": {"type": "string"},
         "recipe": {"type": "string"},
         "builder": {"type": "string"},

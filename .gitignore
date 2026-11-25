@@ -7,9 +7,7 @@ studio.config.json
 .env
 tests/ui_screens/
 deliverables/poc/poc_workspace_backup.zip
-_upstream_snapshot.tgz
-# upstream build output
-upstream/atelier/target/
+.sync/
 
-# nested upstream git checkouts (not part of this repo)
+# former upstream checkouts are no longer used
 upstream/

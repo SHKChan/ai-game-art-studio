@@ -1,6 +1,6 @@
 """Deterministic palette-index raster used by procedural builders to *compute* drawing
-instructions. The pixels are then painted by Atelier (doc_paint_grid with palette indices),
-so the editable source of truth is the layered Atelier document and its replayable recipe."""
+instructions. The pixels are then painted by the pixel engine (doc_paint_grid with palette indices),
+so the editable source of truth is the layered engine document and its replayable recipe."""
 from __future__ import annotations
 
 import math
@@ -164,7 +164,7 @@ def vnoise(x: float, y: float, seed: int = 0) -> float:
 
 
 class DocBuilder:
-    """Accumulates Atelier tool calls for one document ("$DOC" is substituted at run time)."""
+    """Accumulates pixel-engine tool calls for one document ("$DOC" is substituted at run time)."""
 
     def __init__(self, name: str, w: int, h: int):
         self.w, self.h = w, h

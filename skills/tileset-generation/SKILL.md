@@ -1,26 +1,26 @@
 ---
 name: tileset-generation
-description: Create seamless terrain tiles and tilesets with Atelier, verified with its seam tools.
+description: Create seamless terrain tiles and tilesets with Engine A, verified with its seam report.
 ---
 
 # Tileset Generation
 
-Create seamless terrain tiles and tilesets with Atelier, verified with its seam tools.
+Create seamless terrain tiles and tilesets with Engine A, verified with its seam report.
 
-CLI: `python -m artstudio <command>` (JSON on stdout). Web: http://127.0.0.1:8870. Atelier tools are reached through the `atelier` provider — never re-implement drawing in Python image code.
+CLI: `python -m artstudio <command>` (JSON on stdout). Web: http://127.0.0.1:8870. Procedural pixels come from Engine A (`procedural` provider, docs/engine-a-guide.md) — never paste pixels in with ad-hoc image code.
 
 ## Required inputs
 Tile size (16/32); terrain types; transitions needed (edges/corners); palette; top-down vs side-view.
 
 ## Recommended workflow
 1. One document per tile family; one frame per tile variant (or a sheet canvas with a grid).
-2. Paint base noise with doc_draw op=noise/scatter inside the tile region, then details on their own layer.
-3. Check tiling with `doc_seam_report` (horizontal + vertical) and `doc_look tile=true`.
+2. Compute base texture in a builder (raster.vnoise + ramp_pick), paint it, then details on their own layer.
+3. Check tiling with `doc_seam_report` (horizontal + vertical mismatch must be 0) and `doc_look tile=true`.
 4. Build transitions (edges, inner/outer corners) as separate frames; tag them (doc_add_tag).
-5. Import into the studio by replaying the recipe (`replay`) and export as sheet + JSON.
+5. Run it with `procedural`/`draw` and export as sheet + JSON.
 
 ## Tool-selection rules
-Atelier (doc_seam_report, doc_look tile mode, doc_dither_ramp). Studio exports with `--formats sheet json` (do not trim tiles: use `trim=false`).
+Engine A (doc_seam_report, doc_look tile=true; shading with raster.ramp_pick). Studio exports with `--formats sheet json` (do not trim tiles: use `trim=false`).
 
 ## Prompt templates
 '32x32 top-down grass tile, 5-colour green ramp, sparse 2-pixel flowers, seamless on all sides, no single-pixel noise.'

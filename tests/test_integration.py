@@ -1,4 +1,4 @@
-"""Integration tests: Atelier provider, Pixel Atelier adapters, mock ComfyUI, job queue, HTTP server, CLI."""
+"""Integration tests: pixel engine + builders, sample/pipeline helpers, mock ComfyUI, job queue, HTTP server, CLI."""
 import http.client
 import io
 import json
@@ -14,17 +14,12 @@ from PIL import Image
 from artstudio import adapters
 from artstudio.animation import load_frames
 from artstudio.comfy.workflows import derive_template, is_api_format
-from artstudio.config import find_atelier, load_config
 from artstudio.jobs import Budget, BudgetExceeded
 from artstudio.util import StudioError
 
-from artstudio.providers.atelier import AtelierProceduralProvider  # noqa: E402
-
-HAVE_ATELIER = AtelierProceduralProvider(find_atelier(load_config())).status().available
 
 
-@unittest.skipUnless(HAVE_ATELIER, "Atelier binary missing or not runnable on this machine (scripts/build-atelier)")
-class AtelierTests(unittest.TestCase):
+class EngineATests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.tmp = temp_workspace()
@@ -36,13 +31,13 @@ class AtelierTests(unittest.TestCase):
         cleanup(cls.tmp)
 
     def test_builders_produce_editable_documents(self):
-        expected = {"potion": 1, "chest": 1, "chest_open": 8, "fireball": 8, "sword_slash": 8}
-        for b, n in expected.items():
+        expected = {"potion": (1, 64), "chest": (1, 64), "chest_open": (8, 64), "fireball": (8, 64), "sword_slash": (8, 64), "ice_spear": (1, 32)}
+        for b, (n, size) in expected.items():
             a = self.s.procedural(self.p["id"], b)
             self.assertEqual(len(a["animation"]["frames"]), n, b)
-            self.assertEqual(a["animation"]["canvas"], [64, 64])
+            self.assertEqual(a["animation"]["canvas"], [size, size])
             self.assertEqual(a["qa"]["deterministic"]["status"], "passed", (b, a["qa"]["deterministic"]["issues"]))
-            doc = self.s.ws.atelier_home(self.p["id"]) / "documents" / a["procedural"]["doc_id"]
+            doc = self.s.ws.engine_home(self.p["id"]) / "documents" / a["procedural"]["doc_id"]
             self.assertTrue((doc / "doc.json").is_file() and (doc / "doc.recipe").is_file())
             layers = json.loads((doc / "doc.json").read_text(encoding="utf-8"))["layers"]
             self.assertGreaterEqual(len(layers), 2, "procedural art must be layered")
@@ -63,12 +58,12 @@ class AtelierTests(unittest.TestCase):
         self.assertEqual(r["status"], "TECHNICAL_VERIFIED", r)
 
 
-class PixelAtelierAdapterTests(unittest.TestCase):
-    def test_upstream_steps_and_prompt(self):
-        steps = adapters.pixel_atelier_steps()
+class SamplePipelineTests(unittest.TestCase):
+    def test_sheet_steps_and_prompt(self):
+        steps = adapters.sheet_steps()
         self.assertEqual(list(steps)[:2], ["idle", "run"])
-        p = adapters.pixel_atelier_prompt("Knight", "light", "blonde", "greatsword")
-        self.assertIn("Knight", p)
+        p = adapters.sheet_prompt_zh("骑士", "light", "金发", "巨剑")
+        self.assertIn("骑士", p)
 
     def test_knight_frames_exact(self):
         frames, durs, meta = adapters.knight_frames("idle")
@@ -275,7 +270,7 @@ class ServerAndCliTests(unittest.TestCase):
             main(["--workspace", str(self.tmp), "project", "create", "CLI", "--id", "cli-proj"])
         self.assertEqual(json.loads(buf.getvalue())["id"], "cli-proj")
         buf = io.StringIO()
-        gif = ROOT / "upstream" / "atelier" / "showcase" / "gifs" / "opus-5.5-xhigh" / "torch.gif"
+        gif = ROOT / "tests" / "fixtures" / "showcase" / "torch.gif"
         with redirect_stdout(buf):
             main(["--workspace", str(self.tmp), "import", str(gif), "--project", "cli-proj", "--opts", '{"name":"torch"}'])
         out = json.loads(buf.getvalue())

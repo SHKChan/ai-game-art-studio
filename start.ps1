@@ -18,7 +18,7 @@ if (Test-Path ".env") {
     $k, $v = $_ -split '=', 2; [Environment]::SetEnvironmentVariable($k.Trim(), $v.Trim(), "Process")
   }
 }
-# UTF-8 mode: avoids GBK/cp936/cp1252 encoding errors (Pixel Atelier writes Chinese JSON with default encodings)
+# UTF-8 mode as a safety net (all studio I/O is explicit UTF-8; protects user scripts on GBK/cp936/cp1252 systems)
 $env:PYTHONUTF8 = "1"
 $env:PYTHONIOENCODING = "utf-8"
 if ($Workspace) { $env:ARTSTUDIO_WORKSPACE = $Workspace }
@@ -38,10 +38,6 @@ if (-not (Test-Path ".venv\Scripts\python.exe")) {
   & .venv\Scripts\python.exe -m pip install --upgrade pip
   & .venv\Scripts\python.exe -m pip install -r requirements.txt
   if ($LASTEXITCODE -ne 0) { Write-Error "Dependency installation failed (see docs/deployment-windows.md for offline wheels)."; exit 1 }
-}
-$exe = "upstream\atelier\target\release\atelier.exe"
-if (-not (Test-Path $exe) -and -not $env:ATELIER_BIN -and -not (Get-Command atelier -ErrorAction SilentlyContinue)) {
-  Write-Warning "Atelier binary not found: the Procedural Studio will show Atelier as unavailable. Run .\scripts\build-atelier.ps1 (needs Rust)."
 }
 if (-not $NoBrowser) { Start-Job -ScriptBlock { param($p) Start-Sleep 2; Start-Process "http://127.0.0.1:$p/" } -ArgumentList $Port | Out-Null }
 & .venv\Scripts\python.exe -m artstudio serve --port $Port
