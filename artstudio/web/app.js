@@ -2,16 +2,26 @@ import { initI18n, setLang, LANGS, getLang, tError } from './i18n.js';
 import { S, api, el, toast, guard, on, emit, fileUrl, badge, fixtureBadge, refreshProject, select } from './core.js';
 import { renderAnimation, openAsset } from './anim.js';
 import { renderCharacter, renderProcedural, renderImport, renderGenerate, renderExport } from './studios.js';
+import { renderWizard } from './wizard.js';
+import { renderHome } from './home.js';
 
-const RENDER = { library: renderLibrary, character: renderCharacter, animation: renderAnimation, procedural: renderProcedural,
-  import: renderImport, generate: renderGenerate, export: renderExport };
-let current = 'library';
+const RENDER = { home: (r) => renderHome(r, { show: showTab, projectForm }), wizard: renderWizard, library: renderLibrary, character: renderCharacter,
+  animation: renderAnimation, procedural: renderProcedural, import: renderImport, generate: renderGenerate, export: renderExport };
+const ADVANCED = ['animation', 'character', 'generate'];
+let current = 'home';
 
-export function showTab(name) {
+function setMore(open) {
+  document.querySelector('.tabs').classList.toggle('show-adv', open);
+  const b = document.getElementById('moreBtn');
+  b.setAttribute('aria-expanded', String(open)); b.textContent = open ? 'More tools ▾' : 'More tools ▸';
+}
+
+export function showTab(name, opts) {
   current = name;
-  document.querySelectorAll('.tabs button').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+  if (ADVANCED.includes(name)) setMore(true);
+  document.querySelectorAll('.tabs button[data-tab]').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
   document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.id === 'tab-' + name));
-  guard(() => RENDER[name](document.getElementById('tab-' + name)));
+  guard(() => RENDER[name](document.getElementById('tab-' + name), opts));
 }
 window.studioShowTab = showTab;
 on('open-asset', (id) => { S.asset = id; showTab('animation'); });
@@ -59,14 +69,15 @@ function renderLibrary(root) {
   };
   [typeSel, charSel].forEach(s => s.onchange = draw); q.oninput = draw;
   const chars = el('div', {}, ...d.characters.map(c => el('div', { class: 'row' },
-    el('a', { href: '#', onclick: (e) => { e.preventDefault(); S.character = c.id; showTab('character'); } }, c.name),
+    el('a', { href: '#', 'data-no-i18n': '', onclick: (e) => { e.preventDefault(); showTab('wizard', { cid: c.id, step: 1 }); } }, c.name),
+    el('a', { href: '#', class: 'small', onclick: (e) => { e.preventDefault(); S.character = c.id; showTab('character'); } }, 'details'),
     badge(c.direction_mode, ''), badge(c.art_style, ''), el('span', { class: 'muted small' }, `${Object.keys(c.masters).length}/${c.directions.length} masters`))));
   root.append(el('div', { class: 'grid cols2' },
     el('div', { class: 'card' }, el('h3', { 'data-no-i18n': '' }, d.project.name), el('p', { class: 'muted small', 'data-no-i18n': '' }, `${d.project.game || ''} · ${d.project.default_style} · id ${d.project.id}`),
       el('div', { class: 'row' }, el('label', {}, 'Prompt language', (() => { const s = select([['en', 'English'], ['zh-CN', '中文']], d.project.prompt_language || 'en');
         s.onchange = () => guard(async () => { await api(`/api/projects/${S.project}/settings`, { body: { prompt_language: s.value } }); toast('Saved'); await refreshProject(); }); return s; })())),
       el('h4', {}, 'Characters'), chars,
-      el('button', { onclick: () => { S.character = null; showTab('character'); } }, '+ Character'),
+      el('button', { onclick: () => showTab('wizard', { cid: null }) }, '+ Character'),
       el('h4', {}, 'Samples'),
       el('button', { onclick: () => guard(async () => { const r = await api(`/api/projects/${S.project}/knight-sample`, { body: {} }); toast(`Imported ${r.assets.length} knight animations`); await refreshProject(); renderLibrary(root); }) },
         'Import knight sample')),
@@ -75,7 +86,7 @@ function renderLibrary(root) {
 }
 
 function newProject() {
-  S.creating = true; showTab('library');
+  S.creating = true; showTab('home');
 }
 
 function projectForm() {
@@ -85,8 +96,8 @@ function projectForm() {
     el('div', { class: 'form' }, el('label', {}, 'Name'), name, el('label', {}, 'Game'), game, el('label', {}, 'Default style'), style),
     el('div', { class: 'row' }, el('button', { class: 'primary', onclick: () => guard(async () => {
       const p = await api('/api/projects', { body: { name: name.value, game: game.value, default_style: style.value } });
-      S.creating = false; await loadProjects(p.id); showTab('library'); }) }, 'Create project'),
-      S.project ? el('button', { onclick: () => { S.creating = false; showTab('library'); } }, 'Cancel') : null));
+      S.creating = false; await loadProjects(p.id); showTab('home'); }) }, 'Create project'),
+      S.project ? el('button', { onclick: () => { S.creating = false; showTab('home'); } }, 'Cancel') : null));
 }
 
 async function renderJobs() {
@@ -106,6 +117,14 @@ async function renderJobs() {
   }
   if (!jobs.length) box.append(el('div', { class: 'job muted' }, 'No jobs yet.'));
   const anyLive = jobs.some(j => ['queued', 'running'].includes(j.status));
+  const dock = document.getElementById('jobsDock');
+  const live = jobs.filter(j => ['queued', 'running'].includes(j.status)).length;
+  document.getElementById('jobsCount').textContent = live ? `(${live})` : '';
+  if (!dock.dataset.pinned) {  // auto: open while something runs, fold away afterwards so it never covers buttons
+    clearTimeout(renderJobs._fold);
+    if (anyLive) dock.classList.remove('collapsed');
+    else renderJobs._fold = setTimeout(() => dock.classList.add('collapsed'), 2500);
+  }
   if (anyLive) { clearTimeout(renderJobs._t); renderJobs._t = setTimeout(renderJobs, 700); }
   else if (renderJobs._wasLive) { await refreshProject(); }
   renderJobs._wasLive = anyLive;
@@ -118,17 +137,20 @@ async function boot() {
   for (const [k, v] of Object.entries(LANGS)) ls.append(el('option', { value: k }, v));
   ls.value = getLang();
   ls.onchange = () => setLang(ls.value);
-  document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => showTab(b.dataset.tab));
+  document.querySelectorAll('.tabs button[data-tab]').forEach(b => b.onclick = () => showTab(b.dataset.tab));
+  document.getElementById('moreBtn').onclick = () => setMore(!document.querySelector('.tabs').classList.contains('show-adv'));
   document.getElementById('projectSelect').onchange = async (e) => { S.project = e.target.value; S.asset = null; await refreshProject(); showTab(current); renderJobs(); };
   document.getElementById('newProjectBtn').onclick = newProject;
   document.getElementById('themeBtn').onclick = () => { const h = document.documentElement; h.dataset.theme = h.dataset.theme === 'dark' ? 'light' : 'dark'; };
-  document.getElementById('jobsToggle').onclick = () => document.getElementById('jobsDock').classList.toggle('collapsed');
+  document.getElementById('jobsToggle').onclick = () => { const d = document.getElementById('jobsDock'); d.classList.toggle('collapsed');
+    if (d.classList.contains('collapsed')) delete d.dataset.pinned; else d.dataset.pinned = '1'; };
   S.templates = await api('/api/templates');
   await Promise.all([loadProviders(), loadProjects()]);
-  showTab('library');
+  showTab('home');
   renderJobs();
   setInterval(loadProviders, 15000);
 }
 on('project', () => { if (current === 'library') renderLibrary(document.getElementById('tab-library')); });
+window.studioShowTab = showTab;
 boot().catch(e => toast(e.message, true));
 export { openAsset };

@@ -3,7 +3,7 @@
 Labels: **implemented** · **offline-tested** (executed here with real data) · **mock-tested** (only against mock providers) ·
 **production-verified** (Stage B on a real ComfyUI — none yet).
 
-## Current state (2026-11-26, v0.2.0)
+## Current state (2026-11-26, v0.3.0)
 
 | Area | State | Evidence |
 |---|---|---|
@@ -13,7 +13,10 @@ Labels: **implemented** · **offline-tested** (executed here with real data) · 
 | Pixel Atelier code moved in: spritepipe, Chinese sheet prompts, Codex client, knight sample | offline-tested | tests/test_spritepipe.py (14 upstream tests ported, pass); POC spritepipe TECHNICAL_VERIFIED |
 | Encoding (GBK/cp936/cp1252/C locale) | offline-tested | tests/test_encoding.py: no locale-default I/O in code; full Chinese CLI flow under C locale with UTF-8 mode OFF and no relaunch; POSIX argv recovery |
 | Bilingual en / zh-CN | offline-tested | UI dictionary + observer; server/CLI localized errors; zh prompts; README/deployment in Chinese; Playwright zh pass over all 7 workspaces |
-| Engine C import/processing, character masters, animation editing, QA, export, job queue, server, CLI | offline-tested | 65 tests total |
+| Engine C import/processing, character masters, animation editing, QA, export, job queue, server, CLI | offline-tested | 78 tests total |
+| Engine B guided flow: reference → action plan → prompts → one strip per action → slice/align → review/redo frame → export | offline-tested (pipeline) / mock-tested (AI) | tests/test_actions.py (13): plan model, template prompts en/zh, Codex prompt writing + failure, Codex strip generation + failure, budget, grid fallback, strip reference, ComfyUI strip via mock server, HTTP API flow; Playwright drives all 5 steps in English + Chinese review |
+| Codex CLI integration (`codex exec` prompt writing, `codex app-server` image generation, Windows `codex.cmd`) | mock-tested | only against `tests/fake_codex.py`; **real Codex not run** (no account/network here) |
+| Guided UI (Home, Animate character, More tools) | offline-tested | tests/ui_playwright.py |
 | ComfyUI provider + workflow library + mock service | mock-tested | ComfyTests (ok, missing model/nodes, invalid values, failure, timeout, WS disconnect, cancel, unreachable) |
 | Proof of concept | done (offline parts) | deliverables/poc/POC_REPORT.json |
 | Stage B | **not run** | needs the ComfyUI PC |
@@ -41,8 +44,12 @@ Labels: **implemented** · **offline-tested** (executed here with real data) · 
 - 724107c — Engine A parity fixes (brush anchoring, inclusive region rects); 0 differing pixels vs Atelier on 10 samples.
 - 0f1773c — hero_shrine builder.
 - v0.2.0 — README (features, usage, upstreams), CHANGELOG, VERSION, AGENTS.md facts/gotchas, version consistency test.
+- v0.3.0 — Engine B = character animation (action plans, Codex/ComfyUI strips), guided UI, `artstudio animate` CLI.
 
 ## Blockers
+
+0. Real Codex CLI run (prompt writing + image generation) needs the owner's logged-in Codex on Windows. First check: Animate
+   character with one preset action; confirm the strip slices into the requested frame count.
 
 1. Real AI generation (Test B chibi adventurer): no ComfyUI/GPU/Codex here. Prompt packs (en + zh) prepared.
 2. Windows scripts not executed here; Cocos/Godot/Phaser runtimes unavailable.

@@ -7,6 +7,7 @@ from pathlib import Path
 
 from PIL import Image
 
+from . import actions as action_plans
 from . import adapters
 from .animation import TEMPLATES, add_layer, create_animation_asset, edit_frames, frame_path, reprocess, replace_frame
 from .config import Config, find_ffmpeg, load_config
@@ -38,6 +39,8 @@ class Studio:
             "export": self._job_export,
             "batch_generate": self._job_batch_generate,
             "replay_recipe": self._job_replay,
+            "action_prompts": self._job_action_prompts,
+            "batch_actions": self._job_batch_actions,
         }, workers=workers)
 
     # ------------------------------------------------------------------ Engine A
@@ -258,6 +261,144 @@ class Studio:
         check_asset(self.ws, asset)
         return self.ws.get_asset(pid, asset["id"])
 
+    # ------------------------------------------------------------------ Engine B: action plans (sequential action frames)
+    def prompt_language(self, pid: str, override: str | None = None) -> str:
+        return override or self.ws.get_project(pid).get("prompt_language") or self.cfg.prompt_language
+
+    def reference_for(self, pid: str, c: dict, direction: str = "none") -> Path | None:
+        m = c["masters"]
+        hit = m.get(direction) or m.get("right") or m.get("east") or m.get("south") or m.get("primary") or next(iter(m.values()), None)
+        return self.ws.char_dir(pid, c["id"]) / hit["file"] if hit else None
+
+    def create_character_from_reference(self, pid: str, name: str, image: Path, *, art_style: str = "pixel", view: str = "side",
+                                        description: str = "") -> dict:
+        """One step for the guided flow: create the character and lock the uploaded image as its master."""
+        mode = "side2" if view == "side" else "four"
+        c = self.ws.create_character(pid, name, mode, art_style, description=description,
+                                     camera="side" if view == "side" else "three_quarter")
+        direction = "right" if view == "side" else "south"
+        c = self.ws.add_character_image(pid, c["id"], Path(image), "candidate", direction, note="reference (uploaded)")
+        c = self.ws.review_candidate(pid, c["id"], c["candidates"][-1]["id"], "approved", "reference uploaded in guided flow")
+        return c
+
+    def set_character_reference(self, pid: str, cid: str, image: Path) -> dict:
+        """Replace the reference used for action generation (keeps history; explicit replace of a locked master)."""
+        c = self.ws.get_character(pid, cid)
+        direction = "right" if c["direction_mode"] == "side2" else "south"
+        c = self.ws.add_character_image(pid, cid, Path(image), "candidate", direction, note="reference (uploaded)")
+        cand = c["candidates"][-1]["id"]
+        if c["masters"].get(direction, {}).get("locked"):
+            return self.ws.replace_master(pid, cid, direction, cand, "new reference uploaded in guided flow")
+        return self.ws.review_candidate(pid, cid, cand, "approved", "reference uploaded in guided flow")
+
+    def write_action_prompts(self, pid: str, cid: str, method: str = "template", action_ids: list[str] | None = None,
+                             language: str | None = None, ctx=None) -> dict:
+        c = self.ws.get_character(pid, cid)
+        ref = self.reference_for(pid, c)
+        return action_plans.write_prompts(self.ws, pid, cid, method, action_ids=action_ids, reference=ref, mode=c["art_style"],
+                                          lang=self.prompt_language(pid, language), codex_bin=self.cfg.codex_bin,
+                                          timeout=self.cfg.codex_timeout, cancel_check=ctx.check_cancel if ctx else None)
+
+    def default_strip_workflow(self) -> str:
+        ids = {w["id"] for w in self.registry.workflows.list()}
+        return "sd-character-reference" if "sd-character-reference" in ids else "sd-image-to-image"
+
+    @staticmethod
+    def strip_reference(ref: Path, n: int, out_dir: Path, mode: str = "pixel", cell: int | None = None) -> Path:
+        """ComfyUI img2img input: the reference repeated in n cells on white, so the model keeps the identity
+        and only changes the pose per cell (denoise controls how much)."""
+        with Image.open(ref) as im:
+            r = im.convert("RGBA")
+        r = r.crop(r.getchannel("A").getbbox() or (0, 0, r.width, r.height))
+        cell = int(cell or max(64, min(512, (2048 // max(1, n)) // 8 * 8)))
+        k = min(cell * 0.8 / r.width, cell * 0.85 / r.height)
+        r = r.resize((max(1, round(r.width * k)), max(1, round(r.height * k))), Image.NEAREST if mode == "pixel" else Image.LANCZOS)
+        strip = Image.new("RGBA", (cell * n, cell), (255, 255, 255, 255))
+        for i in range(n):
+            strip.alpha_composite(r, (i * cell + (cell - r.width) // 2, round(cell * 0.93) - r.height))
+        out_dir.mkdir(parents=True, exist_ok=True)
+        p = out_dir / "strip_reference.png"
+        strip.convert("RGB").save(p)
+        return p
+
+    @staticmethod
+    def strip_layout(img: Path, frames: int, mode: str, fixture: bool) -> tuple[dict, str]:
+        with Image.open(img) as im:
+            sheet = im.convert("RGBA")
+        if sheet.getchannel("A").getextrema()[0] == 255:
+            sheet, _ = remove_background(sheet, mode=mode)
+        n = len(slice_auto(sheet))
+        if n == frames or (fixture and n >= 1):
+            return {"method": "auto"}, f"auto: {n} sprites found"
+        return {"method": "grid", "cols": frames, "rows": 1}, f"grid {frames}x1 (auto found {n}, expected {frames})"
+
+    def generate_action(self, pid: str, cid: str, action_id: str, provider_id: str, workflow_id: str | None = None,
+                        params: dict | None = None, ctx=None, budget=None) -> dict:
+        """Generate every frame of one action as a single sprite strip, then slice, align and store it."""
+        from .providers.base import JobContext
+        ctx = ctx or JobContext()
+        c = self.ws.get_character(pid, cid)
+        plan = action_plans.load_plan(self.ws, pid, cid)
+        a = action_plans.get_action(plan, action_id)
+        prov = self.registry.get(provider_id)
+        st = prov.status()
+        if not st.available:
+            raise GenerationError(f"Provider '{provider_id}' unavailable: {st.reason}", "provider_unavailable")
+        mode = c["art_style"]
+        lang = plan.get("language") or self.prompt_language(pid)
+        if not a["prompt"]:
+            pr = action_plans.strip_prompt(c, plan, a, mode, lang)
+            a.update(prompt=pr["positive"], negative=pr["negative"], prompt_source="template")
+        ref = self.reference_for(pid, c, a["direction"])
+        if ref is None and provider_id != "mock":
+            raise StudioError("Add a reference image for this character first", code="no_reference")
+        a["status"] = "generating"
+        action_plans.save_plan(self.ws, pid, cid, plan)
+        out = self.ws.root / "tmp" / new_id("act")
+        params = dict(params or {})
+        refs = [ref] if ref else []
+        try:
+            if provider_id == "comfyui":
+                workflow_id = workflow_id or self.default_strip_workflow()
+                params["reference_image"] = str(self.strip_reference(ref, a["frames"], out, mode, params.pop("cell", None)))
+                params.setdefault("denoise", 0.62)
+                refs = []
+            if budget is not None and prov.counts_toward_budget:
+                budget.spend(1)
+            ctx.progress(0.02, f"{a['name']}: generating {a['frames']}-frame strip via {provider_id}")
+            res = prov.generate(GenerationRequest("action_strip", params, a["prompt"], a["negative"], refs, params.get("seed"),
+                                                  workflow_id, out), ctx)
+            fixture = res.is_test_fixture or bool(res.metadata.get("is_test_fixture"))
+            layout, layout_note = self.strip_layout(res.images[0], a["frames"], mode, fixture)
+            pmeta = {"id": provider_id, "kind": prov.kind, "is_test_fixture": fixture,
+                     "details": {k: v for k, v in res.metadata.items() if k != "events"}}
+            asset = self.import_file(pid, res.images[0], name=f"{c['name']} — {a['name']}", mode=mode, slicing=layout,
+                                     background={"method": "auto"}, anim_name=a["id"], direction=a["direction"], character_id=cid,
+                                     template=a["preset"], provider=pmeta, origin="fixture" if fixture else "generated")
+        except Exception:
+            plan = action_plans.load_plan(self.ws, pid, cid)
+            action_plans.get_action(plan, action_id)["status"] = "failed"
+            action_plans.save_plan(self.ws, pid, cid, plan)
+            raise
+        finally:
+            shutil.rmtree(out, ignore_errors=True)
+        asset["animation"]["loop"]["enabled"] = bool(a["loop"])
+        asset["prompt"] = {"positive": a["prompt"], "negative": a["negative"], "template": a["preset"] or a["id"]}
+        asset["action"] = {"character_id": cid, "action_id": a["id"], "name": a["name"], "description": a["description"],
+                           "poses": a["poses"], "prompt_source": a["prompt_source"], "layout": layout_note, "frames_requested": a["frames"]}
+        asset["reference_images"] = [str(ref)] if ref else []
+        for f in asset["animation"]["frames"]:
+            f["generation"] = {"provider": provider_id, "workflow_id": workflow_id, "is_test_fixture": fixture,
+                               "prompt_id": res.metadata.get("prompt_id")}
+        asset["tags"] = sorted(set(asset["tags"] + [f"action:{a['id']}"] + (["test-fixture"] if fixture else [])))
+        self.ws.save_asset(asset)
+        check_asset(self.ws, asset)
+        plan = action_plans.load_plan(self.ws, pid, cid)
+        pa = action_plans.get_action(plan, action_id)
+        pa.update(asset_id=asset["id"], status="generated", attempts=(pa.get("attempts") or []) + [asset["id"]])
+        action_plans.save_plan(self.ws, pid, cid, plan)
+        return self.ws.get_asset(pid, asset["id"])
+
     def regenerate_frame(self, pid: str, aid: str, index: int, provider_id: str, workflow_id: str | None = None,
                          params: dict | None = None, note: str = "", ctx=None, budget=None) -> dict:
         """Selective regeneration of one frame using the character master + the current frame as references."""
@@ -275,10 +416,20 @@ class Studio:
         if c and c["masters"]:
             m = c["masters"].get(anim["direction"]) or next(iter(c["masters"].values()))
             refs.insert(0, self.ws.char_dir(pid, c["id"]) / m["file"])
-        tpl = anim.get("template") or "idle"
+        tpl = anim.get("template") if anim.get("template") in TEMPLATES else "idle"
         lang = self.ws.get_project(pid).get("prompt_language") or self.cfg.prompt_language
-        pr = build_keyframe_prompt(c, tpl, anim["direction"], a["art_style"], frame_index=min(index, len(TEMPLATES[tpl]["poses"]) - 1), note=note,
-                                   language=lang) if c else {"positive": note, "negative": ""}
+        if c and a.get("action"):
+            plan = action_plans.load_plan(self.ws, pid, c["id"])
+            pa = next((x for x in plan["actions"] if x["id"] == a["action"]["action_id"]), None) or {
+                **a["action"], "id": a["action"]["action_id"], "frames": len(anim["frames"]), "direction": anim["direction"]}
+            pr = action_plans.frame_prompt(c, plan, pa, index, a["art_style"], plan.get("language") or lang)
+            if note:
+                pr["positive"] += (" 本轮修改：" if str(lang).startswith("zh") else " Revision: ") + note
+        elif c:
+            pr = build_keyframe_prompt(c, tpl, anim["direction"], a["art_style"], frame_index=min(index, len(TEMPLATES[tpl]["poses"]) - 1),
+                                       note=note, language=lang)
+        else:
+            pr = {"positive": note, "negative": ""}
         out = self.ws.root / "tmp" / new_id("regen")
         res = prov.generate(GenerationRequest("pose_keyframe", dict(params or {}), pr["positive"], pr["negative"], refs, None, workflow_id, out), ctx or JobContext())
         with Image.open(res.images[0]) as im:
@@ -345,6 +496,35 @@ class Studio:
     def _job_export(self, p, ctx, budget, job):
         m = self.export(job["project_id"], **p)
         return {"export_id": m["export_id"], "path": m["path"], "qa": m["qa"]["status"]}
+
+    def _job_action_prompts(self, p, ctx, budget, job):
+        ctx.progress(0.05, "writing prompts with Codex" if p.get("method") == "codex" else "building prompts")
+        plan = self.write_action_prompts(job["project_id"], p["character_id"], p.get("method", "template"), p.get("action_ids"),
+                                         p.get("language"), ctx=ctx)
+        return {"character_id": p["character_id"], "actions": [a["id"] for a in plan["actions"]]}
+
+    def _job_batch_actions(self, p, ctx, budget, job):
+        """p: {"character_id", "action_ids", "provider_id", "workflow_id", "params"} — one strip per action, budgeted."""
+        from .jobs import BudgetExceeded
+        from .providers.base import Cancelled
+        done, failed = [], {}
+        ids = p["action_ids"]
+        for i, aid in enumerate(ids):
+            ctx.check_cancel()
+            ctx.progress(i / len(ids), f"action {i + 1}/{len(ids)}: {aid}")
+            try:
+                a = self.generate_action(job["project_id"], p["character_id"], aid, p["provider_id"], p.get("workflow_id"),
+                                         p.get("params"), ctx=ctx, budget=budget)
+                done.append(a["id"])
+            except (BudgetExceeded, Cancelled):
+                raise
+            except (GenerationError, StudioError, OSError, ValueError) as e:
+                failed[aid] = str(e)
+                if len(ids) == 1:
+                    raise
+        if not done and failed:
+            raise GenerationError("All actions failed: " + "; ".join(f"{k}: {v}" for k, v in failed.items())[:1500], "execution_error")
+        return {"asset_ids": done, "asset_id": done[-1] if done else None, "failed": failed, "budget_used": budget.used}
 
     def _job_batch_generate(self, p, ctx, budget, job):
         """p: {"items": [generate kwargs...]} — stops when the explicit budget is exhausted."""

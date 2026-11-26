@@ -5,6 +5,35 @@ versions follow [Semantic Versioning](https://semver.org/). The current version 
 
 ## [Unreleased]
 
+## [0.3.0] — 2026-11-26
+
+Engine B becomes the character-animation engine; the UI becomes a guided flow.
+
+### Added
+- **Animate a character** (guided flow): Character (one reference image) → Actions → Prompts → Generate → Review & export.
+- **Action plans** (`artstudio/actions.py`, `characters/<id>/action_plan.json`): preset actions (idle, walk, run, attack,
+  combo, cast, dodge, dash, jump, hit, death, interact) or custom actions described in one line; frames, loop, facing.
+- **Prompt writing**: Codex CLI reads the reference image and writes the character description + frame-by-frame poses
+  + one strip prompt per action (`codex exec`, `artstudio/codex_cli.py`); built-in template fallback (English / Chinese).
+  Everything is editable before generation.
+- **Strip generation** — every frame of an action in one image, then sliced, aligned and stored as an animation:
+  - Codex CLI (`codex app-server` built-in image generation, reference attached).
+  - Local ComfyUI: the reference repeated across the strip and redrawn per pose (img2img, `sd-character-reference`).
+  - Slicing falls back to an even grid (with a warning) when sprites are not separated.
+- Redo a single frame from the review screen (action-aware frame prompt); export presets for Cocos / Godot / Phaser / PNG.
+- Home page with three entry points (Animate character, Pixel assets, Import) and "Continue" for each character.
+- API: `/api/action-presets`, `characters/from-reference`, `characters/<id>/reference`, `characters/<id>/plan[/prompts|/generate]`.
+- CLI: `artstudio animate new|add|remove|show|prompts|generate`.
+- Config: `codex_bin`, `codex_timeout` (env `ARTSTUDIO_CODEX`).
+- Tests: `tests/test_actions.py` (13), `tests/fake_codex.py` (Codex CLI test double); Playwright test drives the whole guided flow.
+
+### Changed
+- Navigation: Home · Animate character · Pixel assets · Import · Library · Export; the expert tabs (Animation editor,
+  Character details, Generation & workflows) moved under **More tools**.
+- Jobs panel folds away when nothing is running, so it no longer covers buttons.
+- Codex provider: resolves `codex.cmd` on Windows, configurable command, errors reported as generation errors.
+- Selective frame regeneration works for custom actions (no preset template needed).
+
 ## [0.2.0] — 2026-11-26
 
 Self-contained studio: no upstream checkouts, own pixel engine, bilingual UI.
@@ -58,5 +87,6 @@ First Stage A (offline) implementation of SPECIFICATION.md.
 - Stage B (real ComfyUI inference) not run. AI generation is mock-tested only.
 
 [Unreleased]: #unreleased
+[0.3.0]: #030--2026-11-26
 [0.2.0]: #020--2026-11-26
 [0.1.0]: #010--2026-11-25

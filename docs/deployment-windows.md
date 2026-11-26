@@ -41,6 +41,17 @@ Copy `studio.config.example.json` → `studio.config.json` and/or `.env.example`
 - In the studio *Generation* tab the ComfyUI card must show **available** with your version and GPU. If it shows
   "(MOCK)" you are connected to the test server.
 - Install the models you intend to use in ComfyUI's own folders; the studio reads what exists from `/object_info`.
+- In *Animate character → Generate* choose **Local ComfyUI**, enter the checkpoint file name, keep denoise around 0.55–0.7.
+  The reference is repeated across a strip (one cell per frame) and redrawn per pose with img2img.
+
+## 3b. Connect the Codex CLI (optional, recommended for character animation)
+
+- Install and log in once: `npm install -g @openai/codex`, then `codex login`. No API key is stored by the studio.
+- The studio finds `codex` / `codex.cmd` on PATH. If it lives elsewhere set `codex_bin` in `studio.config.json`
+  (or `ARTSTUDIO_CODEX`), e.g. `"codex_bin": "C:\\Users\\you\\AppData\\Roaming\\npm\\codex.cmd"`.
+- Codex is used twice in *Animate character*: **Write with Codex** (`codex exec` reads the reference image and writes
+  the character description + frame-by-frame poses) and **Generate → Codex CLI** (built-in image generation through
+  `codex app-server`). The home page shows "Codex CLI ●" when it is found; login is checked at the first call.
 
 ## 4. Import workflows
 

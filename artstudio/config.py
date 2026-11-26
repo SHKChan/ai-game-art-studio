@@ -40,6 +40,8 @@ class Config:
     log_level: str = "INFO"
     language: str = "en"            # en | zh-CN — CLI/API message language (UI chooses its own)
     prompt_language: str = "en"     # en | zh-CN — default generation prompt language
+    codex_bin: str = ""             # path to the codex CLI (default: found on PATH, incl. codex.cmd on Windows)
+    codex_timeout: int = 300        # seconds per Codex call (prompt writing / image generation)
 
     @property
     def workspace_path(self) -> Path:
@@ -75,6 +77,8 @@ def load_config(path: str | os.PathLike | None = None) -> Config:
         cfg.port = int(env["ARTSTUDIO_PORT"])
     if env.get("ARTSTUDIO_FFMPEG"):
         cfg.ffmpeg_bin = env["ARTSTUDIO_FFMPEG"]
+    if env.get("ARTSTUDIO_CODEX"):
+        cfg.codex_bin = env["ARTSTUDIO_CODEX"]
     if env.get("ARTSTUDIO_LANG"):
         cfg.language = env["ARTSTUDIO_LANG"]
     if env.get("COMFYUI_URL"):

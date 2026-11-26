@@ -1,6 +1,6 @@
 # AI 游戏美术工作室
 
-[English](README.md) · 版本 **0.2.0**（[更新日志](CHANGELOG.md)）· MIT 许可
+[English](README.md) · 版本 **0.3.0**（[更新日志](CHANGELOG.md)）· MIT 许可
 
 **本地优先的 2D 游戏美术制作工具**：支持像素风和高清插画，从单个图标到角色动画精灵，都能直接导出到游戏引擎。
 纯 Python 应用（Pillow + numpy），网页界面支持中英文，不需要云服务、数据库或付费 API。
@@ -12,7 +12,7 @@
 | 引擎 | 适合制作 | 方式 |
 |---|---|---|
 | **A — 像素引擎** | 道具、图标、技能特效、图块、场景物件、建筑、小型动画精灵 | 分层、确定性、可回放的绘制。使用内置生成器或 Agent 编写的调用列表，可离线运行。 |
-| **B — AI 生成** | 精细角色：角色母版、多方向视图、动作关键帧 | 通过 **ComfyUI**（你自己的模型和工作流）以参考图驱动生成。Codex 为可选项。 |
+| **B — 角色动画（AI）** | 角色的连续动作帧：待机、行走、攻击、自定义动作 | 一张参考图 → 动作 → 提示词 → 每个动作一条精灵条，由 **Codex CLI** 或本地 **ComfyUI** 生成。 |
 | **C — 外部素材** | 已有的美术资源 | 导入 PNG / 序列帧 / 精灵表 / GIF / APNG / MP4 / WebM，然后清理和对齐。 |
 
 三个引擎产出**同一种素材格式**，以下功能对所有素材通用：
@@ -54,13 +54,16 @@ powershell -ExecutionPolicy Bypass -File .\start.ps1      # 自动创建 .venv�
 
 ### 网页工作室（http://127.0.0.1:8870）
 
-1. **资源库**：新建项目，选择提示词语言（默认英文，也可选中文）。
-2. 用任一引擎制作：
-   - **程序化绘制**：选生成器、设参数、运行；或回放 `.recipe`。
-   - **AI 生成**：连接 ComfyUI，导入或检查工作流，创建角色母版，然后生成关键帧。
-   - **导入与处理**：拖入文件，切图、去背景、整组对齐。
-3. **动画工作室**：检查帧、调整时长和锚点、运行检查、审核通过。
-4. **导出**：选择格式（如 Cocos 图集 + GIF），下载 ZIP。
+首页有三个入口。主要入口是 **制作角色动画**，共五步：
+
+1. **角色**：名称、美术风格、侧视或俯视，以及 **一张参考图**（会锁定为母版）。
+2. **动作**：点击预设（待机、行走、奔跑、攻击、施法、跳跃、受击、死亡……），或添加 **自定义动作** 并用一句话描述，
+   例如「把剑举过头顶再重重劈下」。设置帧数、是否循环和朝向。
+3. **提示词**：**✨ 用 Codex 编写** 会查看参考图，写出角色描述、逐帧姿势和每个动作的提示词；也可以使用内置模板。所有内容都可以修改。
+4. **生成**：选择 **Codex CLI** 或 **本地 ComfyUI**（工作流、模型文件、重绘强度）。每个动作生成一条精灵条，再切成帧并对齐（统一缩放和地面线）。
+5. **检查与导出**：预览每个动画，点击某一帧可只重做这一帧，审核通过后导出到 Cocos Creator、Godot、Phaser/PixiJS 或 PNG/GIF。
+
+其他入口：**像素素材**（引擎 A 生成器）和 **导入**（引擎 C）。专业工具 —— 逐帧 **动画编辑器**、**角色详情** 和 **生成与工作流** —— 在 **更多工具** 中。
 
 - **界面语言**：顶栏切换 English / 简体中文（记住选择；首次按浏览器语言）。
 - **中文/GBK 系统**：所有读写均为 UTF-8，GBK/cp936/cp1252 系统下不会出现编码错误。
@@ -71,13 +74,19 @@ powershell -ExecutionPolicy Bypass -File .\start.ps1      # 自动创建 .venv�
 python -m artstudio --lang zh-CN project create "我的 RPG" --id my-rpg
 python -m artstudio builders                                       # 列出生成器和动画模板
 python -m artstudio procedural hero_shrine --project my-rpg --params '{"banner":"blue"}'
+# 角色动画（引擎 B）
+python -m artstudio animate new --project my-rpg --name "火焰骑士" --image knight.png --view side
+python -m artstudio animate add --project my-rpg --character <角色ID> --preset attack
+python -m artstudio animate add --project my-rpg --character <角色ID> --name "旋风斩" --description "伸剑原地转一圈" --frames 6
+python -m artstudio animate prompts --project my-rpg --character <角色ID> --method codex --language zh-CN
+python -m artstudio animate generate --project my-rpg --character <角色ID> --provider codex
 python -m artstudio draw my_gem.jsonl --project my-rpg --name "红宝石" --type icon
 python -m artstudio generate --project my-rpg --provider comfyui --workflow sd-image-to-image --character hero --template walk --direction east --prompt-language zh-CN --params '{"checkpoint":"<文件>.safetensors"}'
 python -m artstudio export --project my-rpg --assets <素材ID…> --formats atlas cocos gif json zip
 ```
 
 - 命令行提示语言：`--lang zh-CN` 或环境变量 `ARTSTUDIO_LANG=zh-CN`。
-- 配置：`studio.config.example.json`、`.env.example`。
+- 配置：`studio.config.example.json`、`.env.example`。Codex CLI：安装并运行 `codex login`，工作室会在 PATH 中找到它（或设置 `codex_bin`）。
 - Windows 与 ComfyUI 部署：[docs/deployment-windows.zh-CN.md](docs/deployment-windows.zh-CN.md)。
 
 ### 内置 ComfyUI 工作流模板
@@ -99,8 +108,8 @@ AI 生成通过 **[ComfyUI](https://github.com/comfyanonymous/ComfyUI)** 的服�
 
 ## 验证状态
 
-- ✅ **离线验收（阶段 A）**：65 项自动化测试、Playwright 中英文界面测试、概念验证素材，见 [DEVELOPMENT_PROGRESS.md](DEVELOPMENT_PROGRESS.md)。
-- 🧪 **AI 生成目前只经过模拟服务测试**。模拟输出标记为 TEST FIXTURE，不是 AI 作品。
+- ✅ **离线验收（阶段 A）**：78 项自动化测试、覆盖完整引导流程的 Playwright 中英文界面测试、概念验证素材，见 [DEVELOPMENT_PROGRESS.md](DEVELOPMENT_PROGRESS.md)。
+- 🧪 **AI 生成目前只经过模拟测试**：ComfyUI 使用 `mock_comfyui/`，Codex 使用测试替身（`tests/fake_codex.py`）。模拟输出标记为 TEST FIXTURE，不是 AI 作品。真实的 Codex CLI 尚未在此运行。
 - ⛔ **阶段 B（真实 ComfyUI 推理）尚未运行**。请在 ComfyUI 电脑上运行 `scripts/production_smoke_test.py`。
 
 ## 参与开发

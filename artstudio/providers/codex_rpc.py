@@ -1,7 +1,8 @@
 """Native Codex app-server JSON-RPC client (image generation through a logged-in `codex` CLI; no API keys).
 
 Derived from Pixel Atelier `bridge/rpc.py` (MIT © 2026 Pixel Character Pipeline contributors).
-Change: pipes use explicit UTF-8 (prompts contain Chinese/English text; locale codepages broke them).
+Changes: pipes use explicit UTF-8 (prompts contain Chinese/English text; locale codepages broke them);
+the command is injectable (resolved `codex`/`codex.cmd` path, or a test double).
 """
 import base64,json,queue,shutil,subprocess,threading,time
 from pathlib import Path
@@ -24,13 +25,13 @@ def inspect_sprite_png(path):
 
 
 class CodexClient:
-    def __init__(self,on_event=None,timeout=40):
+    def __init__(self,on_event=None,timeout=40,command=None):
         self.on_event=on_event or (lambda e:None);self.timeout=timeout;self.counter=0;self.q=queue.Queue()
-        self.proc=subprocess.Popen(['codex','app-server','--listen','stdio://'],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,encoding='utf-8',errors='replace',bufsize=1)
+        self.proc=subprocess.Popen(command or ['codex','app-server','--listen','stdio://'],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,encoding='utf-8',errors='replace',bufsize=1)
         threading.Thread(target=self._read,daemon=True).start()
         threading.Thread(target=lambda:[None for _ in self.proc.stderr],daemon=True).start()
         try:
-            self.request('initialize',{'clientInfo':{'name':'pixel_character_bridge','title':'Pixel Character Bridge','version':'0.1.0'},'capabilities':{'experimentalApi':True}})
+            self.request('initialize',{'clientInfo':{'name':'ai_game_art_studio','title':'AI Game Art Studio','version':'0.3.0'},'capabilities':{'experimentalApi':True}})
             self.send({'method':'initialized'})
         except Exception:
             self.close();raise

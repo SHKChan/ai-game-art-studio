@@ -4,13 +4,14 @@ Read this first, then `SPECIFICATION.md` (authoritative requirements) and `DEVEL
 
 ## Project facts
 
-- **What it is:** local-first 2D game art studio. Engine A = own pixel engine; Engine B = ComfyUI (AI); Engine C = import.
+- **What it is:** local-first 2D game art studio. Engine A = own pixel engine; Engine B = character animation (AI:
+  Codex CLI or ComfyUI); Engine C = import.
   User-facing overview: `README.md` / `README.zh-CN.md`.
-- **Version:** `VERSION` (currently 0.2.0). History: `CHANGELOG.md`.
+- **Version:** `VERSION` (currently 0.3.0). History: `CHANGELOG.md`.
 - **Based on (MIT):** Atelier (marmikshah/atelier @ 8ac6adf) — call format re-implemented in `artstudio/engine`;
   Pixel Atelier (jinxingtaire/pixel-atelier @ 15d199f) — code moved into `artstudio/pipeline`, `prompts_zh_sheet.py`,
   `providers/codex_rpc.py`, `samples/knight`. Neither is a dependency any more; do not re-add them as checkouts.
-- **Status:** Stage A (offline) done, 65 tests. Stage B (real ComfyUI) **not run** — never claim it passed.
+- **Status:** Stage A (offline) done, 78 tests. Stage B (real ComfyUI) **not run** — never claim it passed.
 - **Owner policy:** the owner allows rewriting and reorganising any code. Translation scope is UI, CLI/API messages,
   prompts, README and deployment guide only.
 
@@ -40,6 +41,29 @@ source frames are preserved (`frames_src/`), processed frames (`frames/`) are re
 `processing.normalize`. Processing lives in `artstudio/processing/frames.py` (shared by pixel and HD modes), QA in
 `artstudio/qa/`, exports in `artstudio/export/`. UI: `artstudio/web/` (vanilla ES modules, no build step, strict CSP).
 
+## Engine B — character animation (guided flow)
+
+- Flow: reference image (locked master) → action plan → prompts → **one sprite strip per action** → slice + align →
+  animation asset → review (redo single frames) → export. UI: `artstudio/web/wizard.js`; home: `home.js`.
+- Plan: `artstudio/actions.py`, stored at `characters/<cid>/action_plan.json`. Action ids are `[a-z0-9_]` (non-ASCII
+  names fall back to `action`, `action_2`). Presets come from `animation.TEMPLATES`.
+- Prompts: `write_prompts(method="codex")` runs `codex exec` read-only with the reference image and expects JSON
+  (`codex_cli.extract_json`); `method="template"` is the offline fallback. Never silently swap one for the other.
+- Generation: `Studio.generate_action`. Codex → `codex app-server` image bridge (`providers/codex_rpc.py`); ComfyUI →
+  `strip_reference` (reference repeated per cell) + img2img; mock → labelled fixtures. `strip_layout` uses auto
+  slicing and falls back to an even grid with a visible warning.
+- Codex is located by `codex_cli.resolve` (`codex_bin` / `ARTSTUDIO_CODEX` / PATH, incl. `codex.cmd`). The prompt goes
+  on **stdin**, never argv (Windows quoting + Chinese text). Tests use `tests/fake_codex.py` via
+  `ARTSTUDIO_CODEX="<python> tests/fake_codex.py"`; that double is not art and must never ship as output.
+- Batch generation is job kind `batch_actions` and always has a budget (default = number of actions).
+
+## UI structure
+
+- Main nav: Home · Animate character · Pixel assets · Import · Library · Export. Expert tabs (Animation editor,
+  Character details, Generation & workflows) sit under **More tools** and open automatically when linked to.
+- Keep new user-facing features inside the guided flow first; add expert controls to the advanced tabs.
+- The jobs dock auto-folds when idle; don't place primary buttons where it would cover them while jobs run.
+
 ## Development standards
 
 - Python ≥ 3.10, dependencies limited to Pillow + numpy (stdlib for HTTP/WebSocket/JSON). Add a dependency only
@@ -68,7 +92,8 @@ source frames are preserved (`frames_src/`), processed frames (`frames/`) are re
 ```bash
 python scripts/run_tests.py                       # all tests (engine, pipeline, encoding, mock ComfyUI, server, CLI)
 python -m artstudio serve --port 8870             # web studio
-python tests/ui_playwright.py                     # UI smoke (needs a running studio with an EMPTY workspace)
+python tests/ui_playwright.py                     # UI test of the whole guided flow; start the studio first with an EMPTY
+                                                  # workspace and ARTSTUDIO_CODEX="<python> tests/fake_codex.py"
 python demo/build_poc.py                          # rebuild proof-of-concept deliverables
 python mock_comfyui/server.py --port 8188 [--scenario ok|fail|timeout|disconnect|slow]
 python scripts/make_workflow_templates.py         # regenerate bundled ComfyUI templates

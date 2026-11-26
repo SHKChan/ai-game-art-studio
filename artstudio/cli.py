@@ -175,6 +175,28 @@ def build_parser():
     rs.add_argument("archive")
     rs.add_argument("target")
 
+    an = sub.add_parser("animate", help="Engine B guided flow: reference image -> actions -> prompts -> one strip per action")
+    an.add_argument("action", choices=["new", "add", "remove", "show", "prompts", "generate"])
+    an.add_argument("--project", required=True)
+    an.add_argument("--character", help="character id (all actions except new)")
+    an.add_argument("--name", help="new: character name; add: custom action name")
+    an.add_argument("--image", help="new: reference image (PNG/WebP/JPEG)")
+    an.add_argument("--style", default="pixel", choices=["pixel", "hd"])
+    an.add_argument("--view", default="side", choices=["side", "top_down"])
+    an.add_argument("--notes", default="", help="new: details the image does not show")
+    an.add_argument("--preset", help="add: idle, walk, run, attack, combo_attack, cast, dodge, dash, jump, hit, death, interact")
+    an.add_argument("--description", default="", help="add: one line describing the action")
+    an.add_argument("--frames", type=int)
+    an.add_argument("--loop", action="store_true")
+    an.add_argument("--direction", help="add: facing (default: the character's first direction)")
+    an.add_argument("--method", default="template", choices=["codex", "template"], help="prompts: codex reads the reference image")
+    an.add_argument("--language", choices=["en", "zh-CN"])
+    an.add_argument("--actions", nargs="*", help="limit to these action ids")
+    an.add_argument("--provider", default="codex", help="generate: codex | comfyui | mock")
+    an.add_argument("--workflow")
+    an.add_argument("--params", default="{}", help="generate: provider params JSON (ComfyUI: checkpoint, denoise, cell ...)")
+    an.add_argument("--budget", type=int, help="generate: max generation calls (default: number of actions)")
+
     ks = sub.add_parser("knight-sample", help="import the bundled knight sample as a character")
     ks.add_argument("--project", required=True)
     ks.add_argument("--character")
@@ -338,10 +360,44 @@ def _run(args, cfg, Studio):
         return _j(s.registry.get("comfyui").check_workflow(a.id, json.loads(a.params)))
     if a.cmd == "backup":
         return _j({"written": str(s.ws.backup(Path(a.out), not a.no_exports))})
+    if a.cmd == "animate":
+        return _j(_animate(s, a))
     if a.cmd == "knight-sample":
         cid = a.character or s.ws.create_character(a.project, "Knight (sample)", "side2", "pixel")["id"]
         return _j({"character_id": cid, "assets": [x["id"] for x in s.import_knight_sample(a.project, cid, a.actions)]})
     return 1
+
+
+def _animate(s, a) -> dict:
+    from . import actions as plans
+    from .jobs import Budget
+    from .util import StudioError
+    if a.action == "new":
+        if not (a.name and a.image):
+            raise StudioError("animate new needs --name and --image")
+        c = s.create_character_from_reference(a.project, a.name, Path(a.image), art_style=a.style, view=a.view, description=a.notes)
+        return {"character_id": c["id"], "directions": c["directions"], "masters": list(c["masters"])}
+    if not a.character:
+        raise StudioError("--character is required")
+    plan = plans.load_plan(s.ws, a.project, a.character)
+    if a.action == "show":
+        return plan
+    if a.action == "add":
+        c = s.ws.get_character(a.project, a.character)
+        item = {"preset": a.preset, "name": a.name, "description": a.description, "frames": a.frames,
+                "loop": True if a.loop else None, "direction": a.direction or c["directions"][0]}
+        plan["actions"].append({k: v for k, v in item.items() if v is not None})
+        plan.setdefault("language", s.prompt_language(a.project))
+        return plans.save_plan(s.ws, a.project, a.character, plan)
+    if a.action == "remove":
+        plan["actions"] = [x for x in plan["actions"] if x["id"] not in (a.actions or [])]
+        return plans.save_plan(s.ws, a.project, a.character, plan)
+    if a.action == "prompts":
+        return s.write_action_prompts(a.project, a.character, a.method, a.actions, a.language, ctx=_ctx())
+    ids = a.actions or [x["id"] for x in plan["actions"]]
+    budget = Budget(a.budget if a.budget is not None else len(ids))
+    return s._job_batch_actions({"character_id": a.character, "action_ids": ids, "provider_id": a.provider,
+                                 "workflow_id": a.workflow, "params": json.loads(a.params)}, _ctx(), budget, {"project_id": a.project})
 
 
 def _brief(a: dict) -> dict:

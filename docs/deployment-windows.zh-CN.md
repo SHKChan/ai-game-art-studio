@@ -33,6 +33,13 @@
 - 本机：正常启动 ComfyUI（默认端口 8188）。远程：用 `--listen 0.0.0.0` 启动并填写 `http://<主机>:8188`（ComfyUI 无身份验证，仅限可信网络）。
 - 工作室「AI 生成」页的 ComfyUI 卡片应显示 **可用**、版本和 GPU。显示「模拟」说明连到了测试服务器。
 - 模型放在 ComfyUI 自己的目录中；工作室通过 `/object_info` 读取服务器上实际存在的模型。
+- 在「角色动画 → 生成」中选择 **本地 ComfyUI**，填写模型文件名，重绘强度建议 0.55–0.7。参考图会铺满一条精灵条（每帧一格），再按每个姿势用图生图重绘。
+
+## 3b. 连接 Codex CLI（可选，制作角色动画时推荐）
+
+- 安装并登录一次：`npm install -g @openai/codex`，然后运行 `codex login`。工作室不保存任何 API 密钥。
+- 工作室会在 PATH 中查找 `codex` / `codex.cmd`。如果装在其他位置，请在 `studio.config.json` 中设置 `codex_bin`（或环境变量 `ARTSTUDIO_CODEX`）。
+- 「角色动画」中有两处使用 Codex：**用 Codex 编写**（`codex exec` 读取参考图，写出角色描述和逐帧姿势）和 **生成 → Codex CLI**（通过 `codex app-server` 使用内置图像生成）。找到 Codex 后首页会显示「Codex CLI ●」；登录状态在第一次调用时检查。
 
 ## 4. 导入工作流
 

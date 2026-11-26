@@ -2,8 +2,9 @@
   "workspace": "",
   "host": "127.0.0.1",
   "port": 8870,
-  "atelier_bin": "",
   "ffmpeg_bin": "",
+  "codex_bin": "",
+  "codex_timeout": 300,
   "default_generation_budget": 0,
   "log_level": "INFO",
   "comfyui": {
@@ -13,5 +14,7 @@
     "poll_interval_s": 1,
     "use_websocket": true,
     "api_key_env": ""
-  }
+  },
+  "language": "en",
+  "prompt_language": "en"
 }

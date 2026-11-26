@@ -19,16 +19,22 @@
   <button id="themeBtn" class="ghost" title="Toggle light/dark">◐</button>
 </header>
 <nav class="tabs" role="tablist">
-  <button data-tab="library" class="active">Library</button>
-  <button data-tab="character">Character Studio</button>
-  <button data-tab="animation">Animation Studio</button>
-  <button data-tab="procedural">Procedural Studio</button>
-  <button data-tab="import">Import &amp; Processing</button>
-  <button data-tab="generate">Generation</button>
-  <button data-tab="export">Export Studio</button>
+  <button data-tab="home" class="active">Home</button>
+  <button data-tab="wizard">Animate character</button>
+  <button data-tab="procedural">Pixel assets</button>
+  <button data-tab="import">Import</button>
+  <button data-tab="library">Library</button>
+  <button data-tab="export">Export</button>
+  <span class="sep"></span>
+  <button id="moreBtn" class="more" aria-expanded="false" title="Advanced tools">More tools ▸</button>
+  <button data-tab="animation" class="adv">Animation editor</button>
+  <button data-tab="character" class="adv">Character details</button>
+  <button data-tab="generate" class="adv">Generation &amp; workflows</button>
 </nav>
 <main>
-  <section id="tab-library" class="tab active"></section>
+  <section id="tab-home" class="tab active"></section>
+  <section id="tab-wizard" class="tab"></section>
+  <section id="tab-library" class="tab"></section>
   <section id="tab-character" class="tab"></section>
   <section id="tab-animation" class="tab"></section>
   <section id="tab-procedural" class="tab"></section>
@@ -36,8 +42,8 @@
   <section id="tab-generate" class="tab"></section>
   <section id="tab-export" class="tab"></section>
 </main>
-<aside id="jobsDock" class="dock">
-  <div class="dock-head"><b>Jobs</b><button id="jobsToggle" class="ghost small">▾</button></div>
+<aside id="jobsDock" class="dock collapsed">
+  <div class="dock-head"><b>Jobs</b> <span id="jobsCount" class="muted small" data-no-i18n></span><button id="jobsToggle" class="ghost small">▾</button></div>
   <div id="jobsList"></div>
 </aside>
 <div id="toast" role="status" aria-live="polite"></div>

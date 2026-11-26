@@ -83,7 +83,7 @@ class MockGenerationProvider(Provider):
             ctx.progress((i + 1) / steps, f"mock step {i + 1}/{steps}")
         if self.fail_mode == "timeout":
             raise GenerationError("Mock provider simulated timeout", "timeout", retryable=True)
-        key = req.params.get("fixture") or {"pose_keyframe": "knight_light", "sheet": "knight_run"}.get(req.kind, "knight_poster")
+        key = req.params.get("fixture") or {"pose_keyframe": "knight_light", "sheet": "knight_run", "action_strip": "knight_run"}.get(req.kind, "knight_poster")
         src = self.FIXTURES.get(key)
         if not src or not src.exists():
             raise GenerationError(f"Unknown fixture {key}", "bad_request")
@@ -96,31 +96,53 @@ class MockGenerationProvider(Provider):
 
 
 class CodexImageProvider(Provider):
-    """Optional: native Codex app-server image bridge (artstudio.providers.codex_rpc, from Pixel Atelier).
-    Requires a logged-in `codex` CLI with built-in image generation. Never a mandatory dependency."""
+    """Codex image generation through the native app-server bridge (artstudio.providers.codex_rpc, from Pixel Atelier).
+    Requires a logged-in `codex` CLI with built-in image generation (no API keys). Optional provider."""
     id = "codex"
-    name = "Codex image bridge (optional)"
+    name = "Codex CLI (image generation)"
     kind = "image_generation"
     counts_toward_budget = True
 
+    def __init__(self, codex_bin: str = "", timeout: int = 300):
+        self.codex_bin, self.timeout = codex_bin, timeout
+
     def status(self) -> ProviderStatus:
-        if not shutil.which("codex"):
-            return ProviderStatus(False, "codex CLI not installed (optional provider)")
-        return ProviderStatus(True, "codex CLI found; authentication is verified at first generation", {"verified": False})
+        from ..codex_cli import resolve
+        cmd = resolve(self.codex_bin)
+        if not cmd:
+            return ProviderStatus(False, "codex CLI not found (install it and run `codex login`, or set codex_bin)")
+        return ProviderStatus(True, "codex CLI found; login is checked at the first call", {"command": cmd[0], "verified": False})
+
+    def capabilities(self) -> dict:
+        return {"kinds": ["sheet", "pose_keyframe", "master_candidate"], "prompt_writing": True, "reference_images": True}
 
     def generate(self, req: GenerationRequest, ctx: JobContext) -> GenerationResult:
         st = self.status()
         if not st.available:
             raise GenerationError(st.reason, "provider_unavailable")
-        from .codex_rpc import CodexClient
-        events = []
-        client = CodexClient(lambda e: events.append(e))
+        from ..codex_cli import app_server_command
+        from .codex_rpc import BridgeError, CodexClient
+        events: list = []
+
+        def on_event(e):
+            events.append(e)
+            if e.get("type") == "imageGeneration":
+                ctx.progress(0.5, f"codex image {e.get('status')}")
+
+        ctx.progress(0.05, "starting codex")
+        try:
+            client = CodexClient(on_event, command=app_server_command(self.codex_bin))
+        except (OSError, BridgeError) as e:
+            raise GenerationError(f"Codex could not start: {e}", "provider_unavailable") from e
         try:
             ref = Path(req.reference_images[0]) if req.reference_images else None
-            res = client.generate(ref, req.prompt, Path(req.out_dir), timeout=int(req.params.get("timeout", 240)))
+            res = client.generate(ref, req.prompt, Path(req.out_dir), timeout=int(req.params.get("timeout", self.timeout)))
+        except BridgeError as e:
+            raise GenerationError(f"Codex generation failed: {e}", "execution_error", {"events": events[-10:]}, retryable=False) from e
         finally:
             client.close()
-        return GenerationResult([Path(p) for p in res["images"]], {"provider": "codex", "model": res.get("model"), "events": events[-20:]})
+        return GenerationResult([Path(p) for p in res["images"]], {"provider": "codex", "model": res.get("model"),
+                                                                    "thread_id": res.get("thread_id"), "events": events[-20:]})
 
 
 def mark_fixture(image_path: Path) -> None:

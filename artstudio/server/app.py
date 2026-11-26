@@ -324,6 +324,61 @@ def api_char_report(s, h, m, q, body):
     return s.character_report(m["pid"], m["cid"], body.get("animations", ["idle", "walk", "attack"]))
 
 
+# guided flow: character animation (Engine B action plans)
+@route("GET", r"/api/action-presets")
+def api_action_presets(s, h, m, q, body):
+    from ..actions import presets
+    return presets()
+
+
+@route("POST", r"/api/projects/(?P<pid>[a-z0-9_-]+)/characters/from-reference")
+def api_char_from_ref(s, h, m, q, body):
+    p = _save_upload(s, body.get("filename", "reference.png"), body["data"])
+    return s.create_character_from_reference(m["pid"], body["name"], p, art_style=body.get("art_style", "pixel"),
+                                             view=body.get("view", "side"), description=body.get("description", ""))
+
+
+@route("POST", r"/api/projects/(?P<pid>[a-z0-9_-]+)/characters/(?P<cid>[a-z0-9_-]+)/reference")
+def api_char_reference(s, h, m, q, body):
+    p = _save_upload(s, body.get("filename", "reference.png"), body["data"])
+    return s.set_character_reference(m["pid"], m["cid"], p)
+
+
+@route("GET", r"/api/projects/(?P<pid>[a-z0-9_-]+)/characters/(?P<cid>[a-z0-9_-]+)/plan")
+def api_plan(s, h, m, q, body):
+    from ..actions import load_plan
+    return load_plan(s.ws, m["pid"], m["cid"])
+
+
+@route("POST", r"/api/projects/(?P<pid>[a-z0-9_-]+)/characters/(?P<cid>[a-z0-9_-]+)/plan")
+def api_plan_save(s, h, m, q, body):
+    from ..actions import save_plan
+    body.setdefault("language", s.prompt_language(m["pid"]))
+    return save_plan(s.ws, m["pid"], m["cid"], body)
+
+
+@route("POST", r"/api/projects/(?P<pid>[a-z0-9_-]+)/characters/(?P<cid>[a-z0-9_-]+)/plan/prompts")
+def api_plan_prompts(s, h, m, q, body):
+    method = body.get("method", "template")
+    p = {"character_id": m["cid"], "method": method, "action_ids": body.get("action_ids"), "language": body.get("language")}
+    if method == "template":  # instant: no job needed
+        return {"plan": s.write_action_prompts(m["pid"], m["cid"], "template", body.get("action_ids"), body.get("language"))}
+    return s.jobs.submit("action_prompts", p, project_id=m["pid"], label="write prompts with Codex")
+
+
+@route("POST", r"/api/projects/(?P<pid>[a-z0-9_-]+)/characters/(?P<cid>[a-z0-9_-]+)/plan/generate")
+def api_plan_generate(s, h, m, q, body):
+    from ..actions import load_plan
+    plan = load_plan(s.ws, m["pid"], m["cid"])
+    ids = body.get("action_ids") or [a["id"] for a in plan["actions"]]
+    if not ids:
+        raise StudioError("No actions in the plan; add at least one action first")
+    p = {"character_id": m["cid"], "action_ids": ids, "provider_id": body["provider_id"],
+         "workflow_id": body.get("workflow_id") or None, "params": body.get("params", {})}
+    label = f"generate {', '.join(ids)} via {body['provider_id']}" if len(ids) <= 3 else f"generate {len(ids)} actions via {body['provider_id']}"
+    return s.jobs.submit("batch_actions", p, project_id=m["pid"], budget=int(body.get("budget", len(ids))), label=label)
+
+
 @route("POST", r"/api/prompt-preview")
 def api_prompt_preview(s, h, m, q, body):
     from ..prompts import build_keyframe_prompt, build_master_prompt
@@ -410,7 +465,10 @@ class Handler(BaseHTTPRequestHandler):
         for k, v in (extra or {}).items():
             self.send_header(k, v)
         self.end_headers()
-        self.wfile.write(body)
+        try:
+            self.wfile.write(body)
+        except (BrokenPipeError, ConnectionResetError):  # browser navigated away mid-response: nothing to do
+            self.close_connection = True
 
     def _json(self, code, obj):
         self._send(code, json.dumps(obj, ensure_ascii=False, default=str).encode())

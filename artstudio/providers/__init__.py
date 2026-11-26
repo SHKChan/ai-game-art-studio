@@ -21,7 +21,7 @@ class Registry:
             "procedural": ProceduralProvider(),
             "comfyui": ComfyUIProvider(cfg.comfyui, self.workflows),
             "external": ExternalAssetProvider(find_ffmpeg(cfg)),
-            "codex": CodexImageProvider(),
+            "codex": CodexImageProvider(cfg.codex_bin, cfg.codex_timeout),
         }
         if enable_mock:
             self.providers["mock"] = MockGenerationProvider()

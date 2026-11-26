@@ -5,5 +5,5 @@ Atelier-compatible call format; the whole-character pipeline (`artstudio.pipelin
 prompts derive from Pixel Atelier. Both origins are MIT-licensed; see THIRD_PARTY_NOTICES.md.
 """
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 SCHEMA_VERSION = 1
