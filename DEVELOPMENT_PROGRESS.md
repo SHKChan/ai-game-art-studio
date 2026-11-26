@@ -3,20 +3,26 @@
 Labels: **implemented** · **offline-tested** (executed here with real data) · **mock-tested** (only against mock providers) ·
 **production-verified** (Stage B on a real ComfyUI — none yet).
 
-## Current state (2026-11-26, v0.3.0)
+## Current state (2026-11-26, v0.4.0)
+
+Tool names: **Pixel Forge** (procedural pixel engine, was Engine A), **Motion Studio** (character animation, was Engine B),
+**Asset Import** (import, was Engine C).
+
 
 | Area | State | Evidence |
 |---|---|---|
-| Engine A — own Python pixel engine (`artstudio/engine`), Atelier-compatible call format | offline-tested | tests/test_engine.py: tool semantics, persistence, determinism; **Atelier showcase recipes potion/slash replay pixel-identical to Atelier's GIFs**; all builders identical to the earlier Atelier-rendered POC frames |
-| Builders: potion, chest, chest_open, fireball, sword_slash, **ice_spear** (3 elements), **hero_shrine** (96×96, animated) + `artstudio draw` call lists | offline-tested | EngineATests; contact sheets inspected |
-| Engine A authoring guide + skill | done | docs/engine-a-guide.md, skills/procedural-builder-authoring |
+| Pixel Forge — own Python pixel engine (`artstudio/engine`), Atelier-compatible call format | offline-tested | tests/test_engine.py: tool semantics, persistence, determinism; **Atelier showcase recipes potion/slash replay pixel-identical to Atelier's GIFs**; all builders identical to the earlier Atelier-rendered POC frames |
+| Builders: potion, chest, chest_open, fireball, sword_slash, **ice_spear** (3 elements), **hero_shrine** (96×96, animated) + `artstudio draw` call lists | offline-tested | PixelForgeTests; contact sheets inspected |
+| Pixel Forge authoring guide + skill | done | docs/pixel-forge-guide.md, skills/procedural-builder-authoring |
 | Pixel Atelier code moved in: spritepipe, Chinese sheet prompts, Codex client, knight sample | offline-tested | tests/test_spritepipe.py (14 upstream tests ported, pass); POC spritepipe TECHNICAL_VERIFIED |
 | Encoding (GBK/cp936/cp1252/C locale) | offline-tested | tests/test_encoding.py: no locale-default I/O in code; full Chinese CLI flow under C locale with UTF-8 mode OFF and no relaunch; POSIX argv recovery |
 | Bilingual en / zh-CN | offline-tested | UI dictionary + observer; server/CLI localized errors; zh prompts; README/deployment in Chinese; Playwright zh pass over all 7 workspaces |
-| Engine C import/processing, character masters, animation editing, QA, export, job queue, server, CLI | offline-tested | 78 tests total |
-| Engine B guided flow: reference → action plan → prompts → one strip per action → slice/align → review/redo frame → export | offline-tested (pipeline) / mock-tested (AI) | tests/test_actions.py (13): plan model, template prompts en/zh, Codex prompt writing + failure, Codex strip generation + failure, budget, grid fallback, strip reference, ComfyUI strip via mock server, HTTP API flow; Playwright drives all 5 steps in English + Chinese review |
+| Asset Import import/processing, character masters, animation editing, QA, export, job queue, server, CLI | offline-tested | 84 tests total |
+| Motion Studio guided flow: reference → action plan → prompts → one strip per action → slice/align → review/redo frame → export | offline-tested (pipeline) / mock-tested (AI) | tests/test_actions.py (13): plan model, template prompts en/zh, Codex prompt writing + failure, Codex strip generation + failure, budget, grid fallback, strip reference, ComfyUI strip via mock server, HTTP API flow; Playwright drives all 5 steps in English + Chinese review |
 | Codex CLI integration (`codex exec` prompt writing, `codex app-server` image generation, Windows `codex.cmd`) | mock-tested | only against `tests/fake_codex.py`; **real Codex not run** (no account/network here) |
-| Guided UI (Home, Animate character, More tools) | offline-tested | tests/ui_playwright.py |
+| Guided UI (Home, Motion Studio, More tools), theme System/Dark/Light | offline-tested | tests/ui_playwright.py |
+| Pixel Forge editor (live preview; variant, speed, palette/HSV, outline, glow, flip, scale; save/export; replayable edits) | offline-tested | tests/test_forge.py (6) + Playwright |
+| Skill effects: heal, buff_aura, lightning_strike, shield_barrier, frost_nova, poison_cloud (+ colour variants, thickness) | offline-tested | PixelForgeTests (QA passed), test_forge variants; contact sheets inspected |
 | ComfyUI provider + workflow library + mock service | mock-tested | ComfyTests (ok, missing model/nodes, invalid values, failure, timeout, WS disconnect, cancel, unreachable) |
 | Proof of concept | done (offline parts) | deliverables/poc/POC_REPORT.json |
 | Stage B | **not run** | needs the ComfyUI PC |
@@ -25,7 +31,7 @@ Labels: **implemented** · **offline-tested** (executed here with real data) · 
 
 - `python scripts/run_tests.py` → 63 tests OK (build sandbox, Python 3.13, before hero_shrine). Device VM results below.
 - `python tests/ui_playwright.py` → passed in English and Chinese, no console errors.
-- `python demo/build_poc.py` → tests A–D + mock pipeline regenerated with Engine A.
+- `python demo/build_poc.py` → tests A–D + mock pipeline regenerated with Pixel Forge.
 
 ## Decisions
 
@@ -40,11 +46,12 @@ Labels: **implemented** · **offline-tested** (executed here with real data) · 
 
 - c25b33e — Stage A implementation integrating Atelier (Rust binary via MCP/CLI) and Pixel Atelier (as libraries).
 - Session 2 — encoding issue reproduced (Pixel Atelier locale-default I/O); `artstudio draw` added.
-- 0a8b4d9 — reorganisation into a self-contained codebase, Engine A rewrite, i18n, ice_spear builder, guide.
-- 724107c — Engine A parity fixes (brush anchoring, inclusive region rects); 0 differing pixels vs Atelier on 10 samples.
+- 0a8b4d9 — reorganisation into a self-contained codebase, Pixel Forge rewrite, i18n, ice_spear builder, guide.
+- 724107c — Pixel Forge parity fixes (brush anchoring, inclusive region rects); 0 differing pixels vs Atelier on 10 samples.
 - 0f1773c — hero_shrine builder.
 - v0.2.0 — README (features, usage, upstreams), CHANGELOG, VERSION, AGENTS.md facts/gotchas, version consistency test.
-- v0.3.0 — Engine B = character animation (action plans, Codex/ComfyUI strips), guided UI, `artstudio animate` CLI.
+- v0.4.0 — tool names, Pixel Forge editor + six skill effects, theme selector.
+- v0.3.0 — Motion Studio = character animation (action plans, Codex/ComfyUI strips), guided UI, `artstudio animate` CLI.
 
 ## Blockers
 
@@ -59,10 +66,10 @@ Labels: **implemented** · **offline-tested** (executed here with real data) · 
 
 - Stage B smoke test + reduced Test B on the ComfyUI PC; mark verified workflows.
 - Verify Cocos Creator import and TS components in a real project; Godot script.
-- More builders (weapons/armour icons, tiles, ice/lightning/heal/smoke effects) via docs/engine-a-guide.md.
+- More builders (weapons/armour icons, tiles, ice/lightning/heal/smoke effects) via docs/pixel-forge-guide.md.
 - Optional local vision model for `qa/visual.py`.
 
 ## Device verification
 
 - User's computer (Linux VM, Python 3.10, Pillow 12.3, numpy 2.2): `python3 scripts/run_tests.py` → **63 tests OK, 0 skipped**
-  (Engine A now runs everywhere — previously the Rust binary could not run there).
+  (Pixel Forge now runs everywhere — previously the Rust binary could not run there).

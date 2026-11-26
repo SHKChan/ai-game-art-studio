@@ -1,11 +1,11 @@
 ---
 name: procedural-builder-authoring
-description: Add a new Engine A asset type (item, icon, skill effect, tile) as a call list or a reusable builder, and verify it.
+description: Add a new Pixel Forge asset type (item, icon, skill effect, tile) as a call list or a reusable builder, and verify it.
 ---
 
 # Procedural Builder Authoring
 
-Full reference: `docs/engine-a-guide.md`. Worked example: `artstudio/procedural/ice_spear.py`.
+Full reference: `docs/pixel-forge-guide.md`. Worked example: `artstudio/procedural/ice_spear.py`.
 
 ## Required inputs
 Asset brief (subject, size, frame count, timing); palette or colour intent; variants to support (params); target asset type.
@@ -19,8 +19,8 @@ Asset brief (subject, size, frame count, timing); palette or colour intent; vari
 6. QA + replay check + add to `tests/test_integration.py`.
 
 ## Tool-selection rules
-Engine A tools only (doc_paint_grid with palette indices preferred). No external image libraries for final pixels.
-Complex characters → Engine B/C instead.
+Pixel Forge tools only (doc_paint_grid with palette indices preferred). No external image libraries for final pixels.
+Complex characters → Motion Studio/C instead.
 
 ## Prompt templates
 The builder's params are the prompt. Brief format: "Skill icon 32x32: diagonal ice spear, pointed head, lit from top-left, round dark frame, 3 sparkle pixels, 9-colour palette, transparent outside the frame."

@@ -31,7 +31,7 @@ class CodexClient:
         threading.Thread(target=self._read,daemon=True).start()
         threading.Thread(target=lambda:[None for _ in self.proc.stderr],daemon=True).start()
         try:
-            self.request('initialize',{'clientInfo':{'name':'ai_game_art_studio','title':'AI Game Art Studio','version':'0.3.0'},'capabilities':{'experimentalApi':True}})
+            self.request('initialize',{'clientInfo':{'name':'ai_game_art_studio','title':'AI Game Art Studio','version':'0.4.0'},'capabilities':{'experimentalApi':True}})
             self.send({'method':'initialized'})
         except Exception:
             self.close();raise

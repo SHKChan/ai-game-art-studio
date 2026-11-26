@@ -72,7 +72,7 @@
 - 备份：`python -m artstudio backup D:\backups\studio.zip [--no-exports]`（或在工作室停止时直接复制 workspace 文件夹）。
 - 在另一台电脑恢复：`python -m artstudio restore backup.zip D:\GameArt\ws`（目标须为空），再用 `-Workspace D:\GameArt\ws` 启动。
 - 升级：workspace 带有 `schema_version`，旧版本会自动迁移，更高版本会被拒绝。
-- 引擎 A 的文档保存在 workspace 中（`projects/<pid>/engine`），配方是纯 JSON 行，可在任何电脑上回放。
+- 像素工坊 的文档保存在 workspace 中（`projects/<pid>/engine`），配方是纯 JSON 行，可在任何电脑上回放。
 
 ## 7. 在目标电脑上运行测试
 

@@ -4,14 +4,16 @@ Read this first, then `SPECIFICATION.md` (authoritative requirements) and `DEVEL
 
 ## Project facts
 
-- **What it is:** local-first 2D game art studio. Engine A = own pixel engine; Engine B = character animation (AI:
-  Codex CLI or ComfyUI); Engine C = import.
+- **What it is:** local-first 2D game art studio with three tools (use these names everywhere; never "Engine A/B/C"):
+  - **Pixel Forge** (像素工坊) — own pixel engine + builders + live editor. Code: `artstudio/engine`, `artstudio/procedural`.
+  - **Motion Studio** (动作工作室) — character animation via Codex CLI or ComfyUI. Code: `actions.py`, `web/wizard.js`.
+  - **Asset Import** (素材导入) — import/clean/align existing art. Code: `processing/`, `Studio.import_file`.
   User-facing overview: `README.md` / `README.zh-CN.md`.
-- **Version:** `VERSION` (currently 0.3.0). History: `CHANGELOG.md`.
+- **Version:** `VERSION` (currently 0.4.0). History: `CHANGELOG.md`.
 - **Based on (MIT):** Atelier (marmikshah/atelier @ 8ac6adf) — call format re-implemented in `artstudio/engine`;
   Pixel Atelier (jinxingtaire/pixel-atelier @ 15d199f) — code moved into `artstudio/pipeline`, `prompts_zh_sheet.py`,
   `providers/codex_rpc.py`, `samples/knight`. Neither is a dependency any more; do not re-add them as checkouts.
-- **Status:** Stage A (offline) done, 78 tests. Stage B (real ComfyUI) **not run** — never claim it passed.
+- **Status:** Stage A (offline) done, 84 tests. Stage B (real ComfyUI) **not run** — never claim it passed.
 - **Owner policy:** the owner allows rewriting and reorganising any code. Translation scope is UI, CLI/API messages,
   prompts, README and deployment guide only.
 
@@ -33,7 +35,7 @@ Read this first, then `SPECIFICATION.md` (authoritative requirements) and `DEVEL
 
 ## Architecture in one paragraph
 
-Engine A is `artstudio/engine` (own pixel engine, Atelier-compatible call format; builders in `artstudio/procedural`).
+Pixel Forge is `artstudio/engine` (own pixel engine, Atelier-compatible call format; builders in `artstudio/procedural`).
 `artstudio.service.Studio` is the single entry point used by the HTTP server (`artstudio/server/app.py`), the CLI
 (`artstudio/cli.py`) and job handlers (`artstudio/jobs.py`). Providers (`artstudio/providers/`) report runtime
 availability. All image assets are manifests (`artstudio/schema/asset.schema.json`) with an `animation` block;
@@ -41,7 +43,7 @@ source frames are preserved (`frames_src/`), processed frames (`frames/`) are re
 `processing.normalize`. Processing lives in `artstudio/processing/frames.py` (shared by pixel and HD modes), QA in
 `artstudio/qa/`, exports in `artstudio/export/`. UI: `artstudio/web/` (vanilla ES modules, no build step, strict CSP).
 
-## Engine B — character animation (guided flow)
+## Motion Studio — character animation (guided flow)
 
 - Flow: reference image (locked master) → action plan → prompts → **one sprite strip per action** → slice + align →
   animation asset → review (redo single frames) → export. UI: `artstudio/web/wizard.js`; home: `home.js`.
@@ -59,8 +61,14 @@ source frames are preserved (`frames_src/`), processed frames (`frames/`) are re
 
 ## UI structure
 
-- Main nav: Home · Animate character · Pixel assets · Import · Library · Export. Expert tabs (Animation editor,
-  Character details, Generation & workflows) sit under **More tools** and open automatically when linked to.
+- Main nav: Home · Motion Studio · Pixel Forge · Asset Import · Library · Export. Expert tabs (Animation editor,
+  Character details, Generation & workflows, Pixel documents) sit under **More tools** and open automatically when linked to.
+- Theme: System / Dark / Light (`#themeSelect`, localStorage `artstudio.theme`). Use CSS variables, never hard-coded
+  colours, so both themes work; check new screens in both.
+- Pixel Forge editor: `web/forge.js` → `POST /api/forge/preview` (throw-away engine home, frames as data URLs) and
+  `GET /api/forge/thumb/<builder>.png` (cached). Quick edits live in `artstudio/procedural/edits.py`: colour edits rewrite
+  the builder's `doc_palette` call before painting; speed/outline/glow/flip/scale are appended engine calls, so the
+  saved recipe replays the edited asset exactly (`tests/test_forge.py`). Add new edit kinds the same way.
 - Keep new user-facing features inside the guided flow first; add expert controls to the advanced tabs.
 - The jobs dock auto-folds when idle; don't place primary buttons where it would cover them while jobs run.
 
@@ -103,7 +111,7 @@ python scripts/production_smoke_test.py --comfy URL --checkpoint FILE   # Stage 
 
 ## Adding things
 
-- **Procedural asset / builder**: follow **docs/engine-a-guide.md** (call list via `artstudio draw`, or a builder module with
+- **Procedural asset / builder**: follow **docs/pixel-forge-guide.md** (call list via `artstudio draw`, or a builder module with
   `DESCRIPTION`, `PARAMS`, `ASSET_TYPE`, `build()`; register in `procedural/__init__.py`; add to tests; look at the contact
   sheet; add the Chinese description to i18n.js). Skill: `skills/procedural-builder-authoring`.
 - **Engine tool**: add `t_<tool>` in `artstudio/engine/tools.py` using Atelier's argument names where one exists; test it in
@@ -134,11 +142,13 @@ python scripts/production_smoke_test.py --comfy URL --checkpoint FILE   # Stage 
 - **UI is CSP-strict** (no `unsafe-eval`): Playwright `wait_for_function` fails; use `expect(locator)` instead.
 - **Builder QA:** keep art 1–2 px off the canvas edge, or QA reports `source_clipped`. A transparent border is expected
   for round icons (`detect_background` handles it).
-- **Engine A parity:** brushes anchor at `size // 2`; `doc_region` rects are inclusive `[x0,y0,x1,y1]`; ellipses use
+- **Pixel Forge parity:** brushes anchor at `size // 2`; `doc_region` rects are inclusive `[x0,y0,x1,y1]`; ellipses use
   Atelier's +0.5 inflation. Changing any of these breaks `tests/fixtures/showcase` replay.
-- **New builder checklist:** module in `artstudio/procedural/`, register in `_NAMES`, add `(frames, size)` to
-  `EngineATests` in `tests/test_integration.py`, add the Chinese description to `artstudio/web/i18n.js`, add a row to
-  both READMEs, add a CHANGELOG entry, look at the contact sheet yourself.
+- **New builder checklist:** module in `artstudio/procedural/` (`DESCRIPTION`, `ASSET_TYPE`, `PARAMS`, optional `LOOP = True`,
+  `build()`; paint by **palette index** so Forge recolouring works; params with `min`/`max`/`step` become sliders, `enum`
+  becomes chips), register in `_NAMES`, add `(frames, size)` to `PixelForgeTests` in `tests/test_integration.py`, add the
+  Chinese description to `artstudio/web/i18n.js`, add a row to both READMEs, add a CHANGELOG entry, look at the contact
+  sheet yourself. Keep 2 px clear of the canvas edge or QA reports `source_clipped`. Shared effect helpers: `procedural/_fx.py`.
 - **Never edit `vibe-game/`** (sibling project in the same parent folder).
 
 ## Keep DEVELOPMENT_PROGRESS.md current

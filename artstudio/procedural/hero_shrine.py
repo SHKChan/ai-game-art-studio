@@ -7,6 +7,7 @@ import math
 from .raster import DocBuilder, Grid, bayer4, hash01
 
 DESCRIPTION = "Shrine of Heroes: stone temple with a sword-raising hero statue, banners and animated braziers."
+LOOP = True
 ASSET_TYPE = "environment"
 PARAMS = {"frames": {"type": "int", "default": 4, "max": 8}, "banner": {"type": "string", "default": "red", "enum": ["red", "blue", "green"]}}
 

@@ -1,13 +1,13 @@
 ---
 name: sprite-sheet-processing
-description: Turn an external sprite sheet into a clean, aligned animation (Engine C).
+description: Turn an external sprite sheet into a clean, aligned animation (Asset Import).
 ---
 
 # Sprite Sheet Processing
 
-Turn an external sprite sheet into a clean, aligned animation (Engine C).
+Turn an external sprite sheet into a clean, aligned animation (Asset Import).
 
-CLI: `python -m artstudio <command>` (JSON on stdout). Web: http://127.0.0.1:8870. Procedural pixels come from Engine A (`procedural` provider, docs/engine-a-guide.md) — never paste pixels in with ad-hoc image code.
+CLI: `python -m artstudio <command>` (JSON on stdout). Web: http://127.0.0.1:8870. Procedural pixels come from Pixel Forge (`procedural` provider, docs/pixel-forge-guide.md) — never paste pixels in with ad-hoc image code.
 
 ## Required inputs
 Sheet PNG; grid (cols×rows/cell size) or auto-detect; background type; art mode; anchor policy.

@@ -1,4 +1,4 @@
-"""Prompt templates for Engine B (reference-driven character generation).
+"""Prompt templates for Motion Studio (reference-driven character generation).
 
 Prompts carry explicit identity constraints (proportions, clothing, hair, weapon geometry, palette,
 camera direction) taken from the locked character master, following Pixel Atelier's workflow rules:

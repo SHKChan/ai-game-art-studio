@@ -8,7 +8,8 @@ from .raster import DocBuilder, Grid, hash01
 
 DESCRIPTION = "8-frame crescent sword-slash effect with anticipation, sweep, impact flash and dissipation."
 ASSET_TYPE = "effect"
-PARAMS = {"size": {"type": "int", "default": 64}, "color": {"type": "string", "default": "azure", "enum": ["azure", "gold", "crimson"]}}
+PARAMS = {"size": {"type": "int", "default": 64}, "color": {"type": "string", "default": "azure", "enum": ["azure", "gold", "crimson"]},
+          "thickness": {"type": "float", "default": 1.0, "min": 0.5, "max": 1.6, "step": 0.1}}
 
 PALETTES = {
     "azure": ["#0c1636", "#1d3f8f", "#3279e0", "#78c4ff", "#c6f0ff", "#ffffff"],
@@ -29,7 +30,8 @@ FRAMES = [
 DURATIONS = [90, 40, 40, 40, 60, 60, 70, 80]
 
 
-def build(size: int = 64, color: str = "azure", **_):
+def build(size: int = 64, color: str = "azure", thickness: float = 1.0, **_):
+    thickness = max(0.5, min(1.6, float(thickness)))
     s = size / 64.0
     pal = PALETTES[color]
     d = DocBuilder(f"sword-slash-{color}", size, size)
@@ -52,7 +54,7 @@ def build(size: int = 64, color: str = "azure", **_):
                     u = (a - tail) / span  # 0 at tail, 1 at head
                     if u < 0:
                         continue
-                    w = thick * s * (u ** 0.45) * (1.0 if u < 0.92 else max(0.2, (1 - u) / 0.08))
+                    w = thick * thickness * s * (u ** 0.45) * (1.0 if u < 0.92 else max(0.2, (1 - u) / 0.08))
                     inner = R - w
                     if not (inner <= r <= R + 0.5):
                         continue

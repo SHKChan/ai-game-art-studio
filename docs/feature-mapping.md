@@ -5,21 +5,21 @@ Status: ✅ implemented & tested offline · 🧪 mock-tested only · ⛔ blocked
 
 | Spec area | Feature | Source | Where | Status |
 |---|---|---|---|---|
-| Engine A | Layered procedural drawing, palette, frames, export | A | `artstudio/engine` (own Python engine) | ✅ Atelier recipes replay pixel-identical |
-| Engine A | Deterministic builders: potion, chest, chest_open, fireball, sword_slash, ice_spear | N | `procedural/*.py` | ✅ |
-| Engine A | Agent call lists (`artstudio draw`) + authoring guide | N | `docs/engine-a-guide.md` | ✅ |
-| Engine A | Replayable recipes / editable documents | A | `doc.recipe`, `replay` command | ✅ pixel-identical replay tested |
-| Engine A | Document inspector (layers, cels, palette, calls) | N | Procedural Studio | ✅ |
-| Engine B | Reference-driven generation with identity constraints | N (rules from P) | `prompts.py`, `service.generate` | 🧪 (mock ComfyUI) |
-| Engine B | ComfyUI provider (HTTP+WS, upload, validation, queue, cancel, timeouts) | N | `providers/comfyui.py`, `comfy/` | 🧪 |
-| Engine B | Codex image bridge | P | `providers/codex_rpc.py` | ⛔ optional, codex CLI absent |
-| Engine B | Candidates / rejected versions / approved & locked masters | N (concept from P) | `workspace.py` | ✅ |
-| Engine B | Selective regeneration of one frame | N | `service.regenerate_frame` | 🧪 |
-| Engine B | Real AI art through the pipeline | P (knight sample) | `import_knight_sample` | ✅ (sample art, not generated here) |
-| Engine C | PNG, PNG sequence, sprite sheet (grid/auto), GIF/APNG/WebP | N | `processing/importers.py`, `frames.py` | ✅ |
-| Engine C | MP4/WebM via ffmpeg | N | `extract_video` | ✅ (ffmpeg present in test envs) |
-| Engine C | Background removal (solid/checker, pixel binary / HD soft) | N | `remove_background` | ✅ |
-| Engine C | Complex-background matting | N (ComfyUI workflow) | `rembg-inspyrenet` template | ⚠ unverified custom node |
+| Pixel Forge | Layered procedural drawing, palette, frames, export | A | `artstudio/engine` (own Python engine) | ✅ Atelier recipes replay pixel-identical |
+| Pixel Forge | Deterministic builders: potion, chest, chest_open, fireball, sword_slash, ice_spear | N | `procedural/*.py` | ✅ |
+| Pixel Forge | Agent call lists (`artstudio draw`) + authoring guide | N | `docs/pixel-forge-guide.md` | ✅ |
+| Pixel Forge | Replayable recipes / editable documents | A | `doc.recipe`, `replay` command | ✅ pixel-identical replay tested |
+| Pixel Forge | Document inspector (layers, cels, palette, calls) | N | Procedural Studio | ✅ |
+| Motion Studio | Reference-driven generation with identity constraints | N (rules from P) | `prompts.py`, `service.generate` | 🧪 (mock ComfyUI) |
+| Motion Studio | ComfyUI provider (HTTP+WS, upload, validation, queue, cancel, timeouts) | N | `providers/comfyui.py`, `comfy/` | 🧪 |
+| Motion Studio | Codex image bridge | P | `providers/codex_rpc.py` | ⛔ optional, codex CLI absent |
+| Motion Studio | Candidates / rejected versions / approved & locked masters | N (concept from P) | `workspace.py` | ✅ |
+| Motion Studio | Selective regeneration of one frame | N | `service.regenerate_frame` | 🧪 |
+| Motion Studio | Real AI art through the pipeline | P (knight sample) | `import_knight_sample` | ✅ (sample art, not generated here) |
+| Asset Import | PNG, PNG sequence, sprite sheet (grid/auto), GIF/APNG/WebP | N | `processing/importers.py`, `frames.py` | ✅ |
+| Asset Import | MP4/WebM via ffmpeg | N | `extract_video` | ✅ (ffmpeg present in test envs) |
+| Asset Import | Background removal (solid/checker, pixel binary / HD soft) | N | `remove_background` | ✅ |
+| Asset Import | Complex-background matting | N (ComfyUI workflow) | `rembg-inspyrenet` template | ⚠ unverified custom node |
 | Providers | Runtime availability, no silent substitution | N | `providers/__init__.py` | ✅ |
 | Providers | Mock provider (fixtures, labelled) | N | `MockGenerationProvider`, `mock_comfyui/` | ✅ |
 | Characters | ID, identity fields, palette, constraints, negatives, history | N | `schema/character.schema.json` | ✅ |

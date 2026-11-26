@@ -7,11 +7,11 @@ with their original MIT copyright notices, as the licence requires.
 ```
 MIT License — Copyright (c) 2026 Marmik Shah
 ```
-- **Not included as code.** Engine A (`artstudio/engine`) is an independent Python implementation of a subset of
+- **Not included as code.** Pixel Forge (`artstudio/engine`) is an independent Python implementation of a subset of
   Atelier's *tool-call format* (tool and argument names, document/recipe layout) so Atelier recipes replay; primitive
   semantics (rect, ellipse inflation, paint_grid) follow Atelier's documented behaviour.
 - `tests/fixtures/showcase/{potion,slash,torch,cat,explosion}.gif`, `{potion,slash}.recipe` — showcase art, MIT.
-- Drawing guidance adapted into `skills/` and `docs/engine-a-guide.md`.
+- Drawing guidance adapted into `skills/` and `docs/pixel-forge-guide.md`.
 
 ## Pixel Atelier — https://github.com/jinxingtaire/pixel-atelier (commit 15d199f68e6657af0873b3c950525c4bf28eed6f)
 ```

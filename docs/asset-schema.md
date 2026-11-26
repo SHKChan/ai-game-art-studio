@@ -17,7 +17,7 @@ external JSON-Schema tool as well.
 <workspace>/projects/<pid>/characters/<cid>/character.json   masters/ candidates/ concept/
 <workspace>/projects/<pid>/assets/<aid>/asset.json           source/ frames_src/ frames/ versions/vN/
 <workspace>/projects/<pid>/exports/<eid>/export_manifest.json + files
-<workspace>/projects/<pid>/engine/documents/<doc-uuid>/      Engine A editable documents (doc.json, cels/, doc.recipe)
+<workspace>/projects/<pid>/engine/documents/<doc-uuid>/      Pixel Forge editable documents (doc.json, cels/, doc.recipe)
 <workspace>/jobs/<jid>.json
 <workspace>/comfyui/workflows/<wid>.json                     user-imported templates
 ```

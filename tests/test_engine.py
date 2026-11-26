@@ -1,4 +1,4 @@
-"""Engine A (artstudio.engine) tests: tool semantics, persistence, determinism and compatibility with
+"""Pixel Forge (artstudio.engine) tests: tool semantics, persistence, determinism and compatibility with
 recipes recorded by the original Atelier editor (showcase fixtures, MIT © 2026 Marmik Shah)."""
 import json
 import tempfile

@@ -1,4 +1,4 @@
-"""Engine C — external asset import: PNG, PNG sequences, sprite sheets, GIF/APNG, MP4/WebM."""
+"""Asset Import — external asset import: PNG, PNG sequences, sprite sheets, GIF/APNG, MP4/WebM."""
 from __future__ import annotations
 
 import logging

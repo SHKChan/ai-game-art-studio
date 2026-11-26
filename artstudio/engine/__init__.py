@@ -1,4 +1,4 @@
-"""Engine A — the studio's own layered pixel-art engine (pure Python, Pillow + numpy).
+"""Pixel Forge — the studio's own layered pixel-art engine (pure Python, Pillow + numpy).
 
 Originally the studio drove the external Atelier editor (Rust, MIT © 2026 Marmik Shah). This package
 replaces it with an in-process engine that keeps Atelier's *call format* — a JSON object

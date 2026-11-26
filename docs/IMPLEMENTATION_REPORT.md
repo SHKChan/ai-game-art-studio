@@ -1,6 +1,6 @@
 # Implementation report — Stage A (offline engineering acceptance)
 
-> **Update (reorganisation):** the Rust Atelier binary and the `upstream/` checkouts were removed. Engine A is now the
+> **Update (reorganisation):** the Rust Atelier binary and the `upstream/` checkouts were removed. Pixel Forge is now the
 > studio's own Python engine with Atelier's call format (Atelier showcase recipes replay pixel-identical; builders render
 > identically to the earlier Atelier-based frames). Used Pixel Atelier code lives in `artstudio/` with MIT notices.
 > Encoding is UTF-8 throughout and the tool is bilingual (en / zh-CN). Current numbers: 63 automated tests, Playwright
@@ -22,7 +22,7 @@ adapted into skills.
 ### Reused from Pixel Atelier (imported unmodified)
 `spritepipe` build/check (run as an additional technical verifier), production STEPS and Chinese sheet prompt
 (`adapters.pixel_atelier_prompt`), Codex app-server client (optional provider), knight example art + manifest
-(genuine Engine B sample), workflow rules (single scale, whole-character poses, no per-frame fitting, technical ≠ visual
+(genuine Motion Studio sample), workflow rules (single scale, whole-character poses, no per-frame fitting, technical ≠ visual
 ≠ engine verification), review checklist and action brief content (skills).
 
 ### New in this studio

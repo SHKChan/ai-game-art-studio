@@ -9,7 +9,7 @@
  (JSON out)        │        └── JobQueue (threads, persisted jobs, budget, cancel/retry/resume)
    ┌───────────────┼────────────────────────────────────┬─────────────────────────────────┐
    │ Providers (runtime-checked)                        │ Processing / QA / Export         │
-   │  ProceduralProvider ──► artstudio.engine (Engine A) │  processing/frames.py (pixel+HD) │
+   │  ProceduralProvider ──► artstudio.engine (Pixel Forge) │  processing/frames.py (pixel+HD) │
    │      builders: artstudio.procedural                │  pipeline/spritepipe.py (checker)│
    │  ComfyUIProvider ──► ComfyUI HTTP + /ws            │  qa/ (deterministic + visual)    │
    │  ExternalAssetProvider (+ ffmpeg)                  │  export/ (atlas, plist, JSON…)   │
@@ -23,10 +23,10 @@
 ## Decisions
 
 1. **Self-contained Python codebase.** The repository started by driving two external projects (Atelier's Rust binary,
-   Pixel Atelier's Python modules). With the owner's approval it was reorganised: Engine A was re-implemented in Python
+   Pixel Atelier's Python modules). With the owner's approval it was reorganised: Pixel Forge was re-implemented in Python
    and the Pixel Atelier code actually used was moved into `artstudio/` (MIT notices kept). Benefits: no Rust toolchain
    or external binary on Windows, one dependency set (Pillow + numpy), and full control over encoding and i18n.
-2. **Engine A keeps Atelier's call format.** Tools and argument names follow Atelier (`doc_new`, `doc_paint_grid`,
+2. **Pixel Forge keeps Atelier's call format.** Tools and argument names follow Atelier (`doc_new`, `doc_paint_grid`,
    `doc_draw` …), documents keep `doc.json + cels/ + doc.recipe`. Compatibility is tested: Atelier showcase recipes
    (potion, slash) replay pixel-identical to Atelier's own GIFs, and all builders render identically to the earlier
    Atelier-rendered proof-of-concept frames. Unsupported Atelier tools fail with a clear error.
@@ -47,4 +47,4 @@
 ## Extension interfaces
 
 `Provider` (`providers/base.py`): `status()`, `capabilities()`, `generate()`, `cancel()`; register in
-`providers/Registry`. Engine tools: `artstudio/engine/tools.py` (`t_<name>`). Builders: `docs/engine-a-guide.md`.
+`providers/Registry`. Engine tools: `artstudio/engine/tools.py` (`t_<name>`). Builders: `docs/pixel-forge-guide.md`.

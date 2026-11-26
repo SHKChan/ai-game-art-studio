@@ -17,9 +17,9 @@ export async function renderHome(root, { show, projectForm }) {
       return el('span', { class: 'pill ' + (ok ? 'on' : 'off'), title: ok ? '' : (p?.status.reason || '') }, (ok ? '● ' : '○ ') + (id === 'codex' ? 'Codex CLI' : 'ComfyUI') + (p?.status.details?.is_mock ? ' (MOCK)' : '')); }),
     ['codex', 'comfyui'].some(id => prov(id)?.status.available) ? null : el('span', { class: 'muted' }, 'Install the Codex CLI or start ComfyUI to generate character frames.'));
   root.append(el('div', { class: 'entries' },
-    entry('🎬', 'Animate a character', 'Upload one character image, list the actions you need, and let Codex or your local ComfyUI draw every frame.', 'wizard', 'Start'),
-    entry('🧱', 'Make pixel assets', 'Items, icons, skill effects, props and buildings from the built-in pixel engine. Works offline, no AI needed.', 'procedural', 'Open'),
-    entry('📥', 'Import existing art', 'Sprite sheets, GIFs, videos or PNG frames: remove the background, slice and align them.', 'import', 'Open')), gen);
+    entry('🎬', 'Motion Studio', 'Animate a character: upload one image, list the actions you need, and let Codex or your local ComfyUI draw every frame.', 'wizard', 'Start'),
+    entry('🔥', 'Pixel Forge', 'Skill effects, items, icons and scenery from the built-in pixel engine — tweak speed, colours, outline and glow live. Works offline.', 'forge', 'Open'),
+    entry('📥', 'Asset Import', 'Bring in sprite sheets, GIFs, videos or PNG frames: remove the background, slice and align them.', 'import', 'Open')), gen);
   const chars = S.data.characters;
   if (chars.length) {
     const plans = await Promise.all(chars.slice(0, 12).map(c => api(`/api/projects/${S.project}/characters/${c.id}/plan`).catch(() => null)));

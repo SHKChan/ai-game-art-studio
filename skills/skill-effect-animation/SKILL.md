@@ -1,25 +1,25 @@
 ---
 name: skill-effect-animation
-description: Create spell/skill effects (fire, ice, lightning, smoke, slashes) as Engine A animations and attach them to characters.
+description: Create spell/skill effects (fire, ice, lightning, smoke, slashes) as Pixel Forge animations and attach them to characters.
 ---
 
 # Skill Effect Animation
 
-Create spell/skill effects (fire, ice, lightning, smoke, slashes) as Engine A animations and attach them to characters.
+Create spell/skill effects (fire, ice, lightning, smoke, slashes) as Pixel Forge animations and attach them to characters.
 
-CLI: `python -m artstudio <command>` (JSON on stdout). Web: http://127.0.0.1:8870. Procedural pixels come from Engine A (`procedural` provider, docs/engine-a-guide.md) — never paste pixels in with ad-hoc image code.
+CLI: `python -m artstudio <command>` (JSON on stdout). Web: http://127.0.0.1:8870. Procedural pixels come from Pixel Forge (`procedural` provider, docs/pixel-forge-guide.md) — never paste pixels in with ad-hoc image code.
 
 ## Required inputs
 Effect type; size; frames; palette; loop vs one-shot; anchor event on the character animation.
 
 ## Recommended workflow
-1. Builders `fireball`, `sword_slash` (colour variants) or new calls/builders following docs/engine-a-guide.md (carry motion in pixels not alpha).
+1. Builders `fireball`, `sword_slash` (colour variants) or new calls/builders following docs/pixel-forge-guide.md (carry motion in pixels not alpha).
 2. Rescale by integer factor to match the character's pixel scale (`reprocess --params '{"scale":2}'`).
 3. `hybrid --character-asset A --effect-asset E --event hit --offset dx dy` (plus event_offset_ms to land the effect's impact on the hit).
 4. Review the composite preview GIF; effect and character keep separate frames/timing in the export.
 
 ## Tool-selection rules
-Engine A; Animation Studio layers; Export composite preview.
+Pixel Forge; Animation Studio layers; Export composite preview.
 
 ## Prompt templates
 '8-frame crescent sword slash: anticipation glint, sweep with tapered trail, bright impact flash, thinning shards; 6-colour azure ramp; transparent.'

@@ -1,4 +1,4 @@
-"""Engine B action plans: the sequential action frames of one character.
+"""Motion Studio action plans: the sequential action frames of one character.
 
 A plan lives in `characters/<cid>/action_plan.json`:
 

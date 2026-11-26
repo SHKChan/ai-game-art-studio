@@ -43,9 +43,9 @@ class Studio:
             "batch_actions": self._job_batch_actions,
         }, workers=workers)
 
-    # ------------------------------------------------------------------ Engine A
+    # ------------------------------------------------------------------ Pixel Forge
     def procedural(self, pid: str, builder: str, params: dict | None = None, name: str | None = None,
-                   character_id: str | None = None, ctx=None) -> dict:
+                   character_id: str | None = None, ctx=None, edits: dict | None = None) -> dict:
         from .procedural import BUILDERS
         from .providers.base import JobContext
         b = BUILDERS.get(builder)
@@ -54,7 +54,7 @@ class Studio:
         prov = self.registry.get("procedural")
         tmp = self.ws.root / "tmp" / new_id("atl")
         req = GenerationRequest("procedural", {"home": str(self.ws.engine_home(pid)), "builder": builder,
-                                               "builder_params": params or {}}, out_dir=tmp)
+                                               "builder_params": params or {}, "edits": edits or None}, out_dir=tmp)
         res = prov.generate(req, ctx or JobContext())
         frames = [(Image.open(p).convert("RGBA"), d) for p, d in zip(res.images, res.metadata["durations"])]
         asset = create_animation_asset(
@@ -64,17 +64,71 @@ class Studio:
             provider={"id": "procedural", "kind": "procedural", "is_test_fixture": False,
                       "details": {"calls": res.metadata["calls"]}},
             character_id=character_id, origin="procedural", asset_type=b.ASSET_TYPE if b.ASSET_TYPE != "animation" else "animation",
-            loop=builder in ("fireball",), tags=["procedural", builder])
+            loop=(edits or {}).get("loop") if (edits or {}).get("loop") is not None else bool(getattr(b, "LOOP", False)),
+            tags=["procedural", builder])
         d = self.ws.asset_dir(pid, asset["id"])
         rec_dst = d / "source" / "doc.recipe"
         shutil.copyfile(res.metadata["recipe"], rec_dst)
         asset["procedural"] = {"engine": "artstudio-pixel", "doc_id": res.metadata["doc_id"], "recipe": "source/doc.recipe",
-                               "builder": builder, "params": params or {}}
+                               "builder": builder, "params": params or {}, "edits": edits or {}}
         asset["source_files"].append({"path": "source/doc.recipe", "role": "engine-recipe", "origin": "procedural"})
         shutil.rmtree(tmp, ignore_errors=True)
         self.ws.save_asset(asset)
         check_asset(self.ws, asset)
         return self.ws.get_asset(pid, asset["id"])
+
+    def forge_preview(self, builder: str, params: dict | None = None, edits: dict | None = None) -> dict:
+        """Pixel Forge live preview: build + edits in a throw-away engine home; frames as PNG data URLs."""
+        import base64
+        import io
+        import time
+        from .procedural import BUILDERS
+        from .procedural.edits import base_palette, final_palette, normalize
+        from .providers.base import JobContext
+        b = BUILDERS.get(builder)
+        if not b:
+            raise StudioError(f"Unknown builder {builder}. Available: {sorted(BUILDERS)}")
+        t0 = time.time()
+        tmp = self.ws.root / "tmp" / new_id("forge")
+        try:
+            res = self.registry.get("procedural").generate(GenerationRequest(
+                "procedural", {"home": str(tmp / "home"), "builder": builder, "builder_params": params or {}, "edits": edits or None},
+                out_dir=tmp / "out"), JobContext())
+            frames = []
+            for p in res.images:
+                buf = io.BytesIO()
+                with Image.open(p) as im:
+                    size = im.size
+                    im.save(buf, "PNG")
+                frames.append("data:image/png;base64," + base64.b64encode(buf.getvalue()).decode())
+            calls = b.build(**(params or {}))
+            e = normalize(edits)
+            return {"frames": frames, "durations": res.metadata["durations"], "size": list(size),
+                    "base_palette": base_palette(calls), "palette": final_palette(calls, e),
+                    "loop": e["loop"] if e["loop"] is not None else bool(getattr(b, "LOOP", False)),
+                    "ms": int((time.time() - t0) * 1000)}
+        finally:
+            shutil.rmtree(tmp, ignore_errors=True)
+
+    def forge_thumbnail(self, builder: str) -> Path:
+        """Cached first frame of a builder with default params (gallery thumbnails)."""
+        from .procedural import BUILDERS
+        if builder not in BUILDERS:
+            raise StudioError(f"Unknown builder {builder}")
+        mod = Path(BUILDERS[builder].__file__)
+        out = self.ws.root / "cache" / "forge" / f"{builder}-{int(mod.stat().st_mtime)}.png"
+        if not out.is_file():
+            from .providers.base import JobContext
+            tmp = self.ws.root / "tmp" / new_id("thumb")
+            try:
+                res = self.registry.get("procedural").generate(GenerationRequest(
+                    "procedural", {"home": str(tmp / "home"), "builder": builder, "builder_params": {}}, out_dir=tmp / "out"), JobContext())
+                pick = res.images[min(len(res.images) - 1, len(res.images) // 2)]
+                out.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(pick, out)
+            finally:
+                shutil.rmtree(tmp, ignore_errors=True)
+        return out
 
     def draw_calls(self, pid: str, calls: list[dict], name: str, asset_type: str = "item", ctx=None) -> dict:
         """Run an agent-authored list of pixel-engine tool calls ({"name","arguments"}, "$DOC" = new doc id).
@@ -116,7 +170,7 @@ class Studio:
         shutil.rmtree(tmp, ignore_errors=True)
         return self.ws.save_asset(a)
 
-    # ------------------------------------------------------------------ Engine C
+    # ------------------------------------------------------------------ Asset Import
     def import_file(self, pid: str, path: Path, *, name: str | None = None, mode: str = "pixel", slicing: dict | None = None,
                     background: dict | None = None, normalize: dict | None = None, video: dict | None = None,
                     anim_name: str = "imported", direction: str = "none", character_id: str | None = None,
@@ -177,7 +231,7 @@ class Studio:
                                       character_id=character_id, template=template, source_file=path, source_rects=rects,
                                       origin=origin, processing_note={"import": steps})
 
-    # ------------------------------------------------------------------ Engine B
+    # ------------------------------------------------------------------ Motion Studio
     def import_knight_sample(self, pid: str, character_id: str, actions: list[str] | None = None, mode: str = "pixel") -> list[dict]:
         """Bring the bundled knight sample (whole-character, side view, right-facing; AI-generated) into the studio."""
         mapping = {"idle": "idle", "run": "run", "dash": "dash", "light": "combo_attack", "heavy": "attack", "jump": "jump",
@@ -261,7 +315,7 @@ class Studio:
         check_asset(self.ws, asset)
         return self.ws.get_asset(pid, asset["id"])
 
-    # ------------------------------------------------------------------ Engine B: action plans (sequential action frames)
+    # ------------------------------------------------------------------ Motion Studio: action plans (sequential action frames)
     def prompt_language(self, pid: str, override: str | None = None) -> str:
         return override or self.ws.get_project(pid).get("prompt_language") or self.cfg.prompt_language
 
@@ -470,7 +524,8 @@ class Studio:
 
     # ------------------------------------------------------------------ job handlers
     def _job_procedural(self, p, ctx, budget, job):
-        a = self.procedural(job["project_id"], p["builder"], p.get("params"), p.get("name"), p.get("character_id"), ctx=ctx)
+        a = self.procedural(job["project_id"], p["builder"], p.get("params"), p.get("name"), p.get("character_id"), ctx=ctx,
+                            edits=p.get("edits"))
         return {"asset_id": a["id"]}
 
     def _job_replay(self, p, ctx, budget, job):

@@ -35,17 +35,37 @@ def main():
         # Home: create a project via the inline form, then the three entry points appear
         page.locator("#projectForm input").first.fill("UI Test RPG")
         page.get_by_role("button", name="Create project").click()
-        expect(page.locator(".entry h3", has_text="Animate a character")).to_be_visible()
+        expect(page.locator(".entry h3", has_text="Motion Studio")).to_be_visible()
         shot(page, "00_home")
-        # Pixel assets: run chest_open with the pixel engine
-        page.get_by_role("button", name="Pixel assets").click()
+        # Pixel Forge: live editor — pick a skill, change variant / speed / colours / outline / glow, save and export
+        page.locator(".tabs").get_by_role("button", name="Pixel Forge", exact=True).click()
+        fg = page.locator("#tab-forge")
+        fg.locator(".fitem", has_text="Heal").click()
+        expect(fg.locator(".fstage h3")).to_have_text("Heal")
+        expect(fg.locator(".fstage .small.muted").last).to_contain_text("rendered in", timeout=30000)
+        expect(fg.locator(".fthumbs img")).to_have_count(8)
+        fg.locator(".chip", has_text="gold").click()
+        fg.get_by_label("Speed").fill("2")
+        fg.get_by_label("Outline", exact=True).fill("1")
+        fg.get_by_label("Glow", exact=True).fill("2")
+        fg.get_by_label("Hue").fill("40")
+        page.wait_for_timeout(1200)
+        expect(fg.locator(".fstage .small.muted").last).to_contain_text("~22 fps", timeout=30000)
+        expect(fg.locator(".swatch-in")).to_have_count(6)
+        shot(page, "01_forge")
+        fg.get_by_role("button", name="Save & export").click()
+        expect(fg.get_by_role("link", name="⬇ Download ZIP")).to_be_visible(timeout=120000)
+        expect(fg.locator(".fsaved")).to_have_count(1)
+        # Pixel documents (advanced): run chest_open and inspect the engine document
+        page.get_by_role("button", name="More tools ▸").click()
+        page.get_by_role("button", name="Pixel documents").click()
         page.locator("#tab-procedural select").first.select_option("chest_open")
         page.get_by_role("button", name="Run with pixel engine").click()
         page.wait_for_selector("#tab-procedural .cels img", timeout=60000)
         shot(page, "01_procedural")
         # Guided flow: Home -> Animate a character
         page.get_by_role("button", name="Home", exact=True).click()
-        page.locator(".entry", has_text="Animate a character").click()
+        page.locator(".entry", has_text="Motion Studio").click()
         w = page.locator("#tab-wizard")
         w.get_by_label("Character name").fill("Test Knight")
         w.locator("input[type=file]").set_input_files(str(ROOT / "samples" / "knight" / "idle" / "poster.png"))
@@ -103,7 +123,7 @@ def main():
         page.get_by_role("button", name="Delete", exact=True).click()
         expect(page.locator(".tframe")).to_have_count(n0, timeout=20000)
         # Import: upload a real GIF (showcase fixture)
-        page.get_by_role("button", name="Import", exact=True).click()
+        page.locator(".tabs").get_by_role("button", name="Asset Import", exact=True).click()
         gif = ROOT / "tests" / "fixtures" / "showcase" / "explosion.gif"
         page.locator("#tab-import input[type=file]").set_input_files(str(gif))
         page.get_by_role("button", name="Import & process", exact=True).click()
@@ -128,27 +148,33 @@ def main():
         page.reload()
         page.wait_for_selector("text=Continue")
         expect(page.locator("#tab-home .pick", has_text="Test Knight")).to_be_visible()
-        # Theme toggle
-        page.locator("#themeBtn").click()
+        # Theme: System / Dark / Light
+        page.select_option("#themeSelect", "light")
+        expect(page.locator("html")).to_have_attribute("data-theme", "light")
+        page.locator(".tabs").get_by_role("button", name="Pixel Forge", exact=True).click()
+        expect(page.locator("#tab-forge .fstage .small.muted").last).to_contain_text("rendered in", timeout=30000)
         shot(page, "08_light_theme")
-        page.locator("#themeBtn").click()
+        page.reload()
+        expect(page.locator("html")).to_have_attribute("data-theme", "light")
+        page.select_option("#themeSelect", "dark")
+        expect(page.locator("html")).to_have_attribute("data-theme", "dark")
         # Chinese UI: switch language (persists and reloads), every workspace must render translated
         page.select_option("#langSelect", "zh-CN")
-        page.wait_for_selector("text=制作角色动画")
+        page.wait_for_selector("text=动作工作室")
         page.get_by_role("button", name="更多工具 ▸").click()
-        for i, (tab, marker) in enumerate([("角色动画", "你的角色"), ("像素素材", "像素引擎配方"), ("导入", "导入并处理"),
+        for i, (tab, marker) in enumerate([("动作工作室", "你的角色"), ("像素工坊", "技能与特效"), ("素材导入", "导入并处理"),
                                            ("资源库", "素材"), ("导出", "导出记录"), ("动画编辑器", "选择一个动画"),
-                                           ("角色详情", "新建角色"), ("生成与工作流", "生成动画关键帧")]):
+                                           ("角色详情", "新建角色"), ("生成与工作流", "生成动画关键帧"), ("像素文档", "像素引擎配方")]):
             page.locator(".tabs").get_by_role("button", name=tab, exact=True).click()
             page.locator(f"text={marker} >> visible=true").first.wait_for(timeout=20000)
             shot(page, f"zh_{i:02d}")
-        page.locator(".tabs").get_by_role("button", name="角色动画", exact=True).click()
+        page.locator(".tabs").get_by_role("button", name="动作工作室", exact=True).click()
         page.locator("#tab-wizard .pick", has_text="Test Knight").click()
         page.locator("#tab-wizard .step", has_text="检查与导出").click()
         page.locator("text=点击某一帧即可只重做这一帧。 >> visible=true").first.wait_for(timeout=20000)
         shot(page, "zh_wizard_review")
         page.select_option("#langSelect", "en")
-        page.wait_for_selector("text=Animate a character")
+        page.wait_for_selector("text=Motion Studio")
         b.close()
     if errors:
         print("Console errors:", *errors, sep="\n  ")

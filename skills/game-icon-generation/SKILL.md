@@ -1,13 +1,13 @@
 ---
 name: game-icon-generation
-description: Produce inventory/equipment/UI icons (potions, chests, weapons, armour) as layered Engine A documents at a fixed grid size.
+description: Produce inventory/equipment/UI icons (potions, chests, weapons, armour) as layered Pixel Forge documents at a fixed grid size.
 ---
 
 # Game Icon Generation
 
-Produce inventory/equipment/UI icons (potions, chests, weapons, armour) as layered Engine A documents at a fixed grid size.
+Produce inventory/equipment/UI icons (potions, chests, weapons, armour) as layered Pixel Forge documents at a fixed grid size.
 
-CLI: `python -m artstudio <command>` (JSON on stdout). Web: http://127.0.0.1:8870. Procedural pixels come from Engine A (`procedural` provider, docs/engine-a-guide.md) — never paste pixels in with ad-hoc image code.
+CLI: `python -m artstudio <command>` (JSON on stdout). Web: http://127.0.0.1:8870. Procedural pixels come from Pixel Forge (`procedural` provider, docs/pixel-forge-guide.md) — never paste pixels in with ad-hoc image code.
 
 ## Required inputs
 Icon list; size (16/24/32/48/64); shared palette; style rules (outline colour, light direction top-left); background policy (transparent).
@@ -19,7 +19,7 @@ Icon list; size (16/24/32/48/64); shared palette; style rules (outline colour, l
 4. Run `qa`; export with `export --formats atlas json cocos phaser` so all icons share one atlas.
 
 ## Tool-selection rules
-Engine A only. External/AI art only if the user supplies it (import → pixel mode → palette snap).
+Pixel Forge only. External/AI art only if the user supplies it (import → pixel mode → palette snap).
 
 ## Prompt templates
 '64x64 fantasy health potion: round flask, red liquid with sphere shading, cork, gold tie, white specular arc top-left, 1px dark outline, transparent background.'

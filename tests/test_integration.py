@@ -19,7 +19,7 @@ from artstudio.util import StudioError
 
 
 
-class EngineATests(unittest.TestCase):
+class PixelForgeTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.tmp = temp_workspace()
@@ -31,7 +31,9 @@ class EngineATests(unittest.TestCase):
         cleanup(cls.tmp)
 
     def test_builders_produce_editable_documents(self):
-        expected = {"potion": (1, 64), "chest": (1, 64), "chest_open": (8, 64), "fireball": (8, 64), "sword_slash": (8, 64), "ice_spear": (1, 32), "hero_shrine": (4, 96)}
+        expected = {"potion": (1, 64), "chest": (1, 64), "chest_open": (8, 64), "fireball": (8, 64), "sword_slash": (8, 64), "ice_spear": (1, 32), "hero_shrine": (4, 96),
+                    "heal": (8, 64), "buff_aura": (8, 64), "lightning_strike": (8, 64), "shield_barrier": (8, 64),
+                    "frost_nova": (8, 64), "poison_cloud": (8, 64)}
         for b, (n, size) in expected.items():
             a = self.s.procedural(self.p["id"], b)
             self.assertEqual(len(a["animation"]["frames"]), n, b)

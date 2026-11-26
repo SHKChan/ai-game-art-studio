@@ -6,6 +6,7 @@ import math
 from .raster import DocBuilder, Grid, bayer4, hash01, vnoise
 
 DESCRIPTION = "Looping 8-frame fireball projectile (faces right) with hot core, flame tongues and trailing embers."
+LOOP = True
 ASSET_TYPE = "effect"
 PARAMS = {"size": {"type": "int", "default": 64}, "frames": {"type": "int", "default": 8}}
 

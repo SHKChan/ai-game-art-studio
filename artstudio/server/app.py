@@ -202,8 +202,12 @@ def api_replay(s, h, m, q, body):
 
 @route("POST", r"/api/projects/(?P<pid>[a-z0-9_-]+)/procedural")
 def api_procedural(s, h, m, q, body):
+    if body.get("edits"):
+        from ..procedural.edits import normalize
+        normalize(body["edits"])  # validate now (400) rather than failing later in the job
     return s.jobs.submit("procedural", {"builder": body["builder"], "params": body.get("params", {}), "name": body.get("name"),
-                                        "character_id": body.get("character_id")}, project_id=m["pid"], label=f"procedural {body['builder']}")
+                                        "character_id": body.get("character_id"), "edits": body.get("edits") or None},
+                         project_id=m["pid"], label=f"Pixel Forge {body['builder']}")
 
 
 @route("POST", r"/api/projects/(?P<pid>[a-z0-9_-]+)/import")
@@ -324,7 +328,29 @@ def api_char_report(s, h, m, q, body):
     return s.character_report(m["pid"], m["cid"], body.get("animations", ["idle", "walk", "attack"]))
 
 
-# guided flow: character animation (Engine B action plans)
+# Pixel Forge (procedural builders + quick edits)
+@route("GET", r"/api/forge/builders")
+def api_forge_builders(s, h, m, q, body):
+    from ..procedural import BUILDERS
+    from ..procedural.edits import DEFAULTS
+    group = {"effect": "Skills & effects", "icon": "Items & icons", "item": "Items & icons", "animation": "Items & icons",
+             "environment": "Scenery"}
+    return {"builders": {k: {"description": b.DESCRIPTION, "params": b.PARAMS, "asset_type": b.ASSET_TYPE,
+                             "loop": bool(getattr(b, "LOOP", False)), "group": group.get(b.ASSET_TYPE, "Other")} for k, b in BUILDERS.items()},
+            "edit_defaults": DEFAULTS}
+
+
+@route("POST", r"/api/forge/preview")
+def api_forge_preview(s, h, m, q, body):
+    return s.forge_preview(body["builder"], body.get("params") or {}, body.get("edits") or {})
+
+
+@route("GET", r"/api/forge/thumb/(?P<b>[a-z0-9_]+)\.png")
+def api_forge_thumb(s, h, m, q, body):
+    return (s.forge_thumbnail(m["b"]).read_bytes(), "image/png")
+
+
+# guided flow: character animation (Motion Studio action plans)
 @route("GET", r"/api/action-presets")
 def api_action_presets(s, h, m, q, body):
     from ..actions import presets

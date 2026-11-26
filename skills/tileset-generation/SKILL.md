@@ -1,13 +1,13 @@
 ---
 name: tileset-generation
-description: Create seamless terrain tiles and tilesets with Engine A, verified with its seam report.
+description: Create seamless terrain tiles and tilesets with Pixel Forge, verified with its seam report.
 ---
 
 # Tileset Generation
 
-Create seamless terrain tiles and tilesets with Engine A, verified with its seam report.
+Create seamless terrain tiles and tilesets with Pixel Forge, verified with its seam report.
 
-CLI: `python -m artstudio <command>` (JSON on stdout). Web: http://127.0.0.1:8870. Procedural pixels come from Engine A (`procedural` provider, docs/engine-a-guide.md) — never paste pixels in with ad-hoc image code.
+CLI: `python -m artstudio <command>` (JSON on stdout). Web: http://127.0.0.1:8870. Procedural pixels come from Pixel Forge (`procedural` provider, docs/pixel-forge-guide.md) — never paste pixels in with ad-hoc image code.
 
 ## Required inputs
 Tile size (16/32); terrain types; transitions needed (edges/corners); palette; top-down vs side-view.
@@ -20,7 +20,7 @@ Tile size (16/32); terrain types; transitions needed (edges/corners); palette; t
 5. Run it with `procedural`/`draw` and export as sheet + JSON.
 
 ## Tool-selection rules
-Engine A (doc_seam_report, doc_look tile=true; shading with raster.ramp_pick). Studio exports with `--formats sheet json` (do not trim tiles: use `trim=false`).
+Pixel Forge (doc_seam_report, doc_look tile=true; shading with raster.ramp_pick). Studio exports with `--formats sheet json` (do not trim tiles: use `trim=false`).
 
 ## Prompt templates
 '32x32 top-down grass tile, 5-colour green ramp, sparse 2-pixel flowers, seamless on all sides, no single-pixel noise.'

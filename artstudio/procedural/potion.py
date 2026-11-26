@@ -7,6 +7,7 @@ import math
 from .raster import DocBuilder, Grid, ramp_pick
 
 DESCRIPTION = "Round-bottom fantasy potion flask (health red by default) with layered glass, liquid, cork and highlights."
+LOOP = True
 ASSET_TYPE = "item"
 PARAMS = {"size": {"type": "int", "default": 64}, "frames": {"type": "int", "default": 1, "max": 12},
           "liquid": {"type": "string", "default": "red", "enum": ["red", "blue", "green", "purple"]}}

@@ -2,7 +2,7 @@
 
   python demo/build_poc.py [--workspace DIR] [--out deliverables/poc]
 
-Test A  Pixel engine (Engine A): potion, chest, 8-frame chest opening, 8-frame fireball, 8-frame sword slash.
+Test A  Pixel engine (Pixel Forge): potion, chest, 8-frame chest opening, 8-frame fireball, 8-frame sword slash.
 Test B  AI character production. No image generator is reachable offline, so:
           * genuine AI-generated whole-character art (bundled knight sample) is processed
             through the character master system in pixel mode AND HD mode (no regeneration);

@@ -96,7 +96,7 @@ reviewed identity/proportion consistency, and GPU time per job is acceptable.
 - Restore on another PC: `python -m artstudio restore backup.zip D:\GameArt\ws` (target must be empty), then start with
   `-Workspace D:\GameArt\ws`.
 - Upgrading the app: workspaces carry `schema_version`; the app migrates older ones on open and refuses newer ones.
-- Engine A documents travel inside the workspace (`projects/<pid>/engine`); recipes are plain JSON lines and replay on
+- Pixel Forge documents travel inside the workspace (`projects/<pid>/engine`); recipes are plain JSON lines and replay on
   any machine. Workspaces created before the engine switch keep their rendered frames; replay their recipe to rebuild
   the editable document.
 

@@ -1,6 +1,6 @@
 # Limitations
 
-## Engine A (own pixel engine, Atelier-compatible)
+## Pixel Forge (own pixel engine, Atelier-compatible)
 
 | Limitation | Handling |
 |---|---|
@@ -8,9 +8,9 @@
 | Draw primitives `stroke aa`, `curve`, `stamp`, `gradient`, `noise`, `scatter`, `text`, palette `generate/snap/swap` are absent | Builders compute such effects in Python (`raster.vnoise`, `ramp_pick`) and paint them |
 | Intentional superset: `doc_draw`/`doc_fx` accept palette indices as `color` (Atelier only accepts them in `doc_paint_grid`) | Call lists meant to run on Atelier too should use `#rrggbb` colours |
 | Verified identical to Atelier (0 differing pixels): showcase potion/slash recipes, a primitives stress test (rect, ellipse, lines incl. thick brush, polyline, fill, pencil, outline, flip, shift, region clear/move, frames, durations), the sword icon, all 6 builders | `tests/fixtures/atelier_reference` + `tests/test_engine.py` keep it that way |
-| Assets made by the earlier Rust-Atelier integration keep their frames, but their documents were in Atelier's own store | Replay `source/doc.recipe` to rebuild an editable Engine A document |
+| Assets made by the earlier Rust-Atelier integration keep their frames, but their documents were in Atelier's own store | Replay `source/doc.recipe` to rebuild an editable Pixel Forge document |
 
-## Character pipeline / Engine B
+## Character pipeline / Motion Studio
 
 | Limitation | Handling |
 |---|---|

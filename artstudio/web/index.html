@@ -16,13 +16,13 @@
   <div class="spacer"></div>
   <div id="providerPills" class="pills" aria-label="Provider status"></div>
   <select id="langSelect" aria-label="Language" data-no-i18n></select>
-  <button id="themeBtn" class="ghost" title="Toggle light/dark">◐</button>
+  <select id="themeSelect" aria-label="Theme" title="Theme"></select>
 </header>
 <nav class="tabs" role="tablist">
   <button data-tab="home" class="active">Home</button>
-  <button data-tab="wizard">Animate character</button>
-  <button data-tab="procedural">Pixel assets</button>
-  <button data-tab="import">Import</button>
+  <button data-tab="wizard">Motion Studio</button>
+  <button data-tab="forge">Pixel Forge</button>
+  <button data-tab="import">Asset Import</button>
   <button data-tab="library">Library</button>
   <button data-tab="export">Export</button>
   <span class="sep"></span>
@@ -30,10 +30,12 @@
   <button data-tab="animation" class="adv">Animation editor</button>
   <button data-tab="character" class="adv">Character details</button>
   <button data-tab="generate" class="adv">Generation &amp; workflows</button>
+  <button data-tab="procedural" class="adv">Pixel documents</button>
 </nav>
 <main>
   <section id="tab-home" class="tab active"></section>
   <section id="tab-wizard" class="tab"></section>
+  <section id="tab-forge" class="tab"></section>
   <section id="tab-library" class="tab"></section>
   <section id="tab-character" class="tab"></section>
   <section id="tab-animation" class="tab"></section>

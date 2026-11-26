@@ -14,7 +14,7 @@ from .base import Cancelled, GenerationError, GenerationRequest, GenerationResul
 
 
 class ExternalAssetProvider(Provider):
-    """Engine C: artwork produced elsewhere (any tool, any service). Always available."""
+    """Asset Import: artwork produced elsewhere (any tool, any service). Always available."""
     id = "external"
     name = "External assets (import)"
     kind = "import"

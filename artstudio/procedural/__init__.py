@@ -1,9 +1,10 @@
-"""Procedural builders for Engine A. Each builder is a deterministic generator of pixel-engine tool
+"""Procedural builders for Pixel Forge. Each builder is a deterministic generator of pixel-engine tool
 calls (DESCRIPTION, PARAMS, ASSET_TYPE, build(**params) -> list[call]). The engine executes them,
 stores the layered document and records its own replayable `doc.recipe`."""
 from importlib import import_module
 
-_NAMES = ["potion", "chest", "chest_open", "fireball", "sword_slash", "ice_spear", "hero_shrine"]
+_NAMES = ["potion", "chest", "chest_open", "fireball", "sword_slash", "ice_spear", "hero_shrine",
+          "heal", "buff_aura", "lightning_strike", "shield_barrier", "frost_nova", "poison_cloud"]
 BUILDERS = {}
 for _n in _NAMES:
     try:

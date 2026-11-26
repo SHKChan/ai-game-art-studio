@@ -65,12 +65,13 @@ def build_parser():
     c.add_argument("--reason", default="")
     c.add_argument("--animations", nargs="*", default=["idle", "walk", "attack"])
 
-    pr = sub.add_parser("procedural", help="draw with the pixel engine via a builder")
+    pr = sub.add_parser("procedural", help="Pixel Forge: draw a builder (optionally with --edits)")
     pr.add_argument("builder")
     pr.add_argument("--project", required=True)
     pr.add_argument("--params", default="{}")
     pr.add_argument("--name")
     pr.add_argument("--character")
+    pr.add_argument("--edits", default="{}", help='Pixel Forge edits JSON, e.g. {"speed":1.5,"hue":40,"outline":1,"glow":2,"flip":true,"scale":2}')
 
     dr = sub.add_parser("draw", help="run an agent-authored pixel-engine call list (JSON array or JSONL; \"$DOC\" = the new doc id)")
     dr.add_argument("file")
@@ -175,7 +176,7 @@ def build_parser():
     rs.add_argument("archive")
     rs.add_argument("target")
 
-    an = sub.add_parser("animate", help="Engine B guided flow: reference image -> actions -> prompts -> one strip per action")
+    an = sub.add_parser("animate", help="Motion Studio guided flow: reference image -> actions -> prompts -> one strip per action")
     an.add_argument("action", choices=["new", "add", "remove", "show", "prompts", "generate"])
     an.add_argument("--project", required=True)
     an.add_argument("--character", help="character id (all actions except new)")
@@ -286,7 +287,8 @@ def _run(args, cfg, Studio):
             return _j(s.ws.unlock_master(a.project, a.id, a.direction, a.reason))
         return _j(s.character_report(a.project, a.id, a.animations))
     if a.cmd == "procedural":
-        return _j(_brief(s.procedural(a.project, a.builder, json.loads(a.params), a.name, a.character, ctx=_ctx())))
+        return _j(_brief(s.procedural(a.project, a.builder, json.loads(a.params), a.name, a.character, ctx=_ctx(),
+                                      edits=json.loads(a.edits) or None)))
     if a.cmd == "draw":
         text = Path(a.file).read_text(encoding="utf-8").strip()
         calls = json.loads(text) if text.startswith("[") else [json.loads(x) for x in text.splitlines() if x.strip() and not x.startswith("#")]

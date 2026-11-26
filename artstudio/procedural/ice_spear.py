@@ -1,4 +1,4 @@
-"""Skill icon: an ice spear on a round frame (32x32 by default). Worked example in docs/engine-a-guide.md.
+"""Skill icon: an ice spear on a round frame (32x32 by default). Worked example in docs/pixel-forge-guide.md.
 
 Demonstrates the builder pattern: palette ramps, one Grid per layer, shading from a light direction,
 selective outline, optional element variants via params."""

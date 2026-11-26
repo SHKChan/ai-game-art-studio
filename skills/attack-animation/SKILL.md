@@ -7,7 +7,7 @@ description: Produce attack/combo animations with anticipation, action, impact, 
 
 Produce attack/combo animations with anticipation, action, impact, follow-through and recovery, plus hit events.
 
-CLI: `python -m artstudio <command>` (JSON on stdout). Web: http://127.0.0.1:8870. Procedural pixels come from Engine A (`procedural` provider, docs/engine-a-guide.md) — never paste pixels in with ad-hoc image code.
+CLI: `python -m artstudio <command>` (JSON on stdout). Web: http://127.0.0.1:8870. Procedural pixels come from Pixel Forge (`procedural` provider, docs/pixel-forge-guide.md) — never paste pixels in with ad-hoc image code.
 
 ## Required inputs
 Locked master + weapon spec; template `attack` or `combo_attack`; 6-10 frames per direction; desired hit timing.
@@ -17,10 +17,10 @@ Locked master + weapon spec; template `attack` or `combo_attack`; 6-10 frames pe
 2. Generate the sheet; keep wide cells so the blade and trail are never cropped.
 3. Import with anchor `source` (preserve lunge) and canvas expansion; verify no `clipped_sprite`/`source_clipped`.
 4. Place `hit` events at impact frames; tune durations (fast action, held impact, slower recovery).
-5. Optionally attach an Engine A effect layer (`hybrid`).
+5. Optionally attach an Pixel Forge effect layer (`hybrid`).
 
 ## Tool-selection rules
-ComfyUI pose_keyframe for single broken poses; Engine A for slash/impact effects; Animation Studio events and comparison.
+ComfyUI pose_keyframe for single broken poses; Pixel Forge for slash/impact effects; Animation Studio events and comparison.
 
 ## Prompt templates
 Template poses: 'ready; anticipation wind-up; anticipation peak; action swing; impact; follow-through; recovery; return to ready'. Add weapon geometry and 'both hands on the same straight hilt' constraints.

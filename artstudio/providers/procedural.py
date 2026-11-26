@@ -1,4 +1,4 @@
-"""Engine A provider — runs procedural builders, agent-authored call lists and recipes on the studio's own
+"""Pixel Forge provider — runs procedural builders, agent-authored call lists and recipes on the studio's own
 pixel engine (artstudio.engine). In-process, no external binary; always available."""
 from __future__ import annotations
 
@@ -11,7 +11,7 @@ from .base import GenerationError, GenerationRequest, GenerationResult, JobConte
 
 class ProceduralProvider(Provider):
     id = "procedural"
-    name = "Pixel engine (Engine A)"
+    name = "Pixel Forge"
     kind = "procedural"
 
     def status(self) -> ProviderStatus:
@@ -32,15 +32,29 @@ class ProceduralProvider(Provider):
         home = Path(req.params["home"])
         out = Path(req.out_dir or home / "out")
         out.mkdir(parents=True, exist_ok=True)
+        from ..procedural.edits import EditError, apply_post, normalize, recolor_calls
         eng = Engine(home)
         try:
-            if req.params.get("builder"):
-                b = BUILDERS.get(req.params["builder"])
-                if not b:
-                    raise GenerationError(f"Unknown builder {req.params['builder']}", "bad_request")
-                doc_id = eng.run(b.build(**(req.params.get("builder_params") or {})), progress=lambda p, m: ctx.progress(p * 0.9, m), cancel=ctx.check_cancel)
-            elif req.params.get("calls"):
-                doc_id = eng.run(req.params["calls"], progress=lambda p, m: ctx.progress(p * 0.9, m), cancel=ctx.check_cancel)
+            edits = normalize(req.params.get("edits")) if req.params.get("edits") else None
+        except EditError as e:
+            raise GenerationError(str(e), "bad_request") from None
+        try:
+            if req.params.get("builder") or req.params.get("calls"):
+                if req.params.get("builder"):
+                    b = BUILDERS.get(req.params["builder"])
+                    if not b:
+                        raise GenerationError(f"Unknown builder {req.params['builder']}", "bad_request")
+                    try:
+                        calls = b.build(**(req.params.get("builder_params") or {}))
+                    except (TypeError, ValueError, KeyError) as e:
+                        raise GenerationError(f"Invalid parameters for {req.params['builder']}: {e}", "bad_request") from None
+                else:
+                    calls = req.params["calls"]
+                if edits:
+                    calls = recolor_calls(calls, edits)
+                doc_id = eng.run(calls, progress=lambda p, m: ctx.progress(p * 0.9, m), cancel=ctx.check_cancel)
+                if edits:
+                    apply_post(eng, doc_id, edits, calls)
             elif req.params.get("recipe"):
                 doc_id = eng.replay(Path(req.params["recipe"]))
             else:

@@ -5,6 +5,31 @@ versions follow [Semantic Versioning](https://semver.org/). The current version 
 
 ## [Unreleased]
 
+## [0.4.0] — 2026-11-26
+
+Tools get names, Pixel Forge gets a live editor and six skill effects, and the UI gets a theme choice.
+
+### Added
+- **Names for the three tools:** Engine A → **Pixel Forge** (像素工坊), Engine B → **Motion Studio** (动作工作室),
+  Engine C → **Asset Import** (素材导入) — in the UI, docs, skills and code comments. Older entries below keep the old names.
+- **Pixel Forge editor** (`web/forge.js`): builder gallery with thumbnails, live animated preview (zoom, background,
+  frame stepping), and controls for variant options, speed (0.25×–3×), loop, per-colour palette editing, hue /
+  saturation / brightness, outline 0–3 px + colour, dithered glow 0–4 px + colour, flip, output scale 1×–4×; save to
+  the library or save & export; reopen saved assets ("Saved in this project").
+- **Edits are replayable** (`procedural/edits.py`): stored on the asset (`procedural.edits`) and recorded as engine calls.
+  CLI: `artstudio procedural <builder> --edits '{...}'`. API: `/api/forge/builders`, `/api/forge/preview`, `/api/forge/thumb/<b>.png`.
+- **Six skill effects** (64×64, 8 frames, colour variants): `heal`, `buff_aura`, `lightning_strike`, `shield_barrier`,
+  `frost_nova`, `poison_cloud` (+ shared helpers `procedural/_fx.py`).
+- `thickness` option for `sword_slash` and `lightning_strike`; builders declare `LOOP`.
+- **Theme selector:** System / Dark / Light, remembered per browser; System follows the OS setting.
+- Tests: `tests/test_forge.py` (6); Playwright covers the Forge editor (variant, speed, colours, outline, glow, save &
+  export), the theme selector and the renamed navigation in English and Chinese.
+
+### Changed
+- Navigation: Home · Motion Studio · Pixel Forge · Asset Import · Library · Export; the former Procedural Studio is
+  **More tools → Pixel documents** (recipes, layers, cels).
+- `docs/engine-a-guide.md` → `docs/pixel-forge-guide.md`.
+
 ## [0.3.0] — 2026-11-26
 
 Engine B becomes the character-animation engine; the UI becomes a guided flow.
@@ -87,6 +112,7 @@ First Stage A (offline) implementation of SPECIFICATION.md.
 - Stage B (real ComfyUI inference) not run. AI generation is mock-tested only.
 
 [Unreleased]: #unreleased
+[0.4.0]: #040--2026-11-26
 [0.3.0]: #030--2026-11-26
 [0.2.0]: #020--2026-11-26
 [0.1.0]: #010--2026-11-25

@@ -4,10 +4,11 @@ import { renderAnimation, openAsset } from './anim.js';
 import { renderCharacter, renderProcedural, renderImport, renderGenerate, renderExport } from './studios.js';
 import { renderWizard } from './wizard.js';
 import { renderHome } from './home.js';
+import { renderForge } from './forge.js';
 
-const RENDER = { home: (r) => renderHome(r, { show: showTab, projectForm }), wizard: renderWizard, library: renderLibrary, character: renderCharacter,
+const RENDER = { home: (r) => renderHome(r, { show: showTab, projectForm }), wizard: renderWizard, forge: renderForge, library: renderLibrary, character: renderCharacter,
   animation: renderAnimation, procedural: renderProcedural, import: renderImport, generate: renderGenerate, export: renderExport };
-const ADVANCED = ['animation', 'character', 'generate'];
+const ADVANCED = ['animation', 'character', 'generate', 'procedural'];
 let current = 'home';
 
 function setMore(open) {
@@ -131,6 +132,22 @@ async function renderJobs() {
 }
 on('jobs', () => { clearTimeout(renderJobs._t); renderJobs(); });
 
+// Theme: System (follows the OS) / Dark / Light, remembered per browser.
+function applyTheme(choice) {
+  const sys = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  document.documentElement.dataset.theme = choice === 'system' ? sys : choice;
+}
+function initTheme() {
+  let choice = 'system';
+  try { choice = localStorage.getItem('artstudio.theme') || 'system'; } catch (e) { /* storage unavailable */ }
+  const sel = document.getElementById('themeSelect');
+  for (const [v, l] of [['system', 'System theme'], ['dark', 'Dark'], ['light', 'Light']]) sel.append(el('option', { value: v }, l));
+  sel.value = choice;
+  applyTheme(choice);
+  sel.onchange = () => { try { localStorage.setItem('artstudio.theme', sel.value); } catch (e) { /* ignore */ } applyTheme(sel.value); };
+  window.matchMedia?.('(prefers-color-scheme: light)').addEventListener?.('change', () => { if (sel.value === 'system') applyTheme('system'); });
+}
+
 async function boot() {
   initI18n();
   const ls = document.getElementById('langSelect');
@@ -141,7 +158,7 @@ async function boot() {
   document.getElementById('moreBtn').onclick = () => setMore(!document.querySelector('.tabs').classList.contains('show-adv'));
   document.getElementById('projectSelect').onchange = async (e) => { S.project = e.target.value; S.asset = null; await refreshProject(); showTab(current); renderJobs(); };
   document.getElementById('newProjectBtn').onclick = newProject;
-  document.getElementById('themeBtn').onclick = () => { const h = document.documentElement; h.dataset.theme = h.dataset.theme === 'dark' ? 'light' : 'dark'; };
+  initTheme();
   document.getElementById('jobsToggle').onclick = () => { const d = document.getElementById('jobsDock'); d.classList.toggle('collapsed');
     if (d.classList.contains('collapsed')) delete d.dataset.pinned; else d.dataset.pinned = '1'; };
   S.templates = await api('/api/templates');

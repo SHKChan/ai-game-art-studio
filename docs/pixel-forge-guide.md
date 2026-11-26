@@ -1,6 +1,6 @@
-# Engine A guide — making new procedural assets
+# Pixel Forge guide — making new procedural assets
 
-For agents and developers. Engine A is the studio's own layered pixel engine (`artstudio/engine`). Its call format
+For agents and developers. Pixel Forge is the studio's own layered pixel engine (`artstudio/engine`). Its call format
 is compatible with the Atelier editor — `{"name": <tool>, "arguments": {...}}`, one call per step — so recipes
 recorded by Atelier replay unchanged (tested pixel-identical on Atelier's showcase recipes).
 
@@ -75,6 +75,21 @@ Animation: `d.add_frames(n - 1, ms)`, paint each frame, `d.duration(i, ms)`, `d.
 frame layer (rim lit top-left, dark outline) → spear layer (shaft + pointed head shaded across its width,
 contour only against the background) → glow layer (sparkle pixels, not alpha).
 
+## 4b. Make builders editor-friendly
+
+The Pixel Forge editor (UI) and `--edits` (CLI) adjust any builder without code:
+
+| Edit | How it is applied | Builder requirement |
+|---|---|---|
+| colours, hue / saturation / brightness | rewrites the first `doc_palette op=set` call before painting | paint by **palette index**, set the palette first |
+| speed | `doc_frame op=duration` per frame | give real per-frame durations (`d.duration(i, ms)`) |
+| outline, glow | adds `outline` / `glow` layers at the bottom, painted from the rendered silhouette | leave ≥ 2 px margin |
+| flip, scale | `doc_fx op=flip` per layer, `doc_rescale` | — |
+
+Declare `LOOP = True` for cyclic effects. Params with `min` / `max` / `step` show as sliders, `enum` as chips
+(`"type": "float"` is allowed). Shared effect helpers (sparkle, plus, ring, dither) are in `procedural/_fx.py`;
+`heal.py`, `lightning_strike.py` and `shield_barrier.py` are short worked examples of skill effects.
+
 ## 5. Art rules (from the Atelier and Pixel Atelier guides)
 
 - **Silhouette first.** It must read in one flat colour at 1×. Detail last, only on the focal area.
@@ -84,7 +99,7 @@ contour only against the background) → glow layer (sparkle pixels, not alpha).
 - **Motion with pixels, not alpha.** GIF has 1-bit alpha; fades must shrink/recolour.
 - **Leave a 1–2 px margin.** QA flags pixels touching the canvas edge.
 - **Effects:** strong anticipation frame, fast action, held impact, then dissipation.
-- **Characters:** don't hand-draw complex characters here — use Engine B (ComfyUI) or C (import).
+- **Characters:** don't hand-draw complex characters here — use Motion Studio (ComfyUI) or C (import).
 
 ## 6. Verify before you hand over
 
@@ -93,5 +108,5 @@ contour only against the background) → glow layer (sparkle pixels, not alpha).
 3. `python -m artstudio qa --project P --asset <id>` → deterministic status `passed`
    (pixel-mode animations: add `--spritepipe` → `TECHNICAL_VERIFIED`).
 4. Determinism: `python -m artstudio replay <asset>/source/doc.recipe --project P` must give identical pixels.
-5. Add the builder to `tests/test_integration.py` (`EngineATests.test_builders_produce_editable_documents`).
+5. Add the builder to `tests/test_integration.py` (`PixelForgeTests.test_builders_produce_editable_documents`).
 6. Record a visual review (UI → Animation Studio) — technical checks never prove the art is good.

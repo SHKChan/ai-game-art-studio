@@ -1,4 +1,4 @@
-"""Engine B action plans: reference -> actions -> prompts (Codex / template) -> one strip per action.
+"""Motion Studio action plans: reference -> actions -> prompts (Codex / template) -> one strip per action.
 
 Codex is replaced by tests/fake_codex.py (a test double for `codex exec` and `codex app-server`);
 ComfyUI by mock_comfyui. Neither produces real art; these tests check the pipeline, not image quality."""

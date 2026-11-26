@@ -1,4 +1,4 @@
-// Guided flow: animate a character (Engine B).
+// Guided flow: animate a character (Motion Studio).
 // 1 Character (reference image) → 2 Actions → 3 Prompts (Codex or template, editable) → 4 Generate (Codex / ComfyUI) → 5 Review & export.
 import { t } from './i18n.js';
 import { S, api, el, toast, guard, emit, fileUrl, charUrl, exportUrl, badge, fixtureBadge, readFile, select, field, waitJob, refreshProject } from './core.js';
@@ -30,7 +30,7 @@ export async function renderWizard(root, opts = {}) {
   const stepper = el('div', { class: 'stepper' }, ...STEPS.map((s, i) => el('button', {
     class: 'step' + (i === W.step ? ' cur' : '') + (i < W.step ? ' done' : ''), disabled: !can(i),
     onclick: () => { W.step = i; renderWizard(root); } }, el('span', { class: 'num' }, String(i + 1)), s)));
-  const head = el('div', { class: 'row' }, el('h2', { class: 'wtitle' }, 'Animate a character'),
+  const head = el('div', { class: 'row' }, el('h2', { class: 'wtitle' }, 'Motion Studio'), el('span', { class: 'muted' }, 'Animate a character'),
     W.char ? el('span', { class: 'muted', 'data-no-i18n': '' }, '· ' + W.char.name) : null);
   const body = el('div', { class: 'wbody' });
   root.append(head, stepper, body);

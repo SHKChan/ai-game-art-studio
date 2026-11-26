@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ai-game-art-studio"
-version = "0.3.0"
+version = "0.4.0"
 description = "Local-first 2D game art studio: own pixel engine (Atelier-compatible), ComfyUI generation, import, animation editing and game-engine export."
 requires-python = ">=3.10"
 dependencies = ["Pillow>=10.0,<13", "numpy>=1.24,<3"]
