@@ -59,10 +59,13 @@ class Studio:
                                                "builder_params": params or {}, "edits": edits or None}, out_dir=tmp)
         res = prov.generate(req, ctx or JobContext())
         frames = [(Image.open(p).convert("RGBA"), d) for p, d in zip(res.images, res.metadata["durations"])]
+        piv = list(b.pivot(**(params or {}))) if hasattr(b, "pivot") else [frames[0][0].width // 2, frames[0][0].height - 1]
+        bleed = getattr(b, "FULL_BLEED", False)
+        bleed = bool(bleed(**(params or {})) if callable(bleed) else bleed)
         asset = create_animation_asset(
             self.ws, pid, name or builder.replace("_", " ").title(), frames, anim_name=builder, mode="pixel",
             params={"mode": "pixel", "anchor": "source", "padding": 0, "canvas": list(frames[0][0].size),
-                    "pivot": [frames[0][0].width // 2, frames[0][0].height - 1]},
+                    "pivot": piv, **({"source_pivot": piv} if (hasattr(b, "pivot") or bleed) else {})},
             provider={"id": "procedural", "kind": "procedural", "is_test_fixture": False,
                       "details": {"calls": res.metadata["calls"]}},
             character_id=character_id, origin="procedural", asset_type=b.ASSET_TYPE if b.ASSET_TYPE != "animation" else "animation",
@@ -74,6 +77,8 @@ class Studio:
         asset["procedural"] = {"engine": "artstudio-pixel", "doc_id": res.metadata["doc_id"], "recipe": "source/doc.recipe",
                                "builder": builder, "params": params or {}, "edits": edits or {}}
         asset["source_files"].append({"path": "source/doc.recipe", "role": "engine-recipe", "origin": "procedural"})
+        if bleed:   # tile-aligned ground effects and slot/badge icons fill the canvas on purpose
+            asset["animation"]["full_bleed"] = True
         shutil.rmtree(tmp, ignore_errors=True)
         self.ws.save_asset(asset)
         check_asset(self.ws, asset)
@@ -162,8 +167,11 @@ class Studio:
         res = prov.generate(GenerationRequest("procedural", {"home": str(self.ws.engine_home(pid)), "recipe": str(recipe)}, out_dir=tmp), ctx or JobContext())
         frames = [(Image.open(p).convert("RGBA"), d) for p, d in zip(res.images, res.metadata["durations"])]
         w, h = frames[0][0].size
+        # art that reaches the canvas edge (grid effects, UI, framed icons) is placed 1:1, never shifted or grown
+        edge = any((bb := im.getbbox()) and (bb[0] == 0 or bb[1] == 0 or bb[2] == w or bb[3] == h) for im, _ in frames)
         a = create_animation_asset(self.ws, pid, name, frames, anim_name="replay", mode="pixel",
-                                   params={"mode": "pixel", "anchor": "source", "padding": 0, "canvas": [w, h], "pivot": [w // 2, h - 1]},
+                                   params={"mode": "pixel", "anchor": "source", "padding": 0, "canvas": [w, h], "pivot": [w // 2, h - 1],
+                                           **({"source_pivot": [w // 2, h - 1]} if edge else {})},
                                    provider={"id": "procedural", "kind": "procedural", "is_test_fixture": False},
                                    origin="procedural", asset_type="effect", tags=["procedural", "replay"])
         d = self.ws.asset_dir(pid, a["id"])

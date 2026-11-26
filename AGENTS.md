@@ -9,7 +9,7 @@ Read this first, then `SPECIFICATION.md` (authoritative requirements) and `DEVEL
   - **Motion Studio** (动作工作室) — character animation via Codex CLI or ComfyUI. Code: `actions.py`, `web/wizard.js`.
   - **Asset Import** (素材导入) — import/clean/align existing art. Code: `processing/`, `Studio.import_file`.
   User-facing overview: `README.md` / `README.zh-CN.md`.
-- **Version:** `VERSION` (currently 0.5.0). History: `CHANGELOG.md`.
+- **Version:** `VERSION` (currently 0.6.0). History: `CHANGELOG.md`.
 - **Based on (MIT):** Atelier (marmikshah/atelier @ 8ac6adf) — call format re-implemented in `artstudio/engine`;
   Pixel Atelier (jinxingtaire/pixel-atelier @ 15d199f) — code moved into `artstudio/pipeline`, `prompts_zh_sheet.py`,
   `providers/codex_rpc.py`, `samples/knight`. Neither is a dependency any more; do not re-add them as checkouts.
@@ -148,10 +148,12 @@ python scripts/production_smoke_test.py --comfy URL --checkpoint FILE   # Stage 
   surrogates there and are fixed by `cli._fix_arg`.
 - **UI is CSP-strict** (no `unsafe-eval`): Playwright `wait_for_function` fails; use `expect(locator)` instead.
 - **Builder QA:** keep art 1–2 px off the canvas edge, or QA reports `source_clipped`. A transparent border is expected
-  for round icons (`detect_background` handles it).
+  for round icons (`detect_background` handles it). Tile-aligned ground skills and framed icons declare `FULL_BLEED`
+  (bool, or a function of the params) and QA accepts edge contact for them.
 - **Pixel Forge parity:** brushes anchor at `size // 2`; `doc_region` rects are inclusive `[x0,y0,x1,y1]`; ellipses use
   Atelier's +0.5 inflation. Changing any of these breaks `tests/fixtures/showcase` replay.
 - **New builder checklist:** module in `artstudio/procedural/` (`DESCRIPTION`, `ASSET_TYPE`, `PARAMS`, optional `LOOP = True`,
+  `GROUP` (gallery group), `FULL_BLEED`, `pivot(**params)`,
   `build()`; paint by **palette index** so Forge recolouring works; params with `min`/`max`/`step` become sliders, `enum`
   becomes chips), register in `_NAMES`, add `(frames, size)` to `PixelForgeTests` in `tests/test_integration.py`, add the
   Chinese description to `artstudio/web/i18n.js`, add a row to both READMEs, add a CHANGELOG entry, look at the contact

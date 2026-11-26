@@ -1,0 +1,58 @@
+{
+ "builder": "earth_spike",
+ "params": {
+  "color": "earth",
+  "tiles": 3
+ },
+ "frame_size": [
+  96,
+  128
+ ],
+ "frames": 9,
+ "durations_ms": [
+  90,
+  50,
+  50,
+  70,
+  120,
+  120,
+  80,
+  90,
+  140
+ ],
+ "tags": [
+  {
+   "name": "erupt",
+   "from": 0,
+   "to": 3,
+   "direction": "forward"
+  },
+  {
+   "name": "hold",
+   "from": 4,
+   "to": 5,
+   "direction": "forward"
+  },
+  {
+   "name": "crumble",
+   "from": 6,
+   "to": 8,
+   "direction": "forward"
+  }
+ ],
+ "pivot": [
+  48,
+  80
+ ],
+ "loop": false,
+ "grid": {
+  "tile": 32,
+  "cells": 3,
+  "ground_rect": [
+   0,
+   32,
+   96,
+   128
+  ]
+ }
+}

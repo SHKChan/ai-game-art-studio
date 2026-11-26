@@ -29,7 +29,8 @@ def _issue(code, severity, msg, frame=None, **extra):
 
 def check_frames(images: list[Image.Image], durations: list[int] | None = None, *, mode: str = "pixel",
                  pivot=None, source_images: list[Image.Image] | None = None, airborne: list[int] | None = None,
-                 jitter_px: float = 3.0, scale_tolerance: float = 0.18, motion_checks: bool = True) -> list[dict]:
+                 jitter_px: float = 3.0, scale_tolerance: float = 0.18, motion_checks: bool = True,
+                 edge_ok: bool = False) -> list[dict]:
     issues = []
     airborne = set(airborne or [])
     if not images:
@@ -50,7 +51,7 @@ def check_frames(images: list[Image.Image], durations: list[int] | None = None, 
         if (al == 255).all():
             issues.append(_issue("no_transparency", "error", "Frame is fully opaque (no transparent background)", i))
         bg = detect_background(im)
-        if bg["kind"] in ("solid", "checker"):
+        if bg["kind"] in ("solid", "checker") and not edge_ok:
             issues.append(_issue("unexpected_background", "error", f"Border looks like a {bg['kind']} background", i, background=bg))
         partial = ((al > 0) & (al < 255)).mean()
         if mode == "pixel" and partial > 0:
@@ -58,13 +59,15 @@ def check_frames(images: list[Image.Image], durations: list[int] | None = None, 
         if mode == "pixel" and ((al == 0) & (a[..., :3].max(-1) > 0)).any():
             issues.append(_issue("dirty_transparent_rgb", "info", "Transparent pixels carry colour data", i))
         w, h = im.size
-        if bb[0] == 0 or bb[1] == 0 or bb[2] == w or bb[3] == h:
+        if (bb[0] == 0 or bb[1] == 0 or bb[2] == w or bb[3] == h) and not edge_ok:
             issues.append(_issue("clipped_sprite", "error", "Visible pixels touch the canvas edge (possible crop)", i, bbox=list(bb)))
         hashes.append(hashlib.sha1(a.tobytes()).hexdigest())
     for i in range(1, len(hashes)):
         if hashes[i] and hashes[i] == hashes[i - 1]:
             issues.append(_issue("duplicate_frame", "warning", f"Identical to frame {i - 1} (hold? use a longer duration instead)", i))
-    if source_images:
+    if edge_ok:
+        issues.append(_issue("full_bleed", "info", "Art fills the canvas edge to edge by design (grid cells / icon slot)"))
+    if source_images and not edge_ok:
         for i, s in enumerate(source_images):
             sb = alpha_bbox(s, 16)
             if sb and (sb[0] == 0 or sb[1] == 0 or sb[2] == s.width or sb[3] == s.height):
@@ -131,7 +134,8 @@ def check_asset(ws, a: dict, save: bool = True) -> dict:
         # Ground/scale/jitter heuristics model a character standing on a ground line; effects and props
         # (fireballs, slashes, opening chests) legitimately move and change extent, so they are skipped.
         motion = a["type"] in ("animation", "character_sprite") and bool(a.get("character_id") or anim.get("direction") not in (None, "none"))
-        issues = check_frames(imgs, durs, mode=a["art_style"], pivot=anim["pivot"], source_images=srcs, airborne=airborne, motion_checks=motion)
+        issues = check_frames(imgs, durs, mode=a["art_style"], pivot=anim["pivot"], source_images=srcs, airborne=airborne, motion_checks=motion,
+                              edge_ok=bool(anim.get("full_bleed")))
         n = len(anim["frames"])
         for e in anim.get("events", []):
             if not 0 <= e["frame"] < n:

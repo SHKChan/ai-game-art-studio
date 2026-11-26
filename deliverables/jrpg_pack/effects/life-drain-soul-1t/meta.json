@@ -1,0 +1,47 @@
+{
+ "builder": "life_drain",
+ "params": {
+  "color": "soul",
+  "tiles": 1
+ },
+ "frame_size": [
+  32,
+  88
+ ],
+ "frames": 10,
+ "durations_ms": [
+  90,
+  80,
+  70,
+  70,
+  70,
+  70,
+  70,
+  90,
+  60,
+  80
+ ],
+ "tags": [
+  {
+   "name": "drain",
+   "from": 0,
+   "to": 9,
+   "direction": "forward"
+  }
+ ],
+ "pivot": [
+  16,
+  72
+ ],
+ "loop": false,
+ "grid": {
+  "tile": 32,
+  "cells": 1,
+  "ground_rect": [
+   0,
+   56,
+   32,
+   88
+  ]
+ }
+}

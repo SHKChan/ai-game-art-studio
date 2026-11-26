@@ -362,7 +362,8 @@ def api_forge_builders(s, h, m, q, body):
     group = {"effect": "Skills & effects", "icon": "Items & icons", "item": "Items & icons", "animation": "Items & icons",
              "environment": "Scenery"}
     return {"builders": {k: {"description": b.DESCRIPTION, "params": b.PARAMS, "asset_type": b.ASSET_TYPE,
-                             "loop": bool(getattr(b, "LOOP", False)), "group": group.get(b.ASSET_TYPE, "Other")} for k, b in BUILDERS.items()},
+                             "loop": bool(getattr(b, "LOOP", False)),
+                             "group": getattr(b, "GROUP", None) or group.get(b.ASSET_TYPE, "Other")} for k, b in BUILDERS.items()},
             "edit_defaults": DEFAULTS}
 
 

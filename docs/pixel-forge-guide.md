@@ -90,6 +90,38 @@ Declare `LOOP = True` for cyclic effects. Params with `min` / `max` / `step` sho
 (`"type": "float"` is allowed). Shared effect helpers (sparkle, plus, ring, dither) are in `procedural/_fx.py`;
 `heal.py`, `lightning_strike.py` and `shield_barrier.py` are short worked examples of skill effects.
 
+## 4c. Grid skills and icon kits (v0.6)
+
+**Top-down ground skills** (`lava_burn`, `meteor`, `fire_pillar`, `earth_spike`, `whirlpool`, `gale`, `ice_field`,
+`holy_judgment`, `dark_vortex`, `life_drain`) share `procedural/_ground.py`:
+
+- Canvas = `tiles*32` wide × `tiles*32 + head` high. The **bottom `tiles*32` square is the ground area** and lines up
+  with the grid cells; `head` is headroom for flames, pillars and spikes.
+- Each module defines `_ground(tiles)` (its headroom) and `pivot(**params)` → centre of the ground cells; the studio
+  stores it as the asset pivot, so engines can drop the effect onto a cell centre.
+- `FULL_BLEED = True` tells QA the art reaches the canvas edge on purpose (it fills the cells); QA then reports an
+  `info` instead of `clipped_sprite`. Outline/glow edits have no margin to grow into on these.
+- Phases are frame tags (`cast` / `burn` / `fade`, `erupt` / `hold` / `crumble` …); loops use `loop_noise`
+  (noise sampled on a circle in time) so the last frame flows into the first. `lava_burn` also takes `phase`.
+- Helpers: `Ground.blob_r` (wobbly seamless outline), `loop_noise`, `flame`, `wisps` (rising smoke), `contour`.
+
+**Icon kits** (`weapon_icon`, `armor_icon`, `consumable_icon`, `material_icon`, `skill_icon`, `ui_icon`) use
+`procedural/_icon.py`. Draw on a **32-unit design grid** with *parts* (`ic.part(name, ramp, style=…)`, then
+`poly / ellipse / rect / bar / line / field`); `Icon(size)` rasterises at 32 / 48 / 64 px. `Icon.shade()` lights each
+part per pixel, like `potion.py`: distance-to-edge height field (bevel width per style) → normal → top-left light →
+5-tone ramp (`ramp5`, hue-shifted) with ordered dithering; styles `metal`, `blade` (ridge), `gem` (internal glow +
+glint), `glass`, `wood` (grain), `soft` (cloth/leather), `round` (dome), `flat`. `dot()` puts highlights on the
+`shine` layer; `emit(name, icon, frame)` adds the rarity slot (`FULL_BLEED` is then a function of `frame`).
+Make tiers/grades change the *design* (extra parts, different outlines), not only the ramp.
+
+**UI kit** (`ui_panel`, `ui_button`, `ui_bar`, `ui_frame`) uses `procedural/_ui.py`: `THEMES`, `frame()` (bevelled,
+rounded, optional inset / highlight / ornaments, textured fill), `emit()` for multi-frame state docs. Keep ornaments
+inside `slice_margin(theme)` so the result 9-slices; states are frames with tags (normal / hover / pressed / disabled). `skill_icon` (bevelled element frame +
+emblem) and `status_icon` (16×16 badge, ASCII symbol + up/down arrow) follow the same pattern.
+
+Gallery placement: `ASSET_TYPE` picks the group; set `GROUP = "Skill icons"` (or another group name) to override.
+`python scripts/make_jrpg_pack.py --out <dir>` renders every kit variant into PNGs, strips, GIFs and contact sheets.
+
 ## 5. Art rules (from the Atelier and Pixel Atelier guides)
 
 - **Silhouette first.** It must read in one flat colour at 1×. Detail last, only on the focal area.
@@ -97,7 +129,7 @@ Declare `LOOP = True` for cyclic effects. Params with `min` / `max` / `step` sho
 - **Layers per part.** Body, moving part, glow/effects separately — fixes stay local.
 - **Fix the region, never the frame.** Change the one wrong area; don't redraw everything.
 - **Motion with pixels, not alpha.** GIF has 1-bit alpha; fades must shrink/recolour.
-- **Leave a 1–2 px margin.** QA flags pixels touching the canvas edge.
+- **Leave a 1–2 px margin.** QA flags pixels touching the canvas edge (unless the builder declares `FULL_BLEED`).
 - **Effects:** strong anticipation frame, fast action, held impact, then dissipation.
 - **Characters:** don't hand-draw complex characters here — use Motion Studio (ComfyUI) or C (import).
 

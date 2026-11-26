@@ -4,7 +4,13 @@ stores the layered document and records its own replayable `doc.recipe`."""
 from importlib import import_module
 
 _NAMES = ["potion", "chest", "chest_open", "fireball", "sword_slash", "ice_spear", "hero_shrine",
-          "heal", "buff_aura", "lightning_strike", "shield_barrier", "frost_nova", "poison_cloud"]
+          "heal", "buff_aura", "lightning_strike", "shield_barrier", "frost_nova", "poison_cloud",
+          # v0.6 — top-down grid skills, JRPG item / skill / status icons
+          "lava_burn", "meteor", "fire_pillar", "earth_spike", "whirlpool", "gale", "ice_field", "holy_judgment",
+          "dark_vortex", "life_drain",
+          "weapon_icon", "armor_icon", "consumable_icon", "material_icon", "skill_icon", "status_icon",
+          # v0.6 — UI kit
+          "ui_panel", "ui_button", "ui_bar", "ui_frame", "ui_icon"]
 BUILDERS = {}
 for _n in _NAMES:
     try:

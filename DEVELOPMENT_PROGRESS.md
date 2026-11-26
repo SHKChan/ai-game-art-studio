@@ -3,7 +3,7 @@
 Labels: **implemented** · **offline-tested** (executed here with real data) · **mock-tested** (only against mock providers) ·
 **production-verified** (Stage B on a real ComfyUI — none yet).
 
-## Current state (2026-11-26, v0.5.0)
+## Current state (2026-11-27, v0.6.0)
 
 Tool names: **Pixel Forge** (procedural pixel engine, was Engine A), **Motion Studio** (character animation, was Engine B),
 **Asset Import** (import, was Engine C).
@@ -13,11 +13,12 @@ Tool names: **Pixel Forge** (procedural pixel engine, was Engine A), **Motion St
 |---|---|---|
 | Pixel Forge — own Python pixel engine (`artstudio/engine`), Atelier-compatible call format | offline-tested | tests/test_engine.py: tool semantics, persistence, determinism; **Atelier showcase recipes potion/slash replay pixel-identical to Atelier's GIFs**; all builders identical to the earlier Atelier-rendered POC frames |
 | Builders: potion, chest, chest_open, fireball, sword_slash, **ice_spear** (3 elements), **hero_shrine** (96×96, animated) + `artstudio draw` call lists | offline-tested | PixelForgeTests; contact sheets inspected |
+| JRPG kit (v0.6): 10 top-down grid skills (lava_burn …), lit icon renderer (32/48/64) with tiered weapon/armor/consumable/material/skill/status icons, UI kit (panels, buttons, bars, frames, menu icons × 4 themes), `scripts/make_jrpg_pack.py` | offline-tested | tests/test_jrpg_assets.py; every variant rendered and contact sheets inspected |
 | Pixel Forge authoring guide + skill | done | docs/pixel-forge-guide.md, skills/procedural-builder-authoring |
 | Pixel Atelier code moved in: spritepipe, Chinese sheet prompts, Codex client, knight sample | offline-tested | tests/test_spritepipe.py (14 upstream tests ported, pass); POC spritepipe TECHNICAL_VERIFIED |
 | Encoding (GBK/cp936/cp1252/C locale) | offline-tested | tests/test_encoding.py: no locale-default I/O in code; full Chinese CLI flow under C locale with UTF-8 mode OFF and no relaunch; POSIX argv recovery |
 | Bilingual en / zh-CN | offline-tested | UI dictionary + observer; server/CLI localized errors; zh prompts; README/deployment in Chinese; Playwright zh pass over all 7 workspaces |
-| Asset Import import/processing, character masters, animation editing, QA, export, job queue, server, CLI | offline-tested | 84 tests total |
+| Asset Import import/processing, character masters, animation editing, QA, export, job queue, server, CLI | offline-tested | 98 tests total |
 | Motion Studio guided flow: reference → action plan → prompts → one strip per action → slice/align → review/redo frame → export | offline-tested (pipeline) / mock-tested (AI) | tests/test_actions.py (13): plan model, template prompts en/zh, Codex prompt writing + failure, Codex strip generation + failure, budget, grid fallback, strip reference, ComfyUI strip via mock server, HTTP API flow; Playwright drives all 5 steps in English + Chinese review |
 | Motion Studio v0.5: description → 4 reference candidates → pick; core set walk/attack/hit; one grid sheet per action; local cutting (cells, pseudo-pixel step, height 64, ground line, reference palette, halo/speck cleanup); QA + automatic regeneration (≤2); re-cut | offline-tested (processing, mock sheets) / mock-tested (AI) | tests/test_sprite_edit.py, tests/test_actions.py (bad sheet → regenerated, retry cap); mock knight sheets cut to 64 px on one ground line (inspected) |
 | Sprite editor (pixel inspector, tools, selection, frames, onion skin, undo/redo) + patch layer that survives reprocess / re-cut | offline-tested | tests/test_sprite_edit.py; Playwright: inspect → recolour → delete → undo/redo → pencil → save → "hand-edited" badge; zh screenshot checked |
@@ -70,7 +71,7 @@ Tool names: **Pixel Forge** (procedural pixel engine, was Engine A), **Motion St
 
 - Stage B smoke test + reduced Test B on the ComfyUI PC; mark verified workflows.
 - Verify Cocos Creator import and TS components in a real project; Godot script.
-- More builders (weapons/armour icons, tiles, ice/lightning/heal/smoke effects) via docs/pixel-forge-guide.md.
+- More builders (terrain tiles, characters' hit sparks, more weapon kinds) via docs/pixel-forge-guide.md.
 - Optional local vision model for `qa/visual.py`.
 
 ## Device verification

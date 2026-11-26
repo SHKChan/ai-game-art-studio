@@ -1,0 +1,54 @@
+{
+ "builder": "holy_judgment",
+ "params": {
+  "color": "moon",
+  "tiles": 3
+ },
+ "frame_size": [
+  96,
+  144
+ ],
+ "frames": 11,
+ "durations_ms": [
+  70,
+  60,
+  70,
+  40,
+  50,
+  60,
+  70,
+  80,
+  90,
+  100,
+  120
+ ],
+ "tags": [
+  {
+   "name": "circle",
+   "from": 0,
+   "to": 2,
+   "direction": "forward"
+  },
+  {
+   "name": "judgment",
+   "from": 3,
+   "to": 10,
+   "direction": "forward"
+  }
+ ],
+ "pivot": [
+  48,
+  96
+ ],
+ "loop": false,
+ "grid": {
+  "tile": 32,
+  "cells": 3,
+  "ground_rect": [
+   0,
+   48,
+   96,
+   144
+  ]
+ }
+}

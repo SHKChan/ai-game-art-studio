@@ -1,0 +1,61 @@
+{
+ "builder": "fire_pillar",
+ "params": {
+  "color": "fire",
+  "tiles": 1
+ },
+ "frame_size": [
+  32,
+  96
+ ],
+ "frames": 12,
+ "durations_ms": [
+  80,
+  70,
+  60,
+  80,
+  80,
+  80,
+  80,
+  80,
+  80,
+  80,
+  100,
+  130
+ ],
+ "tags": [
+  {
+   "name": "rise",
+   "from": 0,
+   "to": 2,
+   "direction": "forward"
+  },
+  {
+   "name": "burn",
+   "from": 3,
+   "to": 8,
+   "direction": "forward"
+  },
+  {
+   "name": "end",
+   "from": 9,
+   "to": 11,
+   "direction": "forward"
+  }
+ ],
+ "pivot": [
+  16,
+  80
+ ],
+ "loop": false,
+ "grid": {
+  "tile": 32,
+  "cells": 1,
+  "ground_rect": [
+   0,
+   64,
+   32,
+   96
+  ]
+ }
+}

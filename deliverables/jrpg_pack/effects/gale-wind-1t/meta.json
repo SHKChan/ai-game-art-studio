@@ -1,0 +1,45 @@
+{
+ "builder": "gale",
+ "params": {
+  "color": "wind",
+  "tiles": 1
+ },
+ "frame_size": [
+  32,
+  80
+ ],
+ "frames": 8,
+ "durations_ms": [
+  70,
+  70,
+  70,
+  70,
+  70,
+  70,
+  70,
+  70
+ ],
+ "tags": [
+  {
+   "name": "spin",
+   "from": 0,
+   "to": 7,
+   "direction": "forward"
+  }
+ ],
+ "pivot": [
+  16,
+  64
+ ],
+ "loop": true,
+ "grid": {
+  "tile": 32,
+  "cells": 1,
+  "ground_rect": [
+   0,
+   48,
+   32,
+   80
+  ]
+ }
+}

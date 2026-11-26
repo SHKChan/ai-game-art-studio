@@ -5,6 +5,45 @@ versions follow [Semantic Versioning](https://semver.org/). The current version 
 
 ## [Unreleased]
 
+## [0.6.0] — 2026-11-27
+
+Pixel Forge gets a JRPG kit for tactics / idle-dungeon games: top-down grid skills, item / skill / status icons and a
+themed UI kit.
+
+### Added
+- **Top-down grid skills** (`procedural/_ground.py` convention: width `tiles*32`, the bottom square is the ground cells,
+  headroom above; pivot = cell centre): `lava_burn` (熔岩灼地 — cracks glow, magma floods the cells, burning loop, cools;
+  tags cast/burn/fade, `phase` param), `meteor`, `fire_pillar`, `earth_spike`, `whirlpool`, `gale`, `ice_field`,
+  `holy_judgment`, `dark_vortex`, `life_drain`. Each has colour variants and a `tiles` size.
+- **Icon renderer** (`procedural/_icon.py`): icons are designed on a 32-unit grid and drawn at **32 / 48 / 64 px**
+  (`size`, default 48); every part is lit per pixel like the original potion builder — height field from the distance to
+  the part edge → normal → top-left light → 5-tone hue-shifted ramp with ordered dithering, plus styles (metal, blade,
+  gem with internal glow, glass, wood grain, soft cloth) and specular highlights; selective outline; rarity slot.
+- **Icon kits** built on it: `weapon_icon` (8 kinds × 5 tiers), `armor_icon` (8 × 5) — each tier (bronze → iron →
+  mithril → gold → dark) changes the **design** (fullers, guards, wings, horns, serration, trident, kite shield, crowned
+  helm …), not just the colour; `consumable_icon` (8 kinds × 3 grades: different bottles, feathers, seals, bombs);
+  `material_icon` (8 × 6 colours, each colour its own design: gem cuts, herbs, mushrooms, key bows …);
+  `skill_icon` (18 skills, lit bevelled element frames); `status_icon` (20 × 16-px badges).
+- **UI kit** (`procedural/_ui.py`, themes classic_blue / wood_gold / stone_iron / parchment, 9-slice friendly):
+  `ui_panel` (window, dialog with bobbing next-arrow, tooltip, title banner, tab active/inactive), `ui_button`
+  (rect / square / round; frames normal / hover / pressed / disabled), `ui_bar` (HP / MP / EXP / stamina / ATB, `fill`,
+  `part` = bar / frame / fill), `ui_frame` (portrait, item slot, skill slot; normal / selected / locked),
+  `ui_icon` (20 menu icons incl. cursor hand, colour or white `mono`). Gallery group "UI".
+- `scripts/make_jrpg_pack.py` renders every variant to PNGs, sprite strips + `meta.json`, GIF previews and contact sheets;
+  the rendered pack is in `deliverables/jrpg_pack/`.
+- Builder attributes `GROUP` (gallery groups "Skill icons", "UI"), `FULL_BLEED` (QA accepts edge-to-edge art for
+  tile-aligned effects, framed icons and UI) and `pivot(**params)` (stored as the asset pivot). Such builders are placed
+  1:1 on their canvas (`source_pivot`), so saved assets keep exactly the drawn size; recipe replays do the same for art
+  that touches the canvas edge.
+
+### Changed
+- Ground skills: textured, lit rock spikes (earth_spike / ice_field crystals), gradient meteor flash, thicker life-drain
+  ribbons, faster lava/ice rendering (cached outline noise).
+
+### Fixed
+- `README.md` was 18 MB (one Motion Studio block repeated 10,840 times, title lost) — rebuilt.
+- Chinese UI strings for all new builders and options; tests `tests/test_jrpg_assets.py`.
+
 ## [0.5.0] — 2026-11-26
 
 Motion Studio becomes a production line for action frames, and gets a sprite editor.

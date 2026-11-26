@@ -1,6 +1,6 @@
 # AI 游戏美术工作室
 
-[English](README.md) · 版本 **0.4.0**（[更新日志](CHANGELOG.md)）· MIT 许可
+[English](README.md) · 版本 **0.6.0**（[更新日志](CHANGELOG.md)）· MIT 许可
 
 **本地优先的 2D 游戏美术制作工具**：支持像素风和高清插画，从单个图标到角色动画精灵，都能直接导出到游戏引擎。
 纯 Python 应用（Pillow + numpy），网页界面支持中英文，不需要云服务、数据库或付费 API。
@@ -43,6 +43,45 @@
 | `chest` / `chest_open` | 宝箱；8 帧开箱动画 | `size` |
 | `hero_shrine` | 96×96 英雄神殿，火盆带动画 | `frames`、`banner` red/blue/green |
 
+
+**战棋 / 地牢用的俯视方格技能**（v0.6）：画布宽 = `tiles × 32`，**底部 `tiles×32` 的正方形就是地面格子**，上方留出火焰、
+光柱用的空间；锚点在格子中心。
+
+| 生成器 | 产出 | 选项 |
+|---|---|---|
+| `lava_burn` | **熔岩灼地**：地面龟裂发光 → 岩浆涌出淹没格子 → 持续燃烧（循环）→ 冷却成焦岩。标签 cast / burn / fade | `tiles` 1–5、`color` lava/soulfire/acid、`phase` all/cast/burn/fade |
+| `meteor` | 陨石坠落：警示圈、燃烧陨石落下、火焰爆炸、冒烟陨坑 | `tiles`、`color` fire/arcane/frost |
+| `fire_pillar` | 火柱：符文圈 → 火柱冲天（循环）→ 火星 | `tiles` 1–3、`color` fire/azure/violet |
+| `earth_spike` | 地刺：每格岩刺破土、尘环、崩碎 | `tiles`、`color` earth/crystal/ice |
+| `whirlpool` | 漩涡（循环） | `tiles`、`frames`、`color` water/abyss/sand |
+| `gale` | 龙卷风暴（循环） | `tiles` 1–3、`frames`、`color` wind/sand/storm |
+| `ice_field` | 冰封大地：寒霜蔓延、冰晶、闪光（循环）、碎裂 | `tiles`、`color` ice/crystal |
+| `holy_judgment` | 圣光审判：魔法阵、光柱、十字闪光 | `tiles`、`color` holy/sun/moon |
+| `dark_vortex` | 暗黑诅咒之地（循环） | `tiles`、`frames`、`color` dark/blood/void |
+| `life_drain` | 生命汲取：精华螺旋升入光球后飞走 | `tiles` 1–3、`color` blood/soul/mana |
+
+**日式 RPG 图标**（v0.6，32 / 48 / 64 像素，默认 48；逐像素光照；可选稀有度边框 common … legendary）：
+
+| 生成器 | 种类 | 变体 |
+|---|---|---|
+| `weapon_icon` | 剑、太刀、匕首、斧、枪、法杖、弓、锤 | `material` 档次：青铜（朴素）→ 铁（血槽、护手）→ 秘银（符文、宝石）→ 金（华丽、翼形）→ 暗黑（锯齿、尖角）—— **造型不同**，不只是换色 |
+| `armor_icon` | 头盔、铠甲、盾、护手、靴、披风、戒指、护符 | `material` 同上（皮帽→骑士盔→翼盔→王冠盔→角盔……） |
+| `consumable_icon` | HP 药水、MP 以太、解毒剂、万能药、凤凰之羽、卷轴、炸弹、饭团 | `grade` 小 / 中 / 大：瓶型、羽毛数、封蜡等不同 |
+| `material_icon` | 矿石、锭、宝石、魔晶、草药、蘑菇、钥匙、钱袋 | `color` 6 种，每种独立设计（宝石切工、草药、蘑菇、钥匙柄……） |
+| `skill_icon` | 18 个技能图标 | `element` 自动或指定边框元素 |
+| `status_icon` | 16×16 状态：攻防速魔 ↑↓ 与各种异常 | — |
+
+**界面套件**（v0.6，4 种主题：经典蓝窗 / 木框金边 / 石材铁框 / 羊皮纸，支持九宫格）：
+
+| 生成器 | 内容 |
+|---|---|
+| `ui_panel` | 窗口、对话框（名字牌 + 跳动的下一页箭头）、提示框、标题横幅、分页标签（选中 / 未选中） |
+| `ui_button` | 长条 / 方形 / 圆形按钮，4 帧：普通 / 悬停 / 按下 / 禁用 |
+| `ui_bar` | HP / MP / EXP / 体力 / ATB 条，`fill` 0–1，`part` 可单独导出边框或填充 |
+| `ui_frame` | 头像框、物品格、技能格（普通 / 选中 / 锁定） |
+| `ui_icon` | 20 个菜单图标：背包、装备、技能、地图、任务、商店、设置、存档、主页、邮件、战斗、自动、倍速、确认、关闭、返回、金币、宝石、体力、手指光标；`style` 彩色 / 白色 |
+
+一次导出全部变体：`python scripts/make_jrpg_pack.py --out deliverables/jrpg_pack`（PNG、精灵条、GIF、预览图、`meta.json`）。
 新素材不一定要写代码：Agent 可以写一个调用列表，用 `artstudio draw` 运行。见
 [docs/pixel-forge-guide.md](docs/pixel-forge-guide.md)（英文，供 Agent 使用）。
 
@@ -139,7 +178,7 @@ AI 生成通过 **[ComfyUI](https://github.com/comfyanonymous/ComfyUI)** 的服�
 
 ## 验证状态
 
-- ✅ **离线验收（阶段 A）**：84 项自动化测试、覆盖完整引导流程的 Playwright 中英文界面测试、概念验证素材，见 [DEVELOPMENT_PROGRESS.md](DEVELOPMENT_PROGRESS.md)。
+- ✅ **离线验收（阶段 A）**：98 项自动化测试、覆盖完整引导流程的 Playwright 中英文界面测试、概念验证素材，见 [DEVELOPMENT_PROGRESS.md](DEVELOPMENT_PROGRESS.md)。
 - 🧪 **AI 生成目前只经过模拟测试**：ComfyUI 使用 `mock_comfyui/`，Codex 使用测试替身（`tests/fake_codex.py`）。模拟输出标记为 TEST FIXTURE，不是 AI 作品。真实的 Codex CLI 尚未在此运行。
 - ⛔ **阶段 B（真实 ComfyUI 推理）尚未运行**。请在 ComfyUI 电脑上运行 `scripts/production_smoke_test.py`。
 

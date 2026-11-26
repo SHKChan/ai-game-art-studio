@@ -39,7 +39,7 @@ function galleryPanel(root) {
   const mine = (S.data?.assets || []).filter(a => a.procedural?.builder && F.builders[a.procedural.builder]).slice(-12).reverse();
   return el('div', { class: 'card fgallery' }, el('h3', {}, 'Pixel Forge'),
     el('p', { class: 'small muted' }, 'Pick something to make, then adjust it on the right.'),
-    ...['Skills & effects', 'Items & icons', 'Scenery', 'Other'].filter(g => groups[g]).map(g => el('div', {},
+    ...['Skills & effects', 'Skill icons', 'Items & icons', 'UI', 'Scenery', 'Other'].filter(g => groups[g]).map(g => el('div', {},
       el('h4', {}, g), el('div', { class: 'fgrid' }, ...groups[g].map(k => el('button', { class: 'fitem' + (k === F.builder && !F.source ? ' sel' : ''), title: F.builders[k].description,
         onclick: () => { choose(k); renderForge(root); } }, el('img', { src: `/api/forge/thumb/${k}.png`, alt: '' }), el('span', { 'data-no-i18n': '' }, title(k))))))),
     mine.length ? el('div', {}, el('h4', {}, 'Saved in this project'), ...mine.map(a => el('div', { class: 'row small fsaved' },

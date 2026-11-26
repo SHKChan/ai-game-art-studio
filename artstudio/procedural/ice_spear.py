@@ -10,6 +10,7 @@ from .raster import DocBuilder, Grid, ramp_pick
 
 DESCRIPTION = "Round skill icon with a diagonal elemental spear (ice by default) and a framed background."
 ASSET_TYPE = "icon"
+GROUP = "Skill icons"
 PARAMS = {"size": {"type": "int", "default": 32}, "element": {"type": "string", "default": "ice", "enum": ["ice", "lightning", "poison"]}}
 
 ELEMENTS = {  # dark → light ramp for the spear + glow colour

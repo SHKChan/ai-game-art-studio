@@ -1,0 +1,5185 @@
+{
+ "icons": [
+  {
+   "file": "icons/weapons/bronze-sword.png",
+   "builder": "weapon_icon",
+   "params": {
+    "kind": "sword",
+    "material": "bronze"
+   }
+  },
+  {
+   "file": "icons/weapons/bronze-katana.png",
+   "builder": "weapon_icon",
+   "params": {
+    "kind": "katana",
+    "material": "bronze"
+   }
+  },
+  {
+   "file": "icons/weapons/bronze-dagger.png",
+   "builder": "weapon_icon",
+   "params": {
+    "kind": "dagger",
+    "material": "bronze"
+   }
+  },
+  {
+   "file": "icons/weapons/bronze-axe.png",
+   "builder": "weapon_icon",
+   "params": {
+    "kind": "axe",
+    "material": "bronze"
+   }
+  },
+  {
+   "file": "icons/weapons/bronze-spear.png",
+   "builder": "weapon_icon",
+   "params": {
+    "kind": "spear",
+    "material": "bronze"
+   }
+  },
+  {
+   "file": "icons/weapons/bronze-staff.png",
+   "builder": "weapon_icon",
+   "params": {
+    "kind": "staff",
+    "material": "bronze"
+   }
+  },
+  {
+   "file": "icons/weapons/bronze-bow.png",
+   "builder": "weapon_icon",
+   "params": {
+    "kind": "bow",
+    "material": "bronze"
+   }
+  },
+  {
+   "file": "icons/weapons/bronze-hammer.png",
+   "builder": "weapon_icon",
+   "params": {
+    "kind": "hammer",
+    "material": "bronze"
+   }
+  },
+  {
+   "file": "icons/weapons/iron-sword.png",
+   "builder": "weapon_icon",
+   "params": {
+    "kind": "sword",
+    "material": "iron"
+   }
+  },
+  {
+   "file": "icons/weapons/iron-katana.png",
+   "builder": "weapon_icon",
+   "params": {
+    "kind": "katana",
+    "material": "iron"
+   }
+  },
+  {
+   "file": "icons/weapons/iron-dagger.png",
+   "builder": "weapon_icon",
+   "params": {
+    "kind": "dagger",
+    "material": "iron"
+   }
+  },
+  {
+   "file": "icons/weapons/iron-axe.png",
+   "builder": "weapon_icon",
+   "params": {
+    "kind": "axe",
+    "material": "iron"
+   }
+  },
+  {
+   "file": "icons/weapons/iron-spear.png",
+   "builder": "weapon_icon",
+   "params": {
+    "kind": "spear",
+    "material": "iron"
+   }
+  },
+  {
+   "file": "icons/weapons/iron-staff.png",
+   "builder": "weapon_icon",
+   "params": {
+    "kind": "staff",
+    "material": "iron"
+   }
+  },
+  {
+   "file": "icons/weapons/iron-bow.png",
+   "builder": "weapon_icon",
+   "params": {
+    "kind": "bow",
+    "material": "iron"
+   }
+  },
+  {
+   "file": "icons/weapons/iron-hammer.png",
+   "builder": "weapon_icon",
+   "params": {
+    "kind": "hammer",
+    "material": "iron"
+   }
+  },
+  {
+   "file": "icons/weapons/mithril-sword.png",
+   "builder": "weapon_icon",
+   "params": {
+    "kind": "sword",
+    "material": "mithril"
+   }
+  },
+  {
+   "file": "icons/weapons/mithril-katana.png",
+   "builder": "weapon_icon",
+   "params": {
+    "kind": "katana",
+    "material": "mithril"
+   }
+  },
+  {
+   "file": "icons/weapons/mithril-dagger.png",
+   "builder": "weapon_icon",
+   "params": {
+    "kind": "dagger",
+    "material": "mithril"
+   }
+  },
+  {
+   "file": "icons/weapons/mithril-axe.png",
+   "builder": "weapon_icon",
+   "params": {
+    "kind": "axe",
+    "material": "mithril"
+   }
+  },
+  {
+   "file": "icons/weapons/mithril-spear.png",
+   "builder": "weapon_icon",
+   "params": {
+    "kind": "spear",
+    "material": "mithril"
+   }
+  },
+  {
+   "file": "icons/weapons/mithril-staff.png",
+   "builder": "weapon_icon",
+   "params": {
+    "kind": "staff",
+    "material": "mithril"
+   }
+  },
+  {
+   "file": "icons/weapons/mithril-bow.png",
+   "builder": "weapon_icon",
+   "params": {
+    "kind": "bow",
+    "material": "mithril"
+   }
+  },
+  {
+   "file": "icons/weapons/mithril-hammer.png",
+   "builder": "weapon_icon",
+   "params": {
+    "kind": "hammer",
+    "material": "mithril"
+   }
+  },
+  {
+   "file": "icons/weapons/gold-sword.png",
+   "builder": "weapon_icon",
+   "params": {
+    "kind": "sword",
+    "material": "gold"
+   }
+  },
+  {
+   "file": "icons/weapons/gold-katana.png",
+   "builder": "weapon_icon",
+   "params": {
+    "kind": "katana",
+    "material": "gold"
+   }
+  },
+  {
+   "file": "icons/weapons/gold-dagger.png",
+   "builder": "weapon_icon",
+   "params": {
+    "kind": "dagger",
+    "material": "gold"
+   }
+  },
+  {
+   "file": "icons/weapons/gold-axe.png",
+   "builder": "weapon_icon",
+   "params": {
+    "kind": "axe",
+    "material": "gold"
+   }
+  },
+  {
+   "file": "icons/weapons/gold-spear.png",
+   "builder": "weapon_icon",
+   "params": {
+    "kind": "spear",
+    "material": "gold"
+   }
+  },
+  {
+   "file": "icons/weapons/gold-staff.png",
+   "builder": "weapon_icon",
+   "params": {
+    "kind": "staff",
+    "material": "gold"
+   }
+  },
+  {
+   "file": "icons/weapons/gold-bow.png",
+   "builder": "weapon_icon",
+   "params": {
+    "kind": "bow",
+    "material": "gold"
+   }
+  },
+  {
+   "file": "icons/weapons/gold-hammer.png",
+   "builder": "weapon_icon",
+   "params": {
+    "kind": "hammer",
+    "material": "gold"
+   }
+  },
+  {
+   "file": "icons/weapons/dark-sword.png",
+   "builder": "weapon_icon",
+   "params": {
+    "kind": "sword",
+    "material": "dark"
+   }
+  },
+  {
+   "file": "icons/weapons/dark-katana.png",
+   "builder": "weapon_icon",
+   "params": {
+    "kind": "katana",
+    "material": "dark"
+   }
+  },
+  {
+   "file": "icons/weapons/dark-dagger.png",
+   "builder": "weapon_icon",
+   "params": {
+    "kind": "dagger",
+    "material": "dark"
+   }
+  },
+  {
+   "file": "icons/weapons/dark-axe.png",
+   "builder": "weapon_icon",
+   "params": {
+    "kind": "axe",
+    "material": "dark"
+   }
+  },
+  {
+   "file": "icons/weapons/dark-spear.png",
+   "builder": "weapon_icon",
+   "params": {
+    "kind": "spear",
+    "material": "dark"
+   }
+  },
+  {
+   "file": "icons/weapons/dark-staff.png",
+   "builder": "weapon_icon",
+   "params": {
+    "kind": "staff",
+    "material": "dark"
+   }
+  },
+  {
+   "file": "icons/weapons/dark-bow.png",
+   "builder": "weapon_icon",
+   "params": {
+    "kind": "bow",
+    "material": "dark"
+   }
+  },
+  {
+   "file": "icons/weapons/dark-hammer.png",
+   "builder": "weapon_icon",
+   "params": {
+    "kind": "hammer",
+    "material": "dark"
+   }
+  },
+  {
+   "file": "icons/armor/bronze-helmet.png",
+   "builder": "armor_icon",
+   "params": {
+    "kind": "helmet",
+    "material": "bronze"
+   }
+  },
+  {
+   "file": "icons/armor/bronze-armor.png",
+   "builder": "armor_icon",
+   "params": {
+    "kind": "armor",
+    "material": "bronze"
+   }
+  },
+  {
+   "file": "icons/armor/bronze-shield.png",
+   "builder": "armor_icon",
+   "params": {
+    "kind": "shield",
+    "material": "bronze"
+   }
+  },
+  {
+   "file": "icons/armor/bronze-gauntlet.png",
+   "builder": "armor_icon",
+   "params": {
+    "kind": "gauntlet",
+    "material": "bronze"
+   }
+  },
+  {
+   "file": "icons/armor/bronze-boots.png",
+   "builder": "armor_icon",
+   "params": {
+    "kind": "boots",
+    "material": "bronze"
+   }
+  },
+  {
+   "file": "icons/armor/bronze-cloak.png",
+   "builder": "armor_icon",
+   "params": {
+    "kind": "cloak",
+    "material": "bronze"
+   }
+  },
+  {
+   "file": "icons/armor/bronze-ring.png",
+   "builder": "armor_icon",
+   "params": {
+    "kind": "ring",
+    "material": "bronze"
+   }
+  },
+  {
+   "file": "icons/armor/bronze-amulet.png",
+   "builder": "armor_icon",
+   "params": {
+    "kind": "amulet",
+    "material": "bronze"
+   }
+  },
+  {
+   "file": "icons/armor/iron-helmet.png",
+   "builder": "armor_icon",
+   "params": {
+    "kind": "helmet",
+    "material": "iron"
+   }
+  },
+  {
+   "file": "icons/armor/iron-armor.png",
+   "builder": "armor_icon",
+   "params": {
+    "kind": "armor",
+    "material": "iron"
+   }
+  },
+  {
+   "file": "icons/armor/iron-shield.png",
+   "builder": "armor_icon",
+   "params": {
+    "kind": "shield",
+    "material": "iron"
+   }
+  },
+  {
+   "file": "icons/armor/iron-gauntlet.png",
+   "builder": "armor_icon",
+   "params": {
+    "kind": "gauntlet",
+    "material": "iron"
+   }
+  },
+  {
+   "file": "icons/armor/iron-boots.png",
+   "builder": "armor_icon",
+   "params": {
+    "kind": "boots",
+    "material": "iron"
+   }
+  },
+  {
+   "file": "icons/armor/iron-cloak.png",
+   "builder": "armor_icon",
+   "params": {
+    "kind": "cloak",
+    "material": "iron"
+   }
+  },
+  {
+   "file": "icons/armor/iron-ring.png",
+   "builder": "armor_icon",
+   "params": {
+    "kind": "ring",
+    "material": "iron"
+   }
+  },
+  {
+   "file": "icons/armor/iron-amulet.png",
+   "builder": "armor_icon",
+   "params": {
+    "kind": "amulet",
+    "material": "iron"
+   }
+  },
+  {
+   "file": "icons/armor/mithril-helmet.png",
+   "builder": "armor_icon",
+   "params": {
+    "kind": "helmet",
+    "material": "mithril"
+   }
+  },
+  {
+   "file": "icons/armor/mithril-armor.png",
+   "builder": "armor_icon",
+   "params": {
+    "kind": "armor",
+    "material": "mithril"
+   }
+  },
+  {
+   "file": "icons/armor/mithril-shield.png",
+   "builder": "armor_icon",
+   "params": {
+    "kind": "shield",
+    "material": "mithril"
+   }
+  },
+  {
+   "file": "icons/armor/mithril-gauntlet.png",
+   "builder": "armor_icon",
+   "params": {
+    "kind": "gauntlet",
+    "material": "mithril"
+   }
+  },
+  {
+   "file": "icons/armor/mithril-boots.png",
+   "builder": "armor_icon",
+   "params": {
+    "kind": "boots",
+    "material": "mithril"
+   }
+  },
+  {
+   "file": "icons/armor/mithril-cloak.png",
+   "builder": "armor_icon",
+   "params": {
+    "kind": "cloak",
+    "material": "mithril"
+   }
+  },
+  {
+   "file": "icons/armor/mithril-ring.png",
+   "builder": "armor_icon",
+   "params": {
+    "kind": "ring",
+    "material": "mithril"
+   }
+  },
+  {
+   "file": "icons/armor/mithril-amulet.png",
+   "builder": "armor_icon",
+   "params": {
+    "kind": "amulet",
+    "material": "mithril"
+   }
+  },
+  {
+   "file": "icons/armor/gold-helmet.png",
+   "builder": "armor_icon",
+   "params": {
+    "kind": "helmet",
+    "material": "gold"
+   }
+  },
+  {
+   "file": "icons/armor/gold-armor.png",
+   "builder": "armor_icon",
+   "params": {
+    "kind": "armor",
+    "material": "gold"
+   }
+  },
+  {
+   "file": "icons/armor/gold-shield.png",
+   "builder": "armor_icon",
+   "params": {
+    "kind": "shield",
+    "material": "gold"
+   }
+  },
+  {
+   "file": "icons/armor/gold-gauntlet.png",
+   "builder": "armor_icon",
+   "params": {
+    "kind": "gauntlet",
+    "material": "gold"
+   }
+  },
+  {
+   "file": "icons/armor/gold-boots.png",
+   "builder": "armor_icon",
+   "params": {
+    "kind": "boots",
+    "material": "gold"
+   }
+  },
+  {
+   "file": "icons/armor/gold-cloak.png",
+   "builder": "armor_icon",
+   "params": {
+    "kind": "cloak",
+    "material": "gold"
+   }
+  },
+  {
+   "file": "icons/armor/gold-ring.png",
+   "builder": "armor_icon",
+   "params": {
+    "kind": "ring",
+    "material": "gold"
+   }
+  },
+  {
+   "file": "icons/armor/gold-amulet.png",
+   "builder": "armor_icon",
+   "params": {
+    "kind": "amulet",
+    "material": "gold"
+   }
+  },
+  {
+   "file": "icons/armor/dark-helmet.png",
+   "builder": "armor_icon",
+   "params": {
+    "kind": "helmet",
+    "material": "dark"
+   }
+  },
+  {
+   "file": "icons/armor/dark-armor.png",
+   "builder": "armor_icon",
+   "params": {
+    "kind": "armor",
+    "material": "dark"
+   }
+  },
+  {
+   "file": "icons/armor/dark-shield.png",
+   "builder": "armor_icon",
+   "params": {
+    "kind": "shield",
+    "material": "dark"
+   }
+  },
+  {
+   "file": "icons/armor/dark-gauntlet.png",
+   "builder": "armor_icon",
+   "params": {
+    "kind": "gauntlet",
+    "material": "dark"
+   }
+  },
+  {
+   "file": "icons/armor/dark-boots.png",
+   "builder": "armor_icon",
+   "params": {
+    "kind": "boots",
+    "material": "dark"
+   }
+  },
+  {
+   "file": "icons/armor/dark-cloak.png",
+   "builder": "armor_icon",
+   "params": {
+    "kind": "cloak",
+    "material": "dark"
+   }
+  },
+  {
+   "file": "icons/armor/dark-ring.png",
+   "builder": "armor_icon",
+   "params": {
+    "kind": "ring",
+    "material": "dark"
+   }
+  },
+  {
+   "file": "icons/armor/dark-amulet.png",
+   "builder": "armor_icon",
+   "params": {
+    "kind": "amulet",
+    "material": "dark"
+   }
+  },
+  {
+   "file": "icons/consumables/minor-hp-potion.png",
+   "builder": "consumable_icon",
+   "params": {
+    "kind": "hp_potion",
+    "grade": "minor"
+   }
+  },
+  {
+   "file": "icons/consumables/minor-mp-potion.png",
+   "builder": "consumable_icon",
+   "params": {
+    "kind": "mp_potion",
+    "grade": "minor"
+   }
+  },
+  {
+   "file": "icons/consumables/minor-antidote.png",
+   "builder": "consumable_icon",
+   "params": {
+    "kind": "antidote",
+    "grade": "minor"
+   }
+  },
+  {
+   "file": "icons/consumables/minor-elixir.png",
+   "builder": "consumable_icon",
+   "params": {
+    "kind": "elixir",
+    "grade": "minor"
+   }
+  },
+  {
+   "file": "icons/consumables/minor-phoenix-feather.png",
+   "builder": "consumable_icon",
+   "params": {
+    "kind": "phoenix_feather",
+    "grade": "minor"
+   }
+  },
+  {
+   "file": "icons/consumables/minor-scroll.png",
+   "builder": "consumable_icon",
+   "params": {
+    "kind": "scroll",
+    "grade": "minor"
+   }
+  },
+  {
+   "file": "icons/consumables/minor-bomb.png",
+   "builder": "consumable_icon",
+   "params": {
+    "kind": "bomb",
+    "grade": "minor"
+   }
+  },
+  {
+   "file": "icons/consumables/minor-onigiri.png",
+   "builder": "consumable_icon",
+   "params": {
+    "kind": "onigiri",
+    "grade": "minor"
+   }
+  },
+  {
+   "file": "icons/consumables/normal-hp-potion.png",
+   "builder": "consumable_icon",
+   "params": {
+    "kind": "hp_potion",
+    "grade": "normal"
+   }
+  },
+  {
+   "file": "icons/consumables/normal-mp-potion.png",
+   "builder": "consumable_icon",
+   "params": {
+    "kind": "mp_potion",
+    "grade": "normal"
+   }
+  },
+  {
+   "file": "icons/consumables/normal-antidote.png",
+   "builder": "consumable_icon",
+   "params": {
+    "kind": "antidote",
+    "grade": "normal"
+   }
+  },
+  {
+   "file": "icons/consumables/normal-elixir.png",
+   "builder": "consumable_icon",
+   "params": {
+    "kind": "elixir",
+    "grade": "normal"
+   }
+  },
+  {
+   "file": "icons/consumables/normal-phoenix-feather.png",
+   "builder": "consumable_icon",
+   "params": {
+    "kind": "phoenix_feather",
+    "grade": "normal"
+   }
+  },
+  {
+   "file": "icons/consumables/normal-scroll.png",
+   "builder": "consumable_icon",
+   "params": {
+    "kind": "scroll",
+    "grade": "normal"
+   }
+  },
+  {
+   "file": "icons/consumables/normal-bomb.png",
+   "builder": "consumable_icon",
+   "params": {
+    "kind": "bomb",
+    "grade": "normal"
+   }
+  },
+  {
+   "file": "icons/consumables/normal-onigiri.png",
+   "builder": "consumable_icon",
+   "params": {
+    "kind": "onigiri",
+    "grade": "normal"
+   }
+  },
+  {
+   "file": "icons/consumables/greater-hp-potion.png",
+   "builder": "consumable_icon",
+   "params": {
+    "kind": "hp_potion",
+    "grade": "greater"
+   }
+  },
+  {
+   "file": "icons/consumables/greater-mp-potion.png",
+   "builder": "consumable_icon",
+   "params": {
+    "kind": "mp_potion",
+    "grade": "greater"
+   }
+  },
+  {
+   "file": "icons/consumables/greater-antidote.png",
+   "builder": "consumable_icon",
+   "params": {
+    "kind": "antidote",
+    "grade": "greater"
+   }
+  },
+  {
+   "file": "icons/consumables/greater-elixir.png",
+   "builder": "consumable_icon",
+   "params": {
+    "kind": "elixir",
+    "grade": "greater"
+   }
+  },
+  {
+   "file": "icons/consumables/greater-phoenix-feather.png",
+   "builder": "consumable_icon",
+   "params": {
+    "kind": "phoenix_feather",
+    "grade": "greater"
+   }
+  },
+  {
+   "file": "icons/consumables/greater-scroll.png",
+   "builder": "consumable_icon",
+   "params": {
+    "kind": "scroll",
+    "grade": "greater"
+   }
+  },
+  {
+   "file": "icons/consumables/greater-bomb.png",
+   "builder": "consumable_icon",
+   "params": {
+    "kind": "bomb",
+    "grade": "greater"
+   }
+  },
+  {
+   "file": "icons/consumables/greater-onigiri.png",
+   "builder": "consumable_icon",
+   "params": {
+    "kind": "onigiri",
+    "grade": "greater"
+   }
+  },
+  {
+   "file": "icons/materials/red-ore.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "ore",
+    "color": "red"
+   }
+  },
+  {
+   "file": "icons/materials/red-ingot.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "ingot",
+    "color": "red"
+   }
+  },
+  {
+   "file": "icons/materials/red-gem.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "gem",
+    "color": "red"
+   }
+  },
+  {
+   "file": "icons/materials/red-crystal.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "crystal",
+    "color": "red"
+   }
+  },
+  {
+   "file": "icons/materials/red-herb.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "herb",
+    "color": "red"
+   }
+  },
+  {
+   "file": "icons/materials/red-mushroom.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "mushroom",
+    "color": "red"
+   }
+  },
+  {
+   "file": "icons/materials/red-key.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "key",
+    "color": "red"
+   }
+  },
+  {
+   "file": "icons/materials/red-coin-pouch.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "coin_pouch",
+    "color": "red"
+   }
+  },
+  {
+   "file": "icons/materials/blue-ore.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "ore",
+    "color": "blue"
+   }
+  },
+  {
+   "file": "icons/materials/blue-ingot.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "ingot",
+    "color": "blue"
+   }
+  },
+  {
+   "file": "icons/materials/blue-gem.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "gem",
+    "color": "blue"
+   }
+  },
+  {
+   "file": "icons/materials/blue-crystal.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "crystal",
+    "color": "blue"
+   }
+  },
+  {
+   "file": "icons/materials/blue-herb.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "herb",
+    "color": "blue"
+   }
+  },
+  {
+   "file": "icons/materials/blue-mushroom.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "mushroom",
+    "color": "blue"
+   }
+  },
+  {
+   "file": "icons/materials/blue-key.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "key",
+    "color": "blue"
+   }
+  },
+  {
+   "file": "icons/materials/blue-coin-pouch.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "coin_pouch",
+    "color": "blue"
+   }
+  },
+  {
+   "file": "icons/materials/green-ore.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "ore",
+    "color": "green"
+   }
+  },
+  {
+   "file": "icons/materials/green-ingot.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "ingot",
+    "color": "green"
+   }
+  },
+  {
+   "file": "icons/materials/green-gem.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "gem",
+    "color": "green"
+   }
+  },
+  {
+   "file": "icons/materials/green-crystal.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "crystal",
+    "color": "green"
+   }
+  },
+  {
+   "file": "icons/materials/green-herb.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "herb",
+    "color": "green"
+   }
+  },
+  {
+   "file": "icons/materials/green-mushroom.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "mushroom",
+    "color": "green"
+   }
+  },
+  {
+   "file": "icons/materials/green-key.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "key",
+    "color": "green"
+   }
+  },
+  {
+   "file": "icons/materials/green-coin-pouch.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "coin_pouch",
+    "color": "green"
+   }
+  },
+  {
+   "file": "icons/materials/purple-ore.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "ore",
+    "color": "purple"
+   }
+  },
+  {
+   "file": "icons/materials/purple-ingot.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "ingot",
+    "color": "purple"
+   }
+  },
+  {
+   "file": "icons/materials/purple-gem.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "gem",
+    "color": "purple"
+   }
+  },
+  {
+   "file": "icons/materials/purple-crystal.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "crystal",
+    "color": "purple"
+   }
+  },
+  {
+   "file": "icons/materials/purple-herb.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "herb",
+    "color": "purple"
+   }
+  },
+  {
+   "file": "icons/materials/purple-mushroom.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "mushroom",
+    "color": "purple"
+   }
+  },
+  {
+   "file": "icons/materials/purple-key.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "key",
+    "color": "purple"
+   }
+  },
+  {
+   "file": "icons/materials/purple-coin-pouch.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "coin_pouch",
+    "color": "purple"
+   }
+  },
+  {
+   "file": "icons/materials/gold-ore.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "ore",
+    "color": "gold"
+   }
+  },
+  {
+   "file": "icons/materials/gold-ingot.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "ingot",
+    "color": "gold"
+   }
+  },
+  {
+   "file": "icons/materials/gold-gem.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "gem",
+    "color": "gold"
+   }
+  },
+  {
+   "file": "icons/materials/gold-crystal.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "crystal",
+    "color": "gold"
+   }
+  },
+  {
+   "file": "icons/materials/gold-herb.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "herb",
+    "color": "gold"
+   }
+  },
+  {
+   "file": "icons/materials/gold-mushroom.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "mushroom",
+    "color": "gold"
+   }
+  },
+  {
+   "file": "icons/materials/gold-key.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "key",
+    "color": "gold"
+   }
+  },
+  {
+   "file": "icons/materials/gold-coin-pouch.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "coin_pouch",
+    "color": "gold"
+   }
+  },
+  {
+   "file": "icons/materials/silver-ore.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "ore",
+    "color": "silver"
+   }
+  },
+  {
+   "file": "icons/materials/silver-ingot.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "ingot",
+    "color": "silver"
+   }
+  },
+  {
+   "file": "icons/materials/silver-gem.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "gem",
+    "color": "silver"
+   }
+  },
+  {
+   "file": "icons/materials/silver-crystal.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "crystal",
+    "color": "silver"
+   }
+  },
+  {
+   "file": "icons/materials/silver-herb.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "herb",
+    "color": "silver"
+   }
+  },
+  {
+   "file": "icons/materials/silver-mushroom.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "mushroom",
+    "color": "silver"
+   }
+  },
+  {
+   "file": "icons/materials/silver-key.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "key",
+    "color": "silver"
+   }
+  },
+  {
+   "file": "icons/materials/silver-coin-pouch.png",
+   "builder": "material_icon",
+   "params": {
+    "kind": "coin_pouch",
+    "color": "silver"
+   }
+  },
+  {
+   "file": "icons/skills/lava-burn.png",
+   "builder": "skill_icon",
+   "params": {
+    "skill": "lava_burn"
+   }
+  },
+  {
+   "file": "icons/skills/meteor.png",
+   "builder": "skill_icon",
+   "params": {
+    "skill": "meteor"
+   }
+  },
+  {
+   "file": "icons/skills/fire-pillar.png",
+   "builder": "skill_icon",
+   "params": {
+    "skill": "fire_pillar"
+   }
+  },
+  {
+   "file": "icons/skills/earth-spike.png",
+   "builder": "skill_icon",
+   "params": {
+    "skill": "earth_spike"
+   }
+  },
+  {
+   "file": "icons/skills/whirlpool.png",
+   "builder": "skill_icon",
+   "params": {
+    "skill": "whirlpool"
+   }
+  },
+  {
+   "file": "icons/skills/gale.png",
+   "builder": "skill_icon",
+   "params": {
+    "skill": "gale"
+   }
+  },
+  {
+   "file": "icons/skills/ice-field.png",
+   "builder": "skill_icon",
+   "params": {
+    "skill": "ice_field"
+   }
+  },
+  {
+   "file": "icons/skills/holy-judgment.png",
+   "builder": "skill_icon",
+   "params": {
+    "skill": "holy_judgment"
+   }
+  },
+  {
+   "file": "icons/skills/revive.png",
+   "builder": "skill_icon",
+   "params": {
+    "skill": "revive"
+   }
+  },
+  {
+   "file": "icons/skills/dark-vortex.png",
+   "builder": "skill_icon",
+   "params": {
+    "skill": "dark_vortex"
+   }
+  },
+  {
+   "file": "icons/skills/curse.png",
+   "builder": "skill_icon",
+   "params": {
+    "skill": "curse"
+   }
+  },
+  {
+   "file": "icons/skills/life-drain.png",
+   "builder": "skill_icon",
+   "params": {
+    "skill": "life_drain"
+   }
+  },
+  {
+   "file": "icons/skills/heal.png",
+   "builder": "skill_icon",
+   "params": {
+    "skill": "heal"
+   }
+  },
+  {
+   "file": "icons/skills/barrier.png",
+   "builder": "skill_icon",
+   "params": {
+    "skill": "barrier"
+   }
+  },
+  {
+   "file": "icons/skills/haste.png",
+   "builder": "skill_icon",
+   "params": {
+    "skill": "haste"
+   }
+  },
+  {
+   "file": "icons/skills/slash.png",
+   "builder": "skill_icon",
+   "params": {
+    "skill": "slash"
+   }
+  },
+  {
+   "file": "icons/skills/thunder.png",
+   "builder": "skill_icon",
+   "params": {
+    "skill": "thunder"
+   }
+  },
+  {
+   "file": "icons/skills/poison.png",
+   "builder": "skill_icon",
+   "params": {
+    "skill": "poison"
+   }
+  },
+  {
+   "file": "icons/status/atk-up.png",
+   "builder": "status_icon",
+   "params": {
+    "status": "atk_up"
+   }
+  },
+  {
+   "file": "icons/status/atk-down.png",
+   "builder": "status_icon",
+   "params": {
+    "status": "atk_down"
+   }
+  },
+  {
+   "file": "icons/status/def-up.png",
+   "builder": "status_icon",
+   "params": {
+    "status": "def_up"
+   }
+  },
+  {
+   "file": "icons/status/def-down.png",
+   "builder": "status_icon",
+   "params": {
+    "status": "def_down"
+   }
+  },
+  {
+   "file": "icons/status/spd-up.png",
+   "builder": "status_icon",
+   "params": {
+    "status": "spd_up"
+   }
+  },
+  {
+   "file": "icons/status/spd-down.png",
+   "builder": "status_icon",
+   "params": {
+    "status": "spd_down"
+   }
+  },
+  {
+   "file": "icons/status/mag-up.png",
+   "builder": "status_icon",
+   "params": {
+    "status": "mag_up"
+   }
+  },
+  {
+   "file": "icons/status/mag-down.png",
+   "builder": "status_icon",
+   "params": {
+    "status": "mag_down"
+   }
+  },
+  {
+   "file": "icons/status/poison.png",
+   "builder": "status_icon",
+   "params": {
+    "status": "poison"
+   }
+  },
+  {
+   "file": "icons/status/burn.png",
+   "builder": "status_icon",
+   "params": {
+    "status": "burn"
+   }
+  },
+  {
+   "file": "icons/status/freeze.png",
+   "builder": "status_icon",
+   "params": {
+    "status": "freeze"
+   }
+  },
+  {
+   "file": "icons/status/paralysis.png",
+   "builder": "status_icon",
+   "params": {
+    "status": "paralysis"
+   }
+  },
+  {
+   "file": "icons/status/sleep.png",
+   "builder": "status_icon",
+   "params": {
+    "status": "sleep"
+   }
+  },
+  {
+   "file": "icons/status/petrify.png",
+   "builder": "status_icon",
+   "params": {
+    "status": "petrify"
+   }
+  },
+  {
+   "file": "icons/status/curse.png",
+   "builder": "status_icon",
+   "params": {
+    "status": "curse"
+   }
+  },
+  {
+   "file": "icons/status/silence.png",
+   "builder": "status_icon",
+   "params": {
+    "status": "silence"
+   }
+  },
+  {
+   "file": "icons/status/blind.png",
+   "builder": "status_icon",
+   "params": {
+    "status": "blind"
+   }
+  },
+  {
+   "file": "icons/status/stun.png",
+   "builder": "status_icon",
+   "params": {
+    "status": "stun"
+   }
+  },
+  {
+   "file": "icons/status/regen.png",
+   "builder": "status_icon",
+   "params": {
+    "status": "regen"
+   }
+  },
+  {
+   "file": "icons/status/charm.png",
+   "builder": "status_icon",
+   "params": {
+    "status": "charm"
+   }
+  },
+  {
+   "file": "icons/ui/color-bag.png",
+   "builder": "ui_icon",
+   "params": {
+    "kind": "bag",
+    "style": "color"
+   }
+  },
+  {
+   "file": "icons/ui/color-equipment.png",
+   "builder": "ui_icon",
+   "params": {
+    "kind": "equipment",
+    "style": "color"
+   }
+  },
+  {
+   "file": "icons/ui/color-skills.png",
+   "builder": "ui_icon",
+   "params": {
+    "kind": "skills",
+    "style": "color"
+   }
+  },
+  {
+   "file": "icons/ui/color-map.png",
+   "builder": "ui_icon",
+   "params": {
+    "kind": "map",
+    "style": "color"
+   }
+  },
+  {
+   "file": "icons/ui/color-quest.png",
+   "builder": "ui_icon",
+   "params": {
+    "kind": "quest",
+    "style": "color"
+   }
+  },
+  {
+   "file": "icons/ui/color-shop.png",
+   "builder": "ui_icon",
+   "params": {
+    "kind": "shop",
+    "style": "color"
+   }
+  },
+  {
+   "file": "icons/ui/color-settings.png",
+   "builder": "ui_icon",
+   "params": {
+    "kind": "settings",
+    "style": "color"
+   }
+  },
+  {
+   "file": "icons/ui/color-save.png",
+   "builder": "ui_icon",
+   "params": {
+    "kind": "save",
+    "style": "color"
+   }
+  },
+  {
+   "file": "icons/ui/color-home.png",
+   "builder": "ui_icon",
+   "params": {
+    "kind": "home",
+    "style": "color"
+   }
+  },
+  {
+   "file": "icons/ui/color-mail.png",
+   "builder": "ui_icon",
+   "params": {
+    "kind": "mail",
+    "style": "color"
+   }
+  },
+  {
+   "file": "icons/ui/color-battle.png",
+   "builder": "ui_icon",
+   "params": {
+    "kind": "battle",
+    "style": "color"
+   }
+  },
+  {
+   "file": "icons/ui/color-auto.png",
+   "builder": "ui_icon",
+   "params": {
+    "kind": "auto",
+    "style": "color"
+   }
+  },
+  {
+   "file": "icons/ui/color-speed.png",
+   "builder": "ui_icon",
+   "params": {
+    "kind": "speed",
+    "style": "color"
+   }
+  },
+  {
+   "file": "icons/ui/color-confirm.png",
+   "builder": "ui_icon",
+   "params": {
+    "kind": "confirm",
+    "style": "color"
+   }
+  },
+  {
+   "file": "icons/ui/color-close.png",
+   "builder": "ui_icon",
+   "params": {
+    "kind": "close",
+    "style": "color"
+   }
+  },
+  {
+   "file": "icons/ui/color-back.png",
+   "builder": "ui_icon",
+   "params": {
+    "kind": "back",
+    "style": "color"
+   }
+  },
+  {
+   "file": "icons/ui/color-gold.png",
+   "builder": "ui_icon",
+   "params": {
+    "kind": "gold",
+    "style": "color"
+   }
+  },
+  {
+   "file": "icons/ui/color-gem.png",
+   "builder": "ui_icon",
+   "params": {
+    "kind": "gem",
+    "style": "color"
+   }
+  },
+  {
+   "file": "icons/ui/color-stamina.png",
+   "builder": "ui_icon",
+   "params": {
+    "kind": "stamina",
+    "style": "color"
+   }
+  },
+  {
+   "file": "icons/ui/color-cursor.png",
+   "builder": "ui_icon",
+   "params": {
+    "kind": "cursor",
+    "style": "color"
+   }
+  },
+  {
+   "file": "icons/ui/mono-bag.png",
+   "builder": "ui_icon",
+   "params": {
+    "kind": "bag",
+    "style": "mono"
+   }
+  },
+  {
+   "file": "icons/ui/mono-equipment.png",
+   "builder": "ui_icon",
+   "params": {
+    "kind": "equipment",
+    "style": "mono"
+   }
+  },
+  {
+   "file": "icons/ui/mono-skills.png",
+   "builder": "ui_icon",
+   "params": {
+    "kind": "skills",
+    "style": "mono"
+   }
+  },
+  {
+   "file": "icons/ui/mono-map.png",
+   "builder": "ui_icon",
+   "params": {
+    "kind": "map",
+    "style": "mono"
+   }
+  },
+  {
+   "file": "icons/ui/mono-quest.png",
+   "builder": "ui_icon",
+   "params": {
+    "kind": "quest",
+    "style": "mono"
+   }
+  },
+  {
+   "file": "icons/ui/mono-shop.png",
+   "builder": "ui_icon",
+   "params": {
+    "kind": "shop",
+    "style": "mono"
+   }
+  },
+  {
+   "file": "icons/ui/mono-settings.png",
+   "builder": "ui_icon",
+   "params": {
+    "kind": "settings",
+    "style": "mono"
+   }
+  },
+  {
+   "file": "icons/ui/mono-save.png",
+   "builder": "ui_icon",
+   "params": {
+    "kind": "save",
+    "style": "mono"
+   }
+  },
+  {
+   "file": "icons/ui/mono-home.png",
+   "builder": "ui_icon",
+   "params": {
+    "kind": "home",
+    "style": "mono"
+   }
+  },
+  {
+   "file": "icons/ui/mono-mail.png",
+   "builder": "ui_icon",
+   "params": {
+    "kind": "mail",
+    "style": "mono"
+   }
+  },
+  {
+   "file": "icons/ui/mono-battle.png",
+   "builder": "ui_icon",
+   "params": {
+    "kind": "battle",
+    "style": "mono"
+   }
+  },
+  {
+   "file": "icons/ui/mono-auto.png",
+   "builder": "ui_icon",
+   "params": {
+    "kind": "auto",
+    "style": "mono"
+   }
+  },
+  {
+   "file": "icons/ui/mono-speed.png",
+   "builder": "ui_icon",
+   "params": {
+    "kind": "speed",
+    "style": "mono"
+   }
+  },
+  {
+   "file": "icons/ui/mono-confirm.png",
+   "builder": "ui_icon",
+   "params": {
+    "kind": "confirm",
+    "style": "mono"
+   }
+  },
+  {
+   "file": "icons/ui/mono-close.png",
+   "builder": "ui_icon",
+   "params": {
+    "kind": "close",
+    "style": "mono"
+   }
+  },
+  {
+   "file": "icons/ui/mono-back.png",
+   "builder": "ui_icon",
+   "params": {
+    "kind": "back",
+    "style": "mono"
+   }
+  },
+  {
+   "file": "icons/ui/mono-gold.png",
+   "builder": "ui_icon",
+   "params": {
+    "kind": "gold",
+    "style": "mono"
+   }
+  },
+  {
+   "file": "icons/ui/mono-gem.png",
+   "builder": "ui_icon",
+   "params": {
+    "kind": "gem",
+    "style": "mono"
+   }
+  },
+  {
+   "file": "icons/ui/mono-stamina.png",
+   "builder": "ui_icon",
+   "params": {
+    "kind": "stamina",
+    "style": "mono"
+   }
+  },
+  {
+   "file": "icons/ui/mono-cursor.png",
+   "builder": "ui_icon",
+   "params": {
+    "kind": "cursor",
+    "style": "mono"
+   }
+  },
+  {
+   "file": "ui/classic_blue/window.png",
+   "builder": "ui_panel",
+   "params": {
+    "kind": "window",
+    "width": 128,
+    "height": 80,
+    "theme": "classic_blue"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/classic_blue/dialog-0.png",
+   "builder": "ui_panel",
+   "params": {
+    "kind": "dialog",
+    "width": 192,
+    "height": 64,
+    "theme": "classic_blue"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/classic_blue/dialog-1.png",
+   "builder": "ui_panel",
+   "params": {
+    "kind": "dialog",
+    "width": 192,
+    "height": 64,
+    "theme": "classic_blue"
+   },
+   "frame": 1
+  },
+  {
+   "file": "ui/classic_blue/dialog-2.png",
+   "builder": "ui_panel",
+   "params": {
+    "kind": "dialog",
+    "width": 192,
+    "height": 64,
+    "theme": "classic_blue"
+   },
+   "frame": 2
+  },
+  {
+   "file": "ui/classic_blue/dialog-3.png",
+   "builder": "ui_panel",
+   "params": {
+    "kind": "dialog",
+    "width": 192,
+    "height": 64,
+    "theme": "classic_blue"
+   },
+   "frame": 3
+  },
+  {
+   "file": "ui/classic_blue/tooltip.png",
+   "builder": "ui_panel",
+   "params": {
+    "kind": "tooltip",
+    "width": 96,
+    "height": 40,
+    "theme": "classic_blue"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/classic_blue/title.png",
+   "builder": "ui_panel",
+   "params": {
+    "kind": "title",
+    "width": 128,
+    "height": 28,
+    "theme": "classic_blue"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/classic_blue/tab-active.png",
+   "builder": "ui_panel",
+   "params": {
+    "kind": "tab",
+    "width": 48,
+    "height": 18,
+    "theme": "classic_blue"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/classic_blue/tab-inactive.png",
+   "builder": "ui_panel",
+   "params": {
+    "kind": "tab",
+    "width": 48,
+    "height": 18,
+    "theme": "classic_blue"
+   },
+   "frame": 1
+  },
+  {
+   "file": "ui/classic_blue/button-normal.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "rect",
+    "width": 96,
+    "height": 32,
+    "theme": "classic_blue"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/classic_blue/button-hover.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "rect",
+    "width": 96,
+    "height": 32,
+    "theme": "classic_blue"
+   },
+   "frame": 1
+  },
+  {
+   "file": "ui/classic_blue/button-pressed.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "rect",
+    "width": 96,
+    "height": 32,
+    "theme": "classic_blue"
+   },
+   "frame": 2
+  },
+  {
+   "file": "ui/classic_blue/button-disabled.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "rect",
+    "width": 96,
+    "height": 32,
+    "theme": "classic_blue"
+   },
+   "frame": 3
+  },
+  {
+   "file": "ui/classic_blue/button-square-normal.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "square",
+    "height": 40,
+    "theme": "classic_blue"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/classic_blue/button-square-hover.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "square",
+    "height": 40,
+    "theme": "classic_blue"
+   },
+   "frame": 1
+  },
+  {
+   "file": "ui/classic_blue/button-square-pressed.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "square",
+    "height": 40,
+    "theme": "classic_blue"
+   },
+   "frame": 2
+  },
+  {
+   "file": "ui/classic_blue/button-square-disabled.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "square",
+    "height": 40,
+    "theme": "classic_blue"
+   },
+   "frame": 3
+  },
+  {
+   "file": "ui/classic_blue/button-round-normal.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "round",
+    "height": 40,
+    "theme": "classic_blue"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/classic_blue/button-round-hover.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "round",
+    "height": 40,
+    "theme": "classic_blue"
+   },
+   "frame": 1
+  },
+  {
+   "file": "ui/classic_blue/button-round-pressed.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "round",
+    "height": 40,
+    "theme": "classic_blue"
+   },
+   "frame": 2
+  },
+  {
+   "file": "ui/classic_blue/button-round-disabled.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "round",
+    "height": 40,
+    "theme": "classic_blue"
+   },
+   "frame": 3
+  },
+  {
+   "file": "ui/classic_blue/bar-hp.png",
+   "builder": "ui_bar",
+   "params": {
+    "kind": "hp",
+    "width": 96,
+    "height": 12,
+    "theme": "classic_blue"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/classic_blue/bar-mp.png",
+   "builder": "ui_bar",
+   "params": {
+    "kind": "mp",
+    "width": 96,
+    "height": 12,
+    "theme": "classic_blue"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/classic_blue/bar-exp.png",
+   "builder": "ui_bar",
+   "params": {
+    "kind": "exp",
+    "width": 96,
+    "height": 8,
+    "fill": 0.45,
+    "theme": "classic_blue"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/classic_blue/bar-frame.png",
+   "builder": "ui_bar",
+   "params": {
+    "kind": "hp",
+    "width": 96,
+    "height": 12,
+    "part": "frame",
+    "theme": "classic_blue"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/classic_blue/bar-fill-hp.png",
+   "builder": "ui_bar",
+   "params": {
+    "kind": "hp",
+    "width": 96,
+    "height": 12,
+    "part": "fill",
+    "fill": 1.0,
+    "theme": "classic_blue"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/classic_blue/portrait.png",
+   "builder": "ui_frame",
+   "params": {
+    "kind": "portrait",
+    "size": 64,
+    "theme": "classic_blue"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/classic_blue/slot-normal.png",
+   "builder": "ui_frame",
+   "params": {
+    "kind": "slot",
+    "size": 40,
+    "theme": "classic_blue"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/classic_blue/slot-selected.png",
+   "builder": "ui_frame",
+   "params": {
+    "kind": "slot",
+    "size": 40,
+    "theme": "classic_blue"
+   },
+   "frame": 1
+  },
+  {
+   "file": "ui/classic_blue/slot-locked.png",
+   "builder": "ui_frame",
+   "params": {
+    "kind": "slot",
+    "size": 40,
+    "theme": "classic_blue"
+   },
+   "frame": 2
+  },
+  {
+   "file": "ui/classic_blue/skill-slot-normal.png",
+   "builder": "ui_frame",
+   "params": {
+    "kind": "skill_slot",
+    "size": 40,
+    "theme": "classic_blue"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/classic_blue/skill-slot-selected.png",
+   "builder": "ui_frame",
+   "params": {
+    "kind": "skill_slot",
+    "size": 40,
+    "theme": "classic_blue"
+   },
+   "frame": 1
+  },
+  {
+   "file": "ui/classic_blue/skill-slot-locked.png",
+   "builder": "ui_frame",
+   "params": {
+    "kind": "skill_slot",
+    "size": 40,
+    "theme": "classic_blue"
+   },
+   "frame": 2
+  },
+  {
+   "file": "ui/wood_gold/window.png",
+   "builder": "ui_panel",
+   "params": {
+    "kind": "window",
+    "width": 128,
+    "height": 80,
+    "theme": "wood_gold"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/wood_gold/dialog-0.png",
+   "builder": "ui_panel",
+   "params": {
+    "kind": "dialog",
+    "width": 192,
+    "height": 64,
+    "theme": "wood_gold"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/wood_gold/dialog-1.png",
+   "builder": "ui_panel",
+   "params": {
+    "kind": "dialog",
+    "width": 192,
+    "height": 64,
+    "theme": "wood_gold"
+   },
+   "frame": 1
+  },
+  {
+   "file": "ui/wood_gold/dialog-2.png",
+   "builder": "ui_panel",
+   "params": {
+    "kind": "dialog",
+    "width": 192,
+    "height": 64,
+    "theme": "wood_gold"
+   },
+   "frame": 2
+  },
+  {
+   "file": "ui/wood_gold/dialog-3.png",
+   "builder": "ui_panel",
+   "params": {
+    "kind": "dialog",
+    "width": 192,
+    "height": 64,
+    "theme": "wood_gold"
+   },
+   "frame": 3
+  },
+  {
+   "file": "ui/wood_gold/tooltip.png",
+   "builder": "ui_panel",
+   "params": {
+    "kind": "tooltip",
+    "width": 96,
+    "height": 40,
+    "theme": "wood_gold"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/wood_gold/title.png",
+   "builder": "ui_panel",
+   "params": {
+    "kind": "title",
+    "width": 128,
+    "height": 28,
+    "theme": "wood_gold"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/wood_gold/tab-active.png",
+   "builder": "ui_panel",
+   "params": {
+    "kind": "tab",
+    "width": 48,
+    "height": 18,
+    "theme": "wood_gold"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/wood_gold/tab-inactive.png",
+   "builder": "ui_panel",
+   "params": {
+    "kind": "tab",
+    "width": 48,
+    "height": 18,
+    "theme": "wood_gold"
+   },
+   "frame": 1
+  },
+  {
+   "file": "ui/wood_gold/button-normal.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "rect",
+    "width": 96,
+    "height": 32,
+    "theme": "wood_gold"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/wood_gold/button-hover.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "rect",
+    "width": 96,
+    "height": 32,
+    "theme": "wood_gold"
+   },
+   "frame": 1
+  },
+  {
+   "file": "ui/wood_gold/button-pressed.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "rect",
+    "width": 96,
+    "height": 32,
+    "theme": "wood_gold"
+   },
+   "frame": 2
+  },
+  {
+   "file": "ui/wood_gold/button-disabled.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "rect",
+    "width": 96,
+    "height": 32,
+    "theme": "wood_gold"
+   },
+   "frame": 3
+  },
+  {
+   "file": "ui/wood_gold/button-square-normal.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "square",
+    "height": 40,
+    "theme": "wood_gold"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/wood_gold/button-square-hover.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "square",
+    "height": 40,
+    "theme": "wood_gold"
+   },
+   "frame": 1
+  },
+  {
+   "file": "ui/wood_gold/button-square-pressed.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "square",
+    "height": 40,
+    "theme": "wood_gold"
+   },
+   "frame": 2
+  },
+  {
+   "file": "ui/wood_gold/button-square-disabled.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "square",
+    "height": 40,
+    "theme": "wood_gold"
+   },
+   "frame": 3
+  },
+  {
+   "file": "ui/wood_gold/button-round-normal.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "round",
+    "height": 40,
+    "theme": "wood_gold"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/wood_gold/button-round-hover.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "round",
+    "height": 40,
+    "theme": "wood_gold"
+   },
+   "frame": 1
+  },
+  {
+   "file": "ui/wood_gold/button-round-pressed.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "round",
+    "height": 40,
+    "theme": "wood_gold"
+   },
+   "frame": 2
+  },
+  {
+   "file": "ui/wood_gold/button-round-disabled.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "round",
+    "height": 40,
+    "theme": "wood_gold"
+   },
+   "frame": 3
+  },
+  {
+   "file": "ui/wood_gold/bar-hp.png",
+   "builder": "ui_bar",
+   "params": {
+    "kind": "hp",
+    "width": 96,
+    "height": 12,
+    "theme": "wood_gold"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/wood_gold/bar-mp.png",
+   "builder": "ui_bar",
+   "params": {
+    "kind": "mp",
+    "width": 96,
+    "height": 12,
+    "theme": "wood_gold"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/wood_gold/bar-exp.png",
+   "builder": "ui_bar",
+   "params": {
+    "kind": "exp",
+    "width": 96,
+    "height": 8,
+    "fill": 0.45,
+    "theme": "wood_gold"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/wood_gold/bar-frame.png",
+   "builder": "ui_bar",
+   "params": {
+    "kind": "hp",
+    "width": 96,
+    "height": 12,
+    "part": "frame",
+    "theme": "wood_gold"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/wood_gold/bar-fill-hp.png",
+   "builder": "ui_bar",
+   "params": {
+    "kind": "hp",
+    "width": 96,
+    "height": 12,
+    "part": "fill",
+    "fill": 1.0,
+    "theme": "wood_gold"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/wood_gold/portrait.png",
+   "builder": "ui_frame",
+   "params": {
+    "kind": "portrait",
+    "size": 64,
+    "theme": "wood_gold"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/wood_gold/slot-normal.png",
+   "builder": "ui_frame",
+   "params": {
+    "kind": "slot",
+    "size": 40,
+    "theme": "wood_gold"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/wood_gold/slot-selected.png",
+   "builder": "ui_frame",
+   "params": {
+    "kind": "slot",
+    "size": 40,
+    "theme": "wood_gold"
+   },
+   "frame": 1
+  },
+  {
+   "file": "ui/wood_gold/slot-locked.png",
+   "builder": "ui_frame",
+   "params": {
+    "kind": "slot",
+    "size": 40,
+    "theme": "wood_gold"
+   },
+   "frame": 2
+  },
+  {
+   "file": "ui/wood_gold/skill-slot-normal.png",
+   "builder": "ui_frame",
+   "params": {
+    "kind": "skill_slot",
+    "size": 40,
+    "theme": "wood_gold"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/wood_gold/skill-slot-selected.png",
+   "builder": "ui_frame",
+   "params": {
+    "kind": "skill_slot",
+    "size": 40,
+    "theme": "wood_gold"
+   },
+   "frame": 1
+  },
+  {
+   "file": "ui/wood_gold/skill-slot-locked.png",
+   "builder": "ui_frame",
+   "params": {
+    "kind": "skill_slot",
+    "size": 40,
+    "theme": "wood_gold"
+   },
+   "frame": 2
+  },
+  {
+   "file": "ui/stone_iron/window.png",
+   "builder": "ui_panel",
+   "params": {
+    "kind": "window",
+    "width": 128,
+    "height": 80,
+    "theme": "stone_iron"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/stone_iron/dialog-0.png",
+   "builder": "ui_panel",
+   "params": {
+    "kind": "dialog",
+    "width": 192,
+    "height": 64,
+    "theme": "stone_iron"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/stone_iron/dialog-1.png",
+   "builder": "ui_panel",
+   "params": {
+    "kind": "dialog",
+    "width": 192,
+    "height": 64,
+    "theme": "stone_iron"
+   },
+   "frame": 1
+  },
+  {
+   "file": "ui/stone_iron/dialog-2.png",
+   "builder": "ui_panel",
+   "params": {
+    "kind": "dialog",
+    "width": 192,
+    "height": 64,
+    "theme": "stone_iron"
+   },
+   "frame": 2
+  },
+  {
+   "file": "ui/stone_iron/dialog-3.png",
+   "builder": "ui_panel",
+   "params": {
+    "kind": "dialog",
+    "width": 192,
+    "height": 64,
+    "theme": "stone_iron"
+   },
+   "frame": 3
+  },
+  {
+   "file": "ui/stone_iron/tooltip.png",
+   "builder": "ui_panel",
+   "params": {
+    "kind": "tooltip",
+    "width": 96,
+    "height": 40,
+    "theme": "stone_iron"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/stone_iron/title.png",
+   "builder": "ui_panel",
+   "params": {
+    "kind": "title",
+    "width": 128,
+    "height": 28,
+    "theme": "stone_iron"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/stone_iron/tab-active.png",
+   "builder": "ui_panel",
+   "params": {
+    "kind": "tab",
+    "width": 48,
+    "height": 18,
+    "theme": "stone_iron"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/stone_iron/tab-inactive.png",
+   "builder": "ui_panel",
+   "params": {
+    "kind": "tab",
+    "width": 48,
+    "height": 18,
+    "theme": "stone_iron"
+   },
+   "frame": 1
+  },
+  {
+   "file": "ui/stone_iron/button-normal.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "rect",
+    "width": 96,
+    "height": 32,
+    "theme": "stone_iron"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/stone_iron/button-hover.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "rect",
+    "width": 96,
+    "height": 32,
+    "theme": "stone_iron"
+   },
+   "frame": 1
+  },
+  {
+   "file": "ui/stone_iron/button-pressed.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "rect",
+    "width": 96,
+    "height": 32,
+    "theme": "stone_iron"
+   },
+   "frame": 2
+  },
+  {
+   "file": "ui/stone_iron/button-disabled.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "rect",
+    "width": 96,
+    "height": 32,
+    "theme": "stone_iron"
+   },
+   "frame": 3
+  },
+  {
+   "file": "ui/stone_iron/button-square-normal.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "square",
+    "height": 40,
+    "theme": "stone_iron"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/stone_iron/button-square-hover.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "square",
+    "height": 40,
+    "theme": "stone_iron"
+   },
+   "frame": 1
+  },
+  {
+   "file": "ui/stone_iron/button-square-pressed.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "square",
+    "height": 40,
+    "theme": "stone_iron"
+   },
+   "frame": 2
+  },
+  {
+   "file": "ui/stone_iron/button-square-disabled.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "square",
+    "height": 40,
+    "theme": "stone_iron"
+   },
+   "frame": 3
+  },
+  {
+   "file": "ui/stone_iron/button-round-normal.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "round",
+    "height": 40,
+    "theme": "stone_iron"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/stone_iron/button-round-hover.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "round",
+    "height": 40,
+    "theme": "stone_iron"
+   },
+   "frame": 1
+  },
+  {
+   "file": "ui/stone_iron/button-round-pressed.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "round",
+    "height": 40,
+    "theme": "stone_iron"
+   },
+   "frame": 2
+  },
+  {
+   "file": "ui/stone_iron/button-round-disabled.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "round",
+    "height": 40,
+    "theme": "stone_iron"
+   },
+   "frame": 3
+  },
+  {
+   "file": "ui/stone_iron/bar-hp.png",
+   "builder": "ui_bar",
+   "params": {
+    "kind": "hp",
+    "width": 96,
+    "height": 12,
+    "theme": "stone_iron"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/stone_iron/bar-mp.png",
+   "builder": "ui_bar",
+   "params": {
+    "kind": "mp",
+    "width": 96,
+    "height": 12,
+    "theme": "stone_iron"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/stone_iron/bar-exp.png",
+   "builder": "ui_bar",
+   "params": {
+    "kind": "exp",
+    "width": 96,
+    "height": 8,
+    "fill": 0.45,
+    "theme": "stone_iron"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/stone_iron/bar-frame.png",
+   "builder": "ui_bar",
+   "params": {
+    "kind": "hp",
+    "width": 96,
+    "height": 12,
+    "part": "frame",
+    "theme": "stone_iron"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/stone_iron/bar-fill-hp.png",
+   "builder": "ui_bar",
+   "params": {
+    "kind": "hp",
+    "width": 96,
+    "height": 12,
+    "part": "fill",
+    "fill": 1.0,
+    "theme": "stone_iron"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/stone_iron/portrait.png",
+   "builder": "ui_frame",
+   "params": {
+    "kind": "portrait",
+    "size": 64,
+    "theme": "stone_iron"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/stone_iron/slot-normal.png",
+   "builder": "ui_frame",
+   "params": {
+    "kind": "slot",
+    "size": 40,
+    "theme": "stone_iron"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/stone_iron/slot-selected.png",
+   "builder": "ui_frame",
+   "params": {
+    "kind": "slot",
+    "size": 40,
+    "theme": "stone_iron"
+   },
+   "frame": 1
+  },
+  {
+   "file": "ui/stone_iron/slot-locked.png",
+   "builder": "ui_frame",
+   "params": {
+    "kind": "slot",
+    "size": 40,
+    "theme": "stone_iron"
+   },
+   "frame": 2
+  },
+  {
+   "file": "ui/stone_iron/skill-slot-normal.png",
+   "builder": "ui_frame",
+   "params": {
+    "kind": "skill_slot",
+    "size": 40,
+    "theme": "stone_iron"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/stone_iron/skill-slot-selected.png",
+   "builder": "ui_frame",
+   "params": {
+    "kind": "skill_slot",
+    "size": 40,
+    "theme": "stone_iron"
+   },
+   "frame": 1
+  },
+  {
+   "file": "ui/stone_iron/skill-slot-locked.png",
+   "builder": "ui_frame",
+   "params": {
+    "kind": "skill_slot",
+    "size": 40,
+    "theme": "stone_iron"
+   },
+   "frame": 2
+  },
+  {
+   "file": "ui/parchment/window.png",
+   "builder": "ui_panel",
+   "params": {
+    "kind": "window",
+    "width": 128,
+    "height": 80,
+    "theme": "parchment"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/parchment/dialog-0.png",
+   "builder": "ui_panel",
+   "params": {
+    "kind": "dialog",
+    "width": 192,
+    "height": 64,
+    "theme": "parchment"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/parchment/dialog-1.png",
+   "builder": "ui_panel",
+   "params": {
+    "kind": "dialog",
+    "width": 192,
+    "height": 64,
+    "theme": "parchment"
+   },
+   "frame": 1
+  },
+  {
+   "file": "ui/parchment/dialog-2.png",
+   "builder": "ui_panel",
+   "params": {
+    "kind": "dialog",
+    "width": 192,
+    "height": 64,
+    "theme": "parchment"
+   },
+   "frame": 2
+  },
+  {
+   "file": "ui/parchment/dialog-3.png",
+   "builder": "ui_panel",
+   "params": {
+    "kind": "dialog",
+    "width": 192,
+    "height": 64,
+    "theme": "parchment"
+   },
+   "frame": 3
+  },
+  {
+   "file": "ui/parchment/tooltip.png",
+   "builder": "ui_panel",
+   "params": {
+    "kind": "tooltip",
+    "width": 96,
+    "height": 40,
+    "theme": "parchment"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/parchment/title.png",
+   "builder": "ui_panel",
+   "params": {
+    "kind": "title",
+    "width": 128,
+    "height": 28,
+    "theme": "parchment"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/parchment/tab-active.png",
+   "builder": "ui_panel",
+   "params": {
+    "kind": "tab",
+    "width": 48,
+    "height": 18,
+    "theme": "parchment"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/parchment/tab-inactive.png",
+   "builder": "ui_panel",
+   "params": {
+    "kind": "tab",
+    "width": 48,
+    "height": 18,
+    "theme": "parchment"
+   },
+   "frame": 1
+  },
+  {
+   "file": "ui/parchment/button-normal.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "rect",
+    "width": 96,
+    "height": 32,
+    "theme": "parchment"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/parchment/button-hover.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "rect",
+    "width": 96,
+    "height": 32,
+    "theme": "parchment"
+   },
+   "frame": 1
+  },
+  {
+   "file": "ui/parchment/button-pressed.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "rect",
+    "width": 96,
+    "height": 32,
+    "theme": "parchment"
+   },
+   "frame": 2
+  },
+  {
+   "file": "ui/parchment/button-disabled.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "rect",
+    "width": 96,
+    "height": 32,
+    "theme": "parchment"
+   },
+   "frame": 3
+  },
+  {
+   "file": "ui/parchment/button-square-normal.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "square",
+    "height": 40,
+    "theme": "parchment"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/parchment/button-square-hover.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "square",
+    "height": 40,
+    "theme": "parchment"
+   },
+   "frame": 1
+  },
+  {
+   "file": "ui/parchment/button-square-pressed.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "square",
+    "height": 40,
+    "theme": "parchment"
+   },
+   "frame": 2
+  },
+  {
+   "file": "ui/parchment/button-square-disabled.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "square",
+    "height": 40,
+    "theme": "parchment"
+   },
+   "frame": 3
+  },
+  {
+   "file": "ui/parchment/button-round-normal.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "round",
+    "height": 40,
+    "theme": "parchment"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/parchment/button-round-hover.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "round",
+    "height": 40,
+    "theme": "parchment"
+   },
+   "frame": 1
+  },
+  {
+   "file": "ui/parchment/button-round-pressed.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "round",
+    "height": 40,
+    "theme": "parchment"
+   },
+   "frame": 2
+  },
+  {
+   "file": "ui/parchment/button-round-disabled.png",
+   "builder": "ui_button",
+   "params": {
+    "shape": "round",
+    "height": 40,
+    "theme": "parchment"
+   },
+   "frame": 3
+  },
+  {
+   "file": "ui/parchment/bar-hp.png",
+   "builder": "ui_bar",
+   "params": {
+    "kind": "hp",
+    "width": 96,
+    "height": 12,
+    "theme": "parchment"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/parchment/bar-mp.png",
+   "builder": "ui_bar",
+   "params": {
+    "kind": "mp",
+    "width": 96,
+    "height": 12,
+    "theme": "parchment"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/parchment/bar-exp.png",
+   "builder": "ui_bar",
+   "params": {
+    "kind": "exp",
+    "width": 96,
+    "height": 8,
+    "fill": 0.45,
+    "theme": "parchment"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/parchment/bar-frame.png",
+   "builder": "ui_bar",
+   "params": {
+    "kind": "hp",
+    "width": 96,
+    "height": 12,
+    "part": "frame",
+    "theme": "parchment"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/parchment/bar-fill-hp.png",
+   "builder": "ui_bar",
+   "params": {
+    "kind": "hp",
+    "width": 96,
+    "height": 12,
+    "part": "fill",
+    "fill": 1.0,
+    "theme": "parchment"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/parchment/portrait.png",
+   "builder": "ui_frame",
+   "params": {
+    "kind": "portrait",
+    "size": 64,
+    "theme": "parchment"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/parchment/slot-normal.png",
+   "builder": "ui_frame",
+   "params": {
+    "kind": "slot",
+    "size": 40,
+    "theme": "parchment"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/parchment/slot-selected.png",
+   "builder": "ui_frame",
+   "params": {
+    "kind": "slot",
+    "size": 40,
+    "theme": "parchment"
+   },
+   "frame": 1
+  },
+  {
+   "file": "ui/parchment/slot-locked.png",
+   "builder": "ui_frame",
+   "params": {
+    "kind": "slot",
+    "size": 40,
+    "theme": "parchment"
+   },
+   "frame": 2
+  },
+  {
+   "file": "ui/parchment/skill-slot-normal.png",
+   "builder": "ui_frame",
+   "params": {
+    "kind": "skill_slot",
+    "size": 40,
+    "theme": "parchment"
+   },
+   "frame": 0
+  },
+  {
+   "file": "ui/parchment/skill-slot-selected.png",
+   "builder": "ui_frame",
+   "params": {
+    "kind": "skill_slot",
+    "size": 40,
+    "theme": "parchment"
+   },
+   "frame": 1
+  },
+  {
+   "file": "ui/parchment/skill-slot-locked.png",
+   "builder": "ui_frame",
+   "params": {
+    "kind": "skill_slot",
+    "size": 40,
+    "theme": "parchment"
+   },
+   "frame": 2
+  }
+ ],
+ "effects": [
+  {
+   "dir": "effects/lava-burn-lava-3t",
+   "builder": "lava_burn",
+   "params": {
+    "color": "lava",
+    "tiles": 3
+   },
+   "frame_size": [
+    96,
+    128
+   ],
+   "frames": 16,
+   "durations_ms": [
+    70,
+    70,
+    60,
+    60,
+    80,
+    90,
+    110,
+    110,
+    110,
+    110,
+    110,
+    110,
+    110,
+    120,
+    130,
+    160
+   ],
+   "tags": [
+    {
+     "name": "cast",
+     "from": 0,
+     "to": 5,
+     "direction": "forward"
+    },
+    {
+     "name": "burn",
+     "from": 6,
+     "to": 11,
+     "direction": "forward"
+    },
+    {
+     "name": "fade",
+     "from": 12,
+     "to": 15,
+     "direction": "forward"
+    }
+   ],
+   "pivot": [
+    48,
+    80
+   ],
+   "loop": false,
+   "grid": {
+    "tile": 32,
+    "cells": 3,
+    "ground_rect": [
+     0,
+     32,
+     96,
+     128
+    ]
+   }
+  },
+  {
+   "dir": "effects/lava-burn-soulfire-3t",
+   "builder": "lava_burn",
+   "params": {
+    "color": "soulfire",
+    "tiles": 3
+   },
+   "frame_size": [
+    96,
+    128
+   ],
+   "frames": 16,
+   "durations_ms": [
+    70,
+    70,
+    60,
+    60,
+    80,
+    90,
+    110,
+    110,
+    110,
+    110,
+    110,
+    110,
+    110,
+    120,
+    130,
+    160
+   ],
+   "tags": [
+    {
+     "name": "cast",
+     "from": 0,
+     "to": 5,
+     "direction": "forward"
+    },
+    {
+     "name": "burn",
+     "from": 6,
+     "to": 11,
+     "direction": "forward"
+    },
+    {
+     "name": "fade",
+     "from": 12,
+     "to": 15,
+     "direction": "forward"
+    }
+   ],
+   "pivot": [
+    48,
+    80
+   ],
+   "loop": false,
+   "grid": {
+    "tile": 32,
+    "cells": 3,
+    "ground_rect": [
+     0,
+     32,
+     96,
+     128
+    ]
+   }
+  },
+  {
+   "dir": "effects/lava-burn-acid-3t",
+   "builder": "lava_burn",
+   "params": {
+    "color": "acid",
+    "tiles": 3
+   },
+   "frame_size": [
+    96,
+    128
+   ],
+   "frames": 16,
+   "durations_ms": [
+    70,
+    70,
+    60,
+    60,
+    80,
+    90,
+    110,
+    110,
+    110,
+    110,
+    110,
+    110,
+    110,
+    120,
+    130,
+    160
+   ],
+   "tags": [
+    {
+     "name": "cast",
+     "from": 0,
+     "to": 5,
+     "direction": "forward"
+    },
+    {
+     "name": "burn",
+     "from": 6,
+     "to": 11,
+     "direction": "forward"
+    },
+    {
+     "name": "fade",
+     "from": 12,
+     "to": 15,
+     "direction": "forward"
+    }
+   ],
+   "pivot": [
+    48,
+    80
+   ],
+   "loop": false,
+   "grid": {
+    "tile": 32,
+    "cells": 3,
+    "ground_rect": [
+     0,
+     32,
+     96,
+     128
+    ]
+   }
+  },
+  {
+   "dir": "effects/lava-burn-lava-1t",
+   "builder": "lava_burn",
+   "params": {
+    "color": "lava",
+    "tiles": 1
+   },
+   "frame_size": [
+    32,
+    48
+   ],
+   "frames": 16,
+   "durations_ms": [
+    70,
+    70,
+    60,
+    60,
+    80,
+    90,
+    110,
+    110,
+    110,
+    110,
+    110,
+    110,
+    110,
+    120,
+    130,
+    160
+   ],
+   "tags": [
+    {
+     "name": "cast",
+     "from": 0,
+     "to": 5,
+     "direction": "forward"
+    },
+    {
+     "name": "burn",
+     "from": 6,
+     "to": 11,
+     "direction": "forward"
+    },
+    {
+     "name": "fade",
+     "from": 12,
+     "to": 15,
+     "direction": "forward"
+    }
+   ],
+   "pivot": [
+    16,
+    32
+   ],
+   "loop": false,
+   "grid": {
+    "tile": 32,
+    "cells": 1,
+    "ground_rect": [
+     0,
+     16,
+     32,
+     48
+    ]
+   }
+  },
+  {
+   "dir": "effects/meteor-fire-3t",
+   "builder": "meteor",
+   "params": {
+    "color": "fire",
+    "tiles": 3
+   },
+   "frame_size": [
+    96,
+    128
+   ],
+   "frames": 12,
+   "durations_ms": [
+    90,
+    70,
+    60,
+    50,
+    50,
+    60,
+    70,
+    90,
+    100,
+    110,
+    120,
+    160
+   ],
+   "tags": [
+    {
+     "name": "fall",
+     "from": 0,
+     "to": 3,
+     "direction": "forward"
+    },
+    {
+     "name": "impact",
+     "from": 4,
+     "to": 11,
+     "direction": "forward"
+    }
+   ],
+   "pivot": [
+    48,
+    80
+   ],
+   "loop": false,
+   "grid": {
+    "tile": 32,
+    "cells": 3,
+    "ground_rect": [
+     0,
+     32,
+     96,
+     128
+    ]
+   }
+  },
+  {
+   "dir": "effects/meteor-arcane-3t",
+   "builder": "meteor",
+   "params": {
+    "color": "arcane",
+    "tiles": 3
+   },
+   "frame_size": [
+    96,
+    128
+   ],
+   "frames": 12,
+   "durations_ms": [
+    90,
+    70,
+    60,
+    50,
+    50,
+    60,
+    70,
+    90,
+    100,
+    110,
+    120,
+    160
+   ],
+   "tags": [
+    {
+     "name": "fall",
+     "from": 0,
+     "to": 3,
+     "direction": "forward"
+    },
+    {
+     "name": "impact",
+     "from": 4,
+     "to": 11,
+     "direction": "forward"
+    }
+   ],
+   "pivot": [
+    48,
+    80
+   ],
+   "loop": false,
+   "grid": {
+    "tile": 32,
+    "cells": 3,
+    "ground_rect": [
+     0,
+     32,
+     96,
+     128
+    ]
+   }
+  },
+  {
+   "dir": "effects/meteor-frost-3t",
+   "builder": "meteor",
+   "params": {
+    "color": "frost",
+    "tiles": 3
+   },
+   "frame_size": [
+    96,
+    128
+   ],
+   "frames": 12,
+   "durations_ms": [
+    90,
+    70,
+    60,
+    50,
+    50,
+    60,
+    70,
+    90,
+    100,
+    110,
+    120,
+    160
+   ],
+   "tags": [
+    {
+     "name": "fall",
+     "from": 0,
+     "to": 3,
+     "direction": "forward"
+    },
+    {
+     "name": "impact",
+     "from": 4,
+     "to": 11,
+     "direction": "forward"
+    }
+   ],
+   "pivot": [
+    48,
+    80
+   ],
+   "loop": false,
+   "grid": {
+    "tile": 32,
+    "cells": 3,
+    "ground_rect": [
+     0,
+     32,
+     96,
+     128
+    ]
+   }
+  },
+  {
+   "dir": "effects/meteor-fire-1t",
+   "builder": "meteor",
+   "params": {
+    "color": "fire",
+    "tiles": 1
+   },
+   "frame_size": [
+    32,
+    52
+   ],
+   "frames": 12,
+   "durations_ms": [
+    90,
+    70,
+    60,
+    50,
+    50,
+    60,
+    70,
+    90,
+    100,
+    110,
+    120,
+    160
+   ],
+   "tags": [
+    {
+     "name": "fall",
+     "from": 0,
+     "to": 3,
+     "direction": "forward"
+    },
+    {
+     "name": "impact",
+     "from": 4,
+     "to": 11,
+     "direction": "forward"
+    }
+   ],
+   "pivot": [
+    16,
+    36
+   ],
+   "loop": false,
+   "grid": {
+    "tile": 32,
+    "cells": 1,
+    "ground_rect": [
+     0,
+     20,
+     32,
+     52
+    ]
+   }
+  },
+  {
+   "dir": "effects/fire-pillar-fire-1t",
+   "builder": "fire_pillar",
+   "params": {
+    "color": "fire",
+    "tiles": 1
+   },
+   "frame_size": [
+    32,
+    96
+   ],
+   "frames": 12,
+   "durations_ms": [
+    80,
+    70,
+    60,
+    80,
+    80,
+    80,
+    80,
+    80,
+    80,
+    80,
+    100,
+    130
+   ],
+   "tags": [
+    {
+     "name": "rise",
+     "from": 0,
+     "to": 2,
+     "direction": "forward"
+    },
+    {
+     "name": "burn",
+     "from": 3,
+     "to": 8,
+     "direction": "forward"
+    },
+    {
+     "name": "end",
+     "from": 9,
+     "to": 11,
+     "direction": "forward"
+    }
+   ],
+   "pivot": [
+    16,
+    80
+   ],
+   "loop": false,
+   "grid": {
+    "tile": 32,
+    "cells": 1,
+    "ground_rect": [
+     0,
+     64,
+     32,
+     96
+    ]
+   }
+  },
+  {
+   "dir": "effects/fire-pillar-azure-1t",
+   "builder": "fire_pillar",
+   "params": {
+    "color": "azure",
+    "tiles": 1
+   },
+   "frame_size": [
+    32,
+    96
+   ],
+   "frames": 12,
+   "durations_ms": [
+    80,
+    70,
+    60,
+    80,
+    80,
+    80,
+    80,
+    80,
+    80,
+    80,
+    100,
+    130
+   ],
+   "tags": [
+    {
+     "name": "rise",
+     "from": 0,
+     "to": 2,
+     "direction": "forward"
+    },
+    {
+     "name": "burn",
+     "from": 3,
+     "to": 8,
+     "direction": "forward"
+    },
+    {
+     "name": "end",
+     "from": 9,
+     "to": 11,
+     "direction": "forward"
+    }
+   ],
+   "pivot": [
+    16,
+    80
+   ],
+   "loop": false,
+   "grid": {
+    "tile": 32,
+    "cells": 1,
+    "ground_rect": [
+     0,
+     64,
+     32,
+     96
+    ]
+   }
+  },
+  {
+   "dir": "effects/fire-pillar-violet-1t",
+   "builder": "fire_pillar",
+   "params": {
+    "color": "violet",
+    "tiles": 1
+   },
+   "frame_size": [
+    32,
+    96
+   ],
+   "frames": 12,
+   "durations_ms": [
+    80,
+    70,
+    60,
+    80,
+    80,
+    80,
+    80,
+    80,
+    80,
+    80,
+    100,
+    130
+   ],
+   "tags": [
+    {
+     "name": "rise",
+     "from": 0,
+     "to": 2,
+     "direction": "forward"
+    },
+    {
+     "name": "burn",
+     "from": 3,
+     "to": 8,
+     "direction": "forward"
+    },
+    {
+     "name": "end",
+     "from": 9,
+     "to": 11,
+     "direction": "forward"
+    }
+   ],
+   "pivot": [
+    16,
+    80
+   ],
+   "loop": false,
+   "grid": {
+    "tile": 32,
+    "cells": 1,
+    "ground_rect": [
+     0,
+     64,
+     32,
+     96
+    ]
+   }
+  },
+  {
+   "dir": "effects/earth-spike-earth-3t",
+   "builder": "earth_spike",
+   "params": {
+    "color": "earth",
+    "tiles": 3
+   },
+   "frame_size": [
+    96,
+    128
+   ],
+   "frames": 9,
+   "durations_ms": [
+    90,
+    50,
+    50,
+    70,
+    120,
+    120,
+    80,
+    90,
+    140
+   ],
+   "tags": [
+    {
+     "name": "erupt",
+     "from": 0,
+     "to": 3,
+     "direction": "forward"
+    },
+    {
+     "name": "hold",
+     "from": 4,
+     "to": 5,
+     "direction": "forward"
+    },
+    {
+     "name": "crumble",
+     "from": 6,
+     "to": 8,
+     "direction": "forward"
+    }
+   ],
+   "pivot": [
+    48,
+    80
+   ],
+   "loop": false,
+   "grid": {
+    "tile": 32,
+    "cells": 3,
+    "ground_rect": [
+     0,
+     32,
+     96,
+     128
+    ]
+   }
+  },
+  {
+   "dir": "effects/earth-spike-crystal-3t",
+   "builder": "earth_spike",
+   "params": {
+    "color": "crystal",
+    "tiles": 3
+   },
+   "frame_size": [
+    96,
+    128
+   ],
+   "frames": 9,
+   "durations_ms": [
+    90,
+    50,
+    50,
+    70,
+    120,
+    120,
+    80,
+    90,
+    140
+   ],
+   "tags": [
+    {
+     "name": "erupt",
+     "from": 0,
+     "to": 3,
+     "direction": "forward"
+    },
+    {
+     "name": "hold",
+     "from": 4,
+     "to": 5,
+     "direction": "forward"
+    },
+    {
+     "name": "crumble",
+     "from": 6,
+     "to": 8,
+     "direction": "forward"
+    }
+   ],
+   "pivot": [
+    48,
+    80
+   ],
+   "loop": false,
+   "grid": {
+    "tile": 32,
+    "cells": 3,
+    "ground_rect": [
+     0,
+     32,
+     96,
+     128
+    ]
+   }
+  },
+  {
+   "dir": "effects/earth-spike-ice-3t",
+   "builder": "earth_spike",
+   "params": {
+    "color": "ice",
+    "tiles": 3
+   },
+   "frame_size": [
+    96,
+    128
+   ],
+   "frames": 9,
+   "durations_ms": [
+    90,
+    50,
+    50,
+    70,
+    120,
+    120,
+    80,
+    90,
+    140
+   ],
+   "tags": [
+    {
+     "name": "erupt",
+     "from": 0,
+     "to": 3,
+     "direction": "forward"
+    },
+    {
+     "name": "hold",
+     "from": 4,
+     "to": 5,
+     "direction": "forward"
+    },
+    {
+     "name": "crumble",
+     "from": 6,
+     "to": 8,
+     "direction": "forward"
+    }
+   ],
+   "pivot": [
+    48,
+    80
+   ],
+   "loop": false,
+   "grid": {
+    "tile": 32,
+    "cells": 3,
+    "ground_rect": [
+     0,
+     32,
+     96,
+     128
+    ]
+   }
+  },
+  {
+   "dir": "effects/earth-spike-earth-1t",
+   "builder": "earth_spike",
+   "params": {
+    "color": "earth",
+    "tiles": 1
+   },
+   "frame_size": [
+    32,
+    64
+   ],
+   "frames": 9,
+   "durations_ms": [
+    90,
+    50,
+    50,
+    70,
+    120,
+    120,
+    80,
+    90,
+    140
+   ],
+   "tags": [
+    {
+     "name": "erupt",
+     "from": 0,
+     "to": 3,
+     "direction": "forward"
+    },
+    {
+     "name": "hold",
+     "from": 4,
+     "to": 5,
+     "direction": "forward"
+    },
+    {
+     "name": "crumble",
+     "from": 6,
+     "to": 8,
+     "direction": "forward"
+    }
+   ],
+   "pivot": [
+    16,
+    48
+   ],
+   "loop": false,
+   "grid": {
+    "tile": 32,
+    "cells": 1,
+    "ground_rect": [
+     0,
+     32,
+     32,
+     64
+    ]
+   }
+  },
+  {
+   "dir": "effects/whirlpool-water-3t",
+   "builder": "whirlpool",
+   "params": {
+    "color": "water",
+    "tiles": 3
+   },
+   "frame_size": [
+    96,
+    102
+   ],
+   "frames": 8,
+   "durations_ms": [
+    90,
+    90,
+    90,
+    90,
+    90,
+    90,
+    90,
+    90
+   ],
+   "tags": [
+    {
+     "name": "swirl",
+     "from": 0,
+     "to": 7,
+     "direction": "forward"
+    }
+   ],
+   "pivot": [
+    48,
+    54
+   ],
+   "loop": true,
+   "grid": {
+    "tile": 32,
+    "cells": 3,
+    "ground_rect": [
+     0,
+     6,
+     96,
+     102
+    ]
+   }
+  },
+  {
+   "dir": "effects/whirlpool-abyss-3t",
+   "builder": "whirlpool",
+   "params": {
+    "color": "abyss",
+    "tiles": 3
+   },
+   "frame_size": [
+    96,
+    102
+   ],
+   "frames": 8,
+   "durations_ms": [
+    90,
+    90,
+    90,
+    90,
+    90,
+    90,
+    90,
+    90
+   ],
+   "tags": [
+    {
+     "name": "swirl",
+     "from": 0,
+     "to": 7,
+     "direction": "forward"
+    }
+   ],
+   "pivot": [
+    48,
+    54
+   ],
+   "loop": true,
+   "grid": {
+    "tile": 32,
+    "cells": 3,
+    "ground_rect": [
+     0,
+     6,
+     96,
+     102
+    ]
+   }
+  },
+  {
+   "dir": "effects/whirlpool-sand-3t",
+   "builder": "whirlpool",
+   "params": {
+    "color": "sand",
+    "tiles": 3
+   },
+   "frame_size": [
+    96,
+    102
+   ],
+   "frames": 8,
+   "durations_ms": [
+    90,
+    90,
+    90,
+    90,
+    90,
+    90,
+    90,
+    90
+   ],
+   "tags": [
+    {
+     "name": "swirl",
+     "from": 0,
+     "to": 7,
+     "direction": "forward"
+    }
+   ],
+   "pivot": [
+    48,
+    54
+   ],
+   "loop": true,
+   "grid": {
+    "tile": 32,
+    "cells": 3,
+    "ground_rect": [
+     0,
+     6,
+     96,
+     102
+    ]
+   }
+  },
+  {
+   "dir": "effects/whirlpool-water-1t",
+   "builder": "whirlpool",
+   "params": {
+    "color": "water",
+    "tiles": 1
+   },
+   "frame_size": [
+    32,
+    38
+   ],
+   "frames": 8,
+   "durations_ms": [
+    90,
+    90,
+    90,
+    90,
+    90,
+    90,
+    90,
+    90
+   ],
+   "tags": [
+    {
+     "name": "swirl",
+     "from": 0,
+     "to": 7,
+     "direction": "forward"
+    }
+   ],
+   "pivot": [
+    16,
+    22
+   ],
+   "loop": true,
+   "grid": {
+    "tile": 32,
+    "cells": 1,
+    "ground_rect": [
+     0,
+     6,
+     32,
+     38
+    ]
+   }
+  },
+  {
+   "dir": "effects/gale-wind-1t",
+   "builder": "gale",
+   "params": {
+    "color": "wind",
+    "tiles": 1
+   },
+   "frame_size": [
+    32,
+    80
+   ],
+   "frames": 8,
+   "durations_ms": [
+    70,
+    70,
+    70,
+    70,
+    70,
+    70,
+    70,
+    70
+   ],
+   "tags": [
+    {
+     "name": "spin",
+     "from": 0,
+     "to": 7,
+     "direction": "forward"
+    }
+   ],
+   "pivot": [
+    16,
+    64
+   ],
+   "loop": true,
+   "grid": {
+    "tile": 32,
+    "cells": 1,
+    "ground_rect": [
+     0,
+     48,
+     32,
+     80
+    ]
+   }
+  },
+  {
+   "dir": "effects/gale-sand-1t",
+   "builder": "gale",
+   "params": {
+    "color": "sand",
+    "tiles": 1
+   },
+   "frame_size": [
+    32,
+    80
+   ],
+   "frames": 8,
+   "durations_ms": [
+    70,
+    70,
+    70,
+    70,
+    70,
+    70,
+    70,
+    70
+   ],
+   "tags": [
+    {
+     "name": "spin",
+     "from": 0,
+     "to": 7,
+     "direction": "forward"
+    }
+   ],
+   "pivot": [
+    16,
+    64
+   ],
+   "loop": true,
+   "grid": {
+    "tile": 32,
+    "cells": 1,
+    "ground_rect": [
+     0,
+     48,
+     32,
+     80
+    ]
+   }
+  },
+  {
+   "dir": "effects/gale-storm-1t",
+   "builder": "gale",
+   "params": {
+    "color": "storm",
+    "tiles": 1
+   },
+   "frame_size": [
+    32,
+    80
+   ],
+   "frames": 8,
+   "durations_ms": [
+    70,
+    70,
+    70,
+    70,
+    70,
+    70,
+    70,
+    70
+   ],
+   "tags": [
+    {
+     "name": "spin",
+     "from": 0,
+     "to": 7,
+     "direction": "forward"
+    }
+   ],
+   "pivot": [
+    16,
+    64
+   ],
+   "loop": true,
+   "grid": {
+    "tile": 32,
+    "cells": 1,
+    "ground_rect": [
+     0,
+     48,
+     32,
+     80
+    ]
+   }
+  },
+  {
+   "dir": "effects/ice-field-ice-3t",
+   "builder": "ice_field",
+   "params": {
+    "color": "ice",
+    "tiles": 3
+   },
+   "frame_size": [
+    96,
+    120
+   ],
+   "frames": 13,
+   "durations_ms": [
+    60,
+    60,
+    60,
+    60,
+    60,
+    120,
+    120,
+    120,
+    120,
+    90,
+    90,
+    90,
+    90
+   ],
+   "tags": [
+    {
+     "name": "spread",
+     "from": 0,
+     "to": 4,
+     "direction": "forward"
+    },
+    {
+     "name": "hold",
+     "from": 5,
+     "to": 8,
+     "direction": "forward"
+    },
+    {
+     "name": "shatter",
+     "from": 9,
+     "to": 12,
+     "direction": "forward"
+    }
+   ],
+   "pivot": [
+    48,
+    72
+   ],
+   "loop": false,
+   "grid": {
+    "tile": 32,
+    "cells": 3,
+    "ground_rect": [
+     0,
+     24,
+     96,
+     120
+    ]
+   }
+  },
+  {
+   "dir": "effects/ice-field-crystal-3t",
+   "builder": "ice_field",
+   "params": {
+    "color": "crystal",
+    "tiles": 3
+   },
+   "frame_size": [
+    96,
+    120
+   ],
+   "frames": 13,
+   "durations_ms": [
+    60,
+    60,
+    60,
+    60,
+    60,
+    120,
+    120,
+    120,
+    120,
+    90,
+    90,
+    90,
+    90
+   ],
+   "tags": [
+    {
+     "name": "spread",
+     "from": 0,
+     "to": 4,
+     "direction": "forward"
+    },
+    {
+     "name": "hold",
+     "from": 5,
+     "to": 8,
+     "direction": "forward"
+    },
+    {
+     "name": "shatter",
+     "from": 9,
+     "to": 12,
+     "direction": "forward"
+    }
+   ],
+   "pivot": [
+    48,
+    72
+   ],
+   "loop": false,
+   "grid": {
+    "tile": 32,
+    "cells": 3,
+    "ground_rect": [
+     0,
+     24,
+     96,
+     120
+    ]
+   }
+  },
+  {
+   "dir": "effects/ice-field-ice-1t",
+   "builder": "ice_field",
+   "params": {
+    "color": "ice",
+    "tiles": 1
+   },
+   "frame_size": [
+    32,
+    56
+   ],
+   "frames": 13,
+   "durations_ms": [
+    60,
+    60,
+    60,
+    60,
+    60,
+    120,
+    120,
+    120,
+    120,
+    90,
+    90,
+    90,
+    90
+   ],
+   "tags": [
+    {
+     "name": "spread",
+     "from": 0,
+     "to": 4,
+     "direction": "forward"
+    },
+    {
+     "name": "hold",
+     "from": 5,
+     "to": 8,
+     "direction": "forward"
+    },
+    {
+     "name": "shatter",
+     "from": 9,
+     "to": 12,
+     "direction": "forward"
+    }
+   ],
+   "pivot": [
+    16,
+    40
+   ],
+   "loop": false,
+   "grid": {
+    "tile": 32,
+    "cells": 1,
+    "ground_rect": [
+     0,
+     24,
+     32,
+     56
+    ]
+   }
+  },
+  {
+   "dir": "effects/holy-judgment-holy-3t",
+   "builder": "holy_judgment",
+   "params": {
+    "color": "holy",
+    "tiles": 3
+   },
+   "frame_size": [
+    96,
+    144
+   ],
+   "frames": 11,
+   "durations_ms": [
+    70,
+    60,
+    70,
+    40,
+    50,
+    60,
+    70,
+    80,
+    90,
+    100,
+    120
+   ],
+   "tags": [
+    {
+     "name": "circle",
+     "from": 0,
+     "to": 2,
+     "direction": "forward"
+    },
+    {
+     "name": "judgment",
+     "from": 3,
+     "to": 10,
+     "direction": "forward"
+    }
+   ],
+   "pivot": [
+    48,
+    96
+   ],
+   "loop": false,
+   "grid": {
+    "tile": 32,
+    "cells": 3,
+    "ground_rect": [
+     0,
+     48,
+     96,
+     144
+    ]
+   }
+  },
+  {
+   "dir": "effects/holy-judgment-sun-3t",
+   "builder": "holy_judgment",
+   "params": {
+    "color": "sun",
+    "tiles": 3
+   },
+   "frame_size": [
+    96,
+    144
+   ],
+   "frames": 11,
+   "durations_ms": [
+    70,
+    60,
+    70,
+    40,
+    50,
+    60,
+    70,
+    80,
+    90,
+    100,
+    120
+   ],
+   "tags": [
+    {
+     "name": "circle",
+     "from": 0,
+     "to": 2,
+     "direction": "forward"
+    },
+    {
+     "name": "judgment",
+     "from": 3,
+     "to": 10,
+     "direction": "forward"
+    }
+   ],
+   "pivot": [
+    48,
+    96
+   ],
+   "loop": false,
+   "grid": {
+    "tile": 32,
+    "cells": 3,
+    "ground_rect": [
+     0,
+     48,
+     96,
+     144
+    ]
+   }
+  },
+  {
+   "dir": "effects/holy-judgment-moon-3t",
+   "builder": "holy_judgment",
+   "params": {
+    "color": "moon",
+    "tiles": 3
+   },
+   "frame_size": [
+    96,
+    144
+   ],
+   "frames": 11,
+   "durations_ms": [
+    70,
+    60,
+    70,
+    40,
+    50,
+    60,
+    70,
+    80,
+    90,
+    100,
+    120
+   ],
+   "tags": [
+    {
+     "name": "circle",
+     "from": 0,
+     "to": 2,
+     "direction": "forward"
+    },
+    {
+     "name": "judgment",
+     "from": 3,
+     "to": 10,
+     "direction": "forward"
+    }
+   ],
+   "pivot": [
+    48,
+    96
+   ],
+   "loop": false,
+   "grid": {
+    "tile": 32,
+    "cells": 3,
+    "ground_rect": [
+     0,
+     48,
+     96,
+     144
+    ]
+   }
+  },
+  {
+   "dir": "effects/holy-judgment-holy-1t",
+   "builder": "holy_judgment",
+   "params": {
+    "color": "holy",
+    "tiles": 1
+   },
+   "frame_size": [
+    32,
+    80
+   ],
+   "frames": 11,
+   "durations_ms": [
+    70,
+    60,
+    70,
+    40,
+    50,
+    60,
+    70,
+    80,
+    90,
+    100,
+    120
+   ],
+   "tags": [
+    {
+     "name": "circle",
+     "from": 0,
+     "to": 2,
+     "direction": "forward"
+    },
+    {
+     "name": "judgment",
+     "from": 3,
+     "to": 10,
+     "direction": "forward"
+    }
+   ],
+   "pivot": [
+    16,
+    64
+   ],
+   "loop": false,
+   "grid": {
+    "tile": 32,
+    "cells": 1,
+    "ground_rect": [
+     0,
+     48,
+     32,
+     80
+    ]
+   }
+  },
+  {
+   "dir": "effects/dark-vortex-dark-3t",
+   "builder": "dark_vortex",
+   "params": {
+    "color": "dark",
+    "tiles": 3
+   },
+   "frame_size": [
+    96,
+    124
+   ],
+   "frames": 8,
+   "durations_ms": [
+    90,
+    90,
+    90,
+    90,
+    90,
+    90,
+    90,
+    90
+   ],
+   "tags": [
+    {
+     "name": "curse",
+     "from": 0,
+     "to": 7,
+     "direction": "forward"
+    }
+   ],
+   "pivot": [
+    48,
+    76
+   ],
+   "loop": true,
+   "grid": {
+    "tile": 32,
+    "cells": 3,
+    "ground_rect": [
+     0,
+     28,
+     96,
+     124
+    ]
+   }
+  },
+  {
+   "dir": "effects/dark-vortex-blood-3t",
+   "builder": "dark_vortex",
+   "params": {
+    "color": "blood",
+    "tiles": 3
+   },
+   "frame_size": [
+    96,
+    124
+   ],
+   "frames": 8,
+   "durations_ms": [
+    90,
+    90,
+    90,
+    90,
+    90,
+    90,
+    90,
+    90
+   ],
+   "tags": [
+    {
+     "name": "curse",
+     "from": 0,
+     "to": 7,
+     "direction": "forward"
+    }
+   ],
+   "pivot": [
+    48,
+    76
+   ],
+   "loop": true,
+   "grid": {
+    "tile": 32,
+    "cells": 3,
+    "ground_rect": [
+     0,
+     28,
+     96,
+     124
+    ]
+   }
+  },
+  {
+   "dir": "effects/dark-vortex-void-3t",
+   "builder": "dark_vortex",
+   "params": {
+    "color": "void",
+    "tiles": 3
+   },
+   "frame_size": [
+    96,
+    124
+   ],
+   "frames": 8,
+   "durations_ms": [
+    90,
+    90,
+    90,
+    90,
+    90,
+    90,
+    90,
+    90
+   ],
+   "tags": [
+    {
+     "name": "curse",
+     "from": 0,
+     "to": 7,
+     "direction": "forward"
+    }
+   ],
+   "pivot": [
+    48,
+    76
+   ],
+   "loop": true,
+   "grid": {
+    "tile": 32,
+    "cells": 3,
+    "ground_rect": [
+     0,
+     28,
+     96,
+     124
+    ]
+   }
+  },
+  {
+   "dir": "effects/dark-vortex-dark-1t",
+   "builder": "dark_vortex",
+   "params": {
+    "color": "dark",
+    "tiles": 1
+   },
+   "frame_size": [
+    32,
+    60
+   ],
+   "frames": 8,
+   "durations_ms": [
+    90,
+    90,
+    90,
+    90,
+    90,
+    90,
+    90,
+    90
+   ],
+   "tags": [
+    {
+     "name": "curse",
+     "from": 0,
+     "to": 7,
+     "direction": "forward"
+    }
+   ],
+   "pivot": [
+    16,
+    44
+   ],
+   "loop": true,
+   "grid": {
+    "tile": 32,
+    "cells": 1,
+    "ground_rect": [
+     0,
+     28,
+     32,
+     60
+    ]
+   }
+  },
+  {
+   "dir": "effects/life-drain-blood-1t",
+   "builder": "life_drain",
+   "params": {
+    "color": "blood",
+    "tiles": 1
+   },
+   "frame_size": [
+    32,
+    88
+   ],
+   "frames": 10,
+   "durations_ms": [
+    90,
+    80,
+    70,
+    70,
+    70,
+    70,
+    70,
+    90,
+    60,
+    80
+   ],
+   "tags": [
+    {
+     "name": "drain",
+     "from": 0,
+     "to": 9,
+     "direction": "forward"
+    }
+   ],
+   "pivot": [
+    16,
+    72
+   ],
+   "loop": false,
+   "grid": {
+    "tile": 32,
+    "cells": 1,
+    "ground_rect": [
+     0,
+     56,
+     32,
+     88
+    ]
+   }
+  },
+  {
+   "dir": "effects/life-drain-soul-1t",
+   "builder": "life_drain",
+   "params": {
+    "color": "soul",
+    "tiles": 1
+   },
+   "frame_size": [
+    32,
+    88
+   ],
+   "frames": 10,
+   "durations_ms": [
+    90,
+    80,
+    70,
+    70,
+    70,
+    70,
+    70,
+    90,
+    60,
+    80
+   ],
+   "tags": [
+    {
+     "name": "drain",
+     "from": 0,
+     "to": 9,
+     "direction": "forward"
+    }
+   ],
+   "pivot": [
+    16,
+    72
+   ],
+   "loop": false,
+   "grid": {
+    "tile": 32,
+    "cells": 1,
+    "ground_rect": [
+     0,
+     56,
+     32,
+     88
+    ]
+   }
+  },
+  {
+   "dir": "effects/life-drain-mana-1t",
+   "builder": "life_drain",
+   "params": {
+    "color": "mana",
+    "tiles": 1
+   },
+   "frame_size": [
+    32,
+    88
+   ],
+   "frames": 10,
+   "durations_ms": [
+    90,
+    80,
+    70,
+    70,
+    70,
+    70,
+    70,
+    90,
+    60,
+    80
+   ],
+   "tags": [
+    {
+     "name": "drain",
+     "from": 0,
+     "to": 9,
+     "direction": "forward"
+    }
+   ],
+   "pivot": [
+    16,
+    72
+   ],
+   "loop": false,
+   "grid": {
+    "tile": 32,
+    "cells": 1,
+    "ground_rect": [
+     0,
+     56,
+     32,
+     88
+    ]
+   }
+  }
+ ]
+}
