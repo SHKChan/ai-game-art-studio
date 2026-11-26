@@ -9,7 +9,7 @@ Read this first, then `SPECIFICATION.md` (authoritative requirements) and `DEVEL
   - **Motion Studio** (动作工作室) — character animation via Codex CLI or ComfyUI. Code: `actions.py`, `web/wizard.js`.
   - **Asset Import** (素材导入) — import/clean/align existing art. Code: `processing/`, `Studio.import_file`.
   User-facing overview: `README.md` / `README.zh-CN.md`.
-- **Version:** `VERSION` (currently 0.4.0). History: `CHANGELOG.md`.
+- **Version:** `VERSION` (currently 0.5.0). History: `CHANGELOG.md`.
 - **Based on (MIT):** Atelier (marmikshah/atelier @ 8ac6adf) — call format re-implemented in `artstudio/engine`;
   Pixel Atelier (jinxingtaire/pixel-atelier @ 15d199f) — code moved into `artstudio/pipeline`, `prompts_zh_sheet.py`,
   `providers/codex_rpc.py`, `samples/knight`. Neither is a dependency any more; do not re-add them as checkouts.
@@ -45,19 +45,26 @@ source frames are preserved (`frames_src/`), processed frames (`frames/`) are re
 
 ## Motion Studio — character animation (guided flow)
 
-- Flow: reference image (locked master) → action plan → prompts → **one sprite strip per action** → slice + align →
-  animation asset → review (redo single frames) → export. UI: `artstudio/web/wizard.js`; home: `home.js`.
-- Plan: `artstudio/actions.py`, stored at `characters/<cid>/action_plan.json`. Action ids are `[a-z0-9_]` (non-ASCII
-  names fall back to `action`, `action_2`). Presets come from `animation.TEMPLATES`.
+- Flow: reference (uploaded image **or** description → `generate_reference_candidates` → `pick_reference`) → action plan →
+  prompts → **one sheet per action in a fixed grid** → local cutting/cleanup → animation asset → review / sprite editor →
+  export. UI: `artstudio/web/wizard.js`; sprite editor: `artstudio/web/sprite.js`; home: `home.js`.
+- Plan: `artstudio/actions.py`, stored at `characters/<cid>/action_plan.json` with `settings` (target_height 64,
+  palette_size 32, max_retries 2). Action ids are `[a-z0-9_]`. Presets come from `animation.TEMPLATES`; the core set is
+  `actions.CORE_ACTIONS` (walk, attack, hit). Each action has `cols`/`rows` (`processing.sheet.grid_for`).
 - Prompts: `write_prompts(method="codex")` runs `codex exec` read-only with the reference image and expects JSON
   (`codex_cli.extract_json`); `method="template"` is the offline fallback. Never silently swap one for the other.
 - Generation: `Studio.generate_action`. Codex → `codex app-server` image bridge (`providers/codex_rpc.py`); ComfyUI →
-  `strip_reference` (reference repeated per cell) + img2img; mock → labelled fixtures. `strip_layout` uses auto
-  slicing and falls back to an even grid with a visible warning.
+  `strip_reference` (reference repeated in the grid) + img2img; mock → labelled fixture sheet built from the knight sample.
+  The sheet goes through `processing/sheet.process_sheet` (cells, ONE sampling step per sheet, cleanup, reference
+  palette, QA). QA `retry` → regenerate up to `max_retries` (not for fixtures). Placement: `normalize_group` with a
+  fixed canvas/pivot from `Studio.action_canvas` and anchor `ground` / `ground_torso`.
+- Sprite editor saves whole frames to `POST …/pixels`; `animation.save_frame_edits` stores the diff to `frames_base/` as
+  `patches/<fid>.png` + `_erase.png` anchored to the pivot. `reprocess` / `recut_action` re-apply patches (stale when the
+  effective scale changes). Any new frame-writing code must keep `base_file` and re-apply patches.
 - Codex is located by `codex_cli.resolve` (`codex_bin` / `ARTSTUDIO_CODEX` / PATH, incl. `codex.cmd`). The prompt goes
   on **stdin**, never argv (Windows quoting + Chinese text). Tests use `tests/fake_codex.py` via
-  `ARTSTUDIO_CODEX="<python> tests/fake_codex.py"`; that double is not art and must never ship as output.
-- Batch generation is job kind `batch_actions` and always has a budget (default = number of actions).
+  `ARTSTUDIO_CODEX="<python> <abs path>/tests/fake_codex.py"`; that double is not art and must never ship as output.
+- Batch generation is job kind `batch_actions` and always has a budget (default = actions × (1 + retries)).
 
 ## UI structure
 

@@ -109,12 +109,14 @@
         "id": {"type": "string"},
         "file": {"type": "string"},
         "source_file": {"type": ["string", "null"]},
+        "base_file": {"type": ["string", "null"]},
+        "patch": {"type": ["object", "null"]},
         "duration_ms": {"type": "integer", "minimum": 1, "maximum": 60000},
         "offset": {"$ref": "#/$defs/pt"},
         "source_rect": {"$ref": "#/$defs/rect"},
         "source_size": {"type": ["array", "null"]},
         "trimmed_rect": {"$ref": "#/$defs/rect"},
-        "origin": {"enum": ["generated", "imported", "procedural", "manual", "fixture"]},
+        "origin": {"enum": ["generated", "imported", "procedural", "manual", "fixture", "edited"]},
         "status": {"enum": ["ok", "rejected", "regenerating", "candidate"]},
         "phase": {"type": ["string", "null"]},
         "airborne": {"type": "boolean"},
@@ -158,7 +160,7 @@
         "anchor": {
           "type": "object",
           "properties": {
-            "kind": {"enum": ["root", "ground", "support_foot", "torso", "custom", "source"]},
+            "kind": {"enum": ["root", "ground", "ground_torso", "support_foot", "torso", "custom", "source"]},
             "ground_y": {"type": "integer"},
             "point": {"$ref": "#/$defs/pt"}
           }

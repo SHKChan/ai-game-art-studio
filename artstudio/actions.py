@@ -16,6 +16,7 @@ import copy
 import re
 
 from .animation import TEMPLATES
+from .processing.sheet import grid_for
 from .codex_cli import CodexError, exec_text, extract_json
 from .prompts import (BASE_NEGATIVE, BASE_NEGATIVE_ZH, CAMERA_ZH, DIRECTION_TEXT, DIRECTION_TEXT_ZH, POSES_ZH, STYLE_TEXT,
                       STYLE_TEXT_ZH, character_block, character_block_zh)
@@ -26,11 +27,25 @@ MAX_FRAMES = 16
 STATUSES = ("draft", "prompted", "generating", "generated", "approved", "failed")
 CAMERA_EN = {"side": "side view", "top_down": "top-down RPG three-quarter view", "three_quarter": "three-quarter RPG view",
              "isometric": "isometric view", "front": "front view"}
+CORE_ACTIONS = ("walk", "attack", "hit")   # the default production set
 PRESET_DESCRIPTIONS = {
-    "idle": "breathing in place, relaxed", "walk": "walking forward at a steady pace", "run": "running fast",
-    "attack": "one strong weapon attack", "combo_attack": "two-hit combo attack", "cast": "casting a spell with both hands",
-    "dodge": "quick evasive roll", "dash": "short burst dash forward", "jump": "jump up and land",
-    "hit": "getting hit and recoiling", "death": "collapsing to the ground", "interact": "reaching out to use an object",
+    "idle": "breathing in place, relaxed",
+    "walk": ("walk cycle in place: legs alternate through contact, down, passing and up; arms and weapon swing slightly "
+             "against the legs; the body bobs about one pixel; the character stays in place (movement is done by the game)"), "run": "running fast",
+    "attack": ("one strong attack with the character's own weapon: clear wind-up, fast swing, an impact frame with a short "
+               "slash trail, follow-through, then recovery back to the ready pose; feet stay planted"), "combo_attack": "two-hit combo attack", "cast": "casting a spell with both hands",
+    "dodge": "quick evasive roll",  # noqa: E241 "dash": "short burst dash forward", "jump": "jump up and land",
+    "hit": ("getting hit: a short impact pushes the shoulders and chest back, knees bend to absorb it, equipment lags behind "
+            "the hands, then the weight returns to the ready pose"), "death": "collapsing to the ground", "interact": "reaching out to use an object",
+}
+
+
+PRESET_NAMES_ZH = {"idle": "待机", "walk": "行走", "run": "奔跑", "attack": "攻击", "combo_attack": "连击", "cast": "施法",
+                   "dodge": "闪避", "dash": "冲刺", "jump": "跳跃", "hit": "受击", "death": "死亡", "interact": "交互"}
+PRESET_DESCRIPTIONS_ZH = {
+    "walk": "原地行走循环：左右腿交替经过接触、下沉、交叉、上升；手臂和武器随步伐轻微反向摆动，身体上下起伏约 1 像素；角色原地踏步，位移交给游戏",
+    "attack": "用角色原有武器完成一次有力的攻击：明显的蓄势、快速挥击、带短暂刀光的命中帧、随势，最后收势回到准备姿势；双脚基本站稳",
+    "hit": "受击：短促冲击使肩胸后仰，屈膝缓冲，装备随手滞后，再收回重心回到准备姿势",
 }
 
 
@@ -58,10 +73,13 @@ def new_action(preset: str | None = None, *, name: str | None = None, descriptio
     n = int(frames or (tpl["frames"] if tpl else 6))
     lp = bool(tpl.get("loop", False)) if loop is None and tpl else bool(loop)
     sid = re.sub(r"[^a-z0-9]+", "_", str(name or preset or "").lower()).strip("_")[:40]
-    a = {"id": sid or "action", "name": name or (preset or "action").replace("_", " "),
-         "preset": preset if tpl else None, "description": description or (PRESET_DESCRIPTIONS.get(preset, "") if tpl else ""),
-         "frames": n, "loop": lp, "direction": direction, "poses": [], "prompt": "", "negative": "", "prompt_source": "",
+    a = {"id": sid or "action", "name": name or ((PRESET_NAMES_ZH.get(preset or "") if _is_zh(lang) else None)
+                                                 or (preset or "action").replace("_", " ")),
+         "preset": preset if tpl else None, "description": description or ((PRESET_DESCRIPTIONS_ZH.get(preset) if _is_zh(lang) else None)
+                                         or PRESET_DESCRIPTIONS.get(preset, "") if tpl else ""),
+         "frames": n, "cols": 0, "rows": 0, "loop": lp, "direction": direction, "poses": [], "prompt": "", "negative": "", "prompt_source": "",
          "asset_id": None, "attempts": [], "status": "draft"}
+    a["cols"], a["rows"] = grid_for(n)
     a["poses"] = default_poses(a, lang)
     return a
 
@@ -84,7 +102,8 @@ def load_plan(ws, pid: str, cid: str) -> dict:
     p = plan_path(ws, pid, cid)
     if p.is_file():
         return read_json(p)
-    return {"character_id": cid, "identity": "", "identity_source": "", "language": "", "actions": [], "updated_at": now()}
+    return {"character_id": cid, "identity": "", "identity_source": "", "language": "", "actions": [],
+            "settings": dict(DEFAULT_SETTINGS), "updated_at": now()}
 
 
 def clean_action(a: dict, lang: str = "en") -> dict:
@@ -96,6 +115,12 @@ def clean_action(a: dict, lang: str = "en") -> dict:
         out["id"] = re.sub(r"[^a-z0-9_]+", "_", str(a["id"]).lower()).strip("_")[:40] or out["id"]
     if not 1 <= out["frames"] <= MAX_FRAMES:
         raise StudioError(f"frames must be 1..{MAX_FRAMES}")
+    try:
+        cols, rows = int(a.get("cols") or 0), int(a.get("rows") or 0)
+    except (TypeError, ValueError):
+        cols = rows = 0
+    if cols >= 1 and rows >= 1 and cols * rows >= out["frames"] and cols * rows <= out["frames"] + max(cols, rows):
+        out["cols"], out["rows"] = cols, rows
     poses = [str(p)[:200] for p in (a.get("poses") or [])]
     out["poses"] = poses if len(poses) == out["frames"] else default_poses(out, lang)
     for k in ("prompt", "negative"):
@@ -121,7 +146,8 @@ def save_plan(ws, pid: str, cid: str, plan: dict) -> dict:
     if len(actions) > 24:
         raise StudioError("At most 24 actions per plan")
     out = {"character_id": c["id"], "identity": str(plan.get("identity", ""))[:4000],
-           "identity_source": plan.get("identity_source", ""), "language": lang, "actions": actions, "updated_at": now()}
+           "identity_source": plan.get("identity_source", ""), "language": lang, "actions": actions,
+           "settings": plan_settings(plan), "updated_at": now()}
     write_json(plan_path(ws, pid, cid), out)
     return out
 
@@ -140,33 +166,48 @@ def identity_text(c: dict, plan: dict, lang: str) -> str:
     return character_block_zh(c) if _is_zh(lang) else character_block(c)
 
 
+def layout(a: dict) -> tuple[int, int]:
+    cols, rows = int(a.get("cols") or 0), int(a.get("rows") or 0)
+    return (cols, rows) if cols and rows and cols * rows >= int(a["frames"]) else grid_for(int(a["frames"]))
+
+
 def strip_prompt(c: dict, plan: dict, a: dict, mode: str, lang: str = "en") -> dict:
-    """Prompt for ONE horizontal sprite strip containing every frame of the action."""
+    """Prompt for ONE sprite sheet holding every frame of the action in a fixed grid (cols x rows)."""
     n = int(a["frames"])
+    cols, rows = layout(a)
+    spare = cols * rows - n
     poses = a["poses"] if len(a["poses"]) == n else default_poses(a, lang)
     style_extra = c.get("visual_style") or ""
     style_en = "; ".join(x for x in (style_extra, STYLE_TEXT[mode]) if x)
     style_zh = "；".join(x for x in (style_extra, STYLE_TEXT_ZH[mode]) if x)
     if _is_zh(lang):
         order = "；".join(f"{i + 1}：{p}" for i, p in enumerate(poses))
+        grid = (f"单行恰好 {n} 格" if rows == 1 else f"固定 {cols} 列 × {rows} 行") + "，等宽等高，严格从左到右、从上到下"
         pos = (f"{identity_text(c, plan, lang)} 动作：{a['name']}——{a['description']}。"
                f"{CAMERA_ZH.get(c.get('camera', 'side'), '')}，{DIRECTION_TEXT_ZH.get(a['direction'], a['direction'])}。"
                f"画风：{style_zh}。"
-               f"一张透明背景 PNG 精灵条：单行恰好 {n} 格，等宽等高，从左到右依次为：{order}。"
-               f"{'动作循环：最后一帧可以自然接回第一帧。' if a['loop'] else ''}"
-               "每格只有一个完整角色，各格人物大小、比例和地面线一致，身体、武器和特效四周留出充足空白；不要格子边框、不要文字。"
-               "脸、发型、服装、配色、比例和武器必须与参考图完全一致。")
+               f"先根据角色比例、原装备和重心设计 {n} 个连贯关键姿势，再一次生成一张透明背景 PNG 精灵图表：{grid}依次为：{order}。"
+               + (f"最后 {spare} 格留空。" if spare else "")
+               + ("动作循环：最后一帧可以自然接回第一帧。" if a["loop"] else "")
+               + "每格只有一名完整角色，各格统一视角、人物大小比例和地面线（根节点），身体、武器和特效四周留出充足空白，不要贴到格子边缘。"
+               "保持同一张脸、发型、服装、配色、握持方式和装备结构，与参考图完全一致；不换装，不新增道具。"
+               "输出真实透明背景，没有地面、阴影、文字、格线或背景填充。")
         neg = BASE_NEGATIVE_ZH
     else:
         order = "; ".join(f"{i + 1}: {p}" for i, p in enumerate(poses))
+        grid = (f"exactly {n} equal cells in a single row, left to right" if rows == 1 else
+                f"a fixed grid of {cols} columns x {rows} rows of equal cells, read left to right, top to bottom")
         pos = (f"{identity_text(c, plan, lang)} Action: {a['name']} — {a['description']}. "
                f"{CAMERA_EN.get(c.get('camera', 'side'), '')}, {DIRECTION_TEXT.get(a['direction'], a['direction'])}. "
                f"Style: {style_en}. "
-               f"One transparent PNG sprite strip: exactly {n} equal cells in a single row, left to right: {order}. "
+               f"First design {n} connected key poses from the character's proportions, own equipment and balance, then generate "
+               f"ONE transparent PNG sprite sheet: {grid}: {order}. "
+               + (f"Leave the last {spare} cell(s) empty. " if spare else "")
                + ("Looping action: the last frame flows back into the first. " if a["loop"] else "")
-               + "Exactly one complete character per cell, same size, proportions and ground line in every cell, generous empty "
-               "margin around body, weapon and effects; no cell borders, no text. Identical face, hair, outfit, colours, "
-               "proportions and weapon to the reference image.")
+               + "Exactly one complete character per cell, the same camera, scale, proportions and ground line (root) in every "
+               "cell, generous empty margin around body, weapon and effects — nothing touches a cell edge. Identical face, hair, "
+               "outfit, colours, grip and weapon to the reference image; no costume change, no new props. Real transparent "
+               "background: no floor, shadow, text, grid lines or background fill.")
         neg = BASE_NEGATIVE
     if c.get("negative_constraints"):
         neg += ("，" if _is_zh(lang) else ", ") + ("，" if _is_zh(lang) else ", ").join(c["negative_constraints"])
@@ -198,9 +239,11 @@ Rules:
 - Write identity, poses and prompts in {language}.
 - One entry per action below, same ids, and EXACTLY the given number of poses (one per frame, in time order).
   Poses must read as a smooth, believable motion that matches the user's description; respect "loop".
-- Each prompt asks for ONE transparent PNG sprite strip: exactly N equal cells in a single row, left to right in pose order,
-  one complete character per cell, identical scale and ground line in every cell, empty margin around body/weapon/effects,
-  no borders, no text. It must restate the identity details so the character stays identical to the reference.
+- Each prompt asks for ONE transparent PNG sprite sheet in the fixed grid given per action (columns x rows, equal cells,
+  read left to right, top to bottom, in pose order; spare cells stay empty), one complete character per cell, identical
+  camera, scale and ground line in every cell, empty margin around body/weapon/effects (nothing touches a cell edge),
+  no floor, shadow, borders or text. It must restate the identity details so the character stays identical to the
+  reference (same face, hair, outfit, colours, grip and weapon; no costume change, no new props).
 - Art style: {style}. Camera: {camera}. Facing: as given per action.
 
 Actions:
@@ -222,7 +265,8 @@ def write_prompts(ws, pid: str, cid: str, method: str = "template", *, action_id
         if reference is None:
             raise StudioError("Codex prompt writing needs a reference image (approve a character master first)")
         listing = "\n".join(
-            f"- id={a['id']}; name={a['name']}; frames={a['frames']}; loop={str(a['loop']).lower()}; "
+            f"- id={a['id']}; name={a['name']}; frames={a['frames']}; grid={layout(a)[0]} columns x {layout(a)[1]} rows; "
+            f"loop={str(a['loop']).lower()}; "
             f"facing={DIRECTION_TEXT.get(a['direction'], a['direction'])}; user description: {a['description'] or '(none)'}; "
             f"suggested beats: {' | '.join(default_poses(a, lang))}" for a in targets)
         instr = (CODEX_INSTRUCTIONS.replace("{language}", "Simplified Chinese" if _is_zh(lang) else "English")
@@ -258,5 +302,23 @@ def write_prompts(ws, pid: str, cid: str, method: str = "template", *, action_id
 
 
 def presets() -> dict:
-    return {k: {"frames": v["frames"], "loop": v.get("loop", False), "poses": v["poses"], "poses_zh": POSES_ZH.get(k, v["poses"]),
-                "description": PRESET_DESCRIPTIONS.get(k, "")} for k, v in copy.deepcopy(TEMPLATES).items()}
+    order = list(CORE_ACTIONS) + [k for k in TEMPLATES if k not in CORE_ACTIONS]
+    out = {}
+    for k in order:
+        v = copy.deepcopy(TEMPLATES[k])
+        cols, rows = grid_for(v["frames"])
+        out[k] = {"frames": v["frames"], "loop": v.get("loop", False), "poses": v["poses"], "poses_zh": POSES_ZH.get(k, v["poses"]),
+                  "description": PRESET_DESCRIPTIONS.get(k, ""), "description_zh": PRESET_DESCRIPTIONS_ZH.get(k, PRESET_DESCRIPTIONS.get(k, "")),
+                  "cols": cols, "rows": rows, "core": k in CORE_ACTIONS}
+    return out
+
+
+DEFAULT_SETTINGS = {"target_height": 64, "palette_size": 32, "max_retries": 2}
+
+
+def plan_settings(plan: dict) -> dict:
+    s = {**DEFAULT_SETTINGS, **{k: v for k, v in (plan.get("settings") or {}).items() if k in DEFAULT_SETTINGS}}
+    s["target_height"] = max(16, min(512, int(s["target_height"])))
+    s["palette_size"] = max(4, min(256, int(s["palette_size"])))
+    s["max_retries"] = max(0, min(5, int(s["max_retries"])))
+    return s

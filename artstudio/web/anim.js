@@ -1,5 +1,6 @@
 // Animation Studio: playback, timeline editing, onion skin, anchor editing, comparison, events, layers, QA.
 import { S, api, el, toast, guard, emit, fileUrl, badge, fixtureBadge, refreshProject, select, readFile, waitJob, assetsOfProject } from './core.js';
+import { openSpriteEditor } from './sprite.js';
 
 const V = { asset: null, imgs: [], srcImgs: [], cur: 0, playing: false, zoom: 4, bg: 'checker', onion: false, ground: true, pivot: true,
   anchorEdit: false, compare: false, cmpA: 0, cmpB: 1, cmpSource: false, layerImgs: {}, t0: 0, raf: 0, showLayers: true };
@@ -156,7 +157,8 @@ export async function renderAnimation(root) {
   });
   const side = el('div', { class: 'card' });
   const renderSide = () => { side.innerHTML = ''; side.append(...frameTools(root, canvas)); };
-  const head = el('div', { class: 'row' }, el('h3', {}, a.name), badge(a.status), badge(a.art_style, ''), fixtureBadge(a), el('span', { class: 'muted small' }, `${A.name} · ${A.direction} · provider ${a.provider.id}`));
+  const head = el('div', { class: 'row' }, el('h3', {}, a.name), badge(a.status), badge(a.art_style, ''), fixtureBadge(a), el('span', { class: 'muted small' }, `${A.name} · ${A.direction} · provider ${a.provider.id}`),
+    el('span', { class: 'spacer' }), el('button', { class: 'primary', onclick: () => guard(() => openSpriteEditor(a.id, { frame: V.cur, onClose: () => renderAnimation(root) })) }, '✎ Edit pixels'));
   const fixtureWarn = a.provider.is_test_fixture ? el('div', { class: 'warnbox' }, 'This asset contains TEST FIXTURE output from a mock provider. It is not AI-generated artwork.') : null;
   root.append(el('div', { class: 'grid cols3' },
     el('div', { class: 'card' }, ...assetPanel(root)),

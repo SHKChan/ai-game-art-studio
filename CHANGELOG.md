@@ -5,6 +5,45 @@ versions follow [Semantic Versioning](https://semver.org/). The current version 
 
 ## [Unreleased]
 
+## [0.5.0] — 2026-11-26
+
+Motion Studio becomes a production line for action frames, and gets a sprite editor.
+
+### Added
+- **Start from a description** (second start option): describe the character, generate **4 reference candidates**
+  with Codex or local ComfyUI (text-to-image), pick one — it is locked as the reference. "Generate 4 more" with a
+  change note. API `characters/from-description`, `…/reference-candidates`, `…/pick-reference`; job `reference_candidates`;
+  CLI `animate describe | candidates | pick`.
+- **Core set** walk (8 frames) · attack (8) · hit (4) with written motion briefs (en/zh); UI button and `animate core`.
+- **One sheet per action in a fixed grid** (`processing/sheet.grid_for`: 8 → 4×2, 4 → 2×2, 5–6 → 3×2 …), following Pixel
+  Atelier's proven 4×2 knight sheet. Prompts (template and Codex) ask for the grid; ComfyUI gets the reference repeated in
+  the same grid.
+- **Local sheet processing** (`artstudio/processing/sheet.py`): background removal → components assigned to grid cells →
+  pseudo-pixel grid detection → **one sampling step per sheet** so the reference pose reaches the character height
+  (default 64 px) → cleanup (binary alpha, background-coloured halo, stray specks, 1-px holes) → snap to the palette of the
+  reference image → QA (empty cell, merged sprites across cells, size drift, border contact). Frames are placed on a fixed
+  per-character canvas with the feet on one ground line (`ground`, or `ground_torso` for loops).
+- **Automatic regeneration**: a sheet that fails QA is regenerated up to `settings.max_retries` times (default 2) with a
+  note describing what failed; attempts are recorded on the asset. Batch budget defaults to actions × (1 + retries).
+- Plan **settings** (character height, palette size, retries) in the Generate step; **Re-cut** an action at another
+  height from its preserved sheet (`POST …/recut`, `Studio.recut_action`).
+- **Sprite editor** (`web/sprite.js`), opened from the review step, the Library (✎ on a card) and the Animation editor:
+  pixel inspector (click a pixel → coordinates, colour, usage count; recolour, delete, use colour, replace that colour in
+  this frame / all frames, remove a colour; arrow keys walk pixels, Enter paints, Delete removes), pencil, eraser, picker,
+  fill (Alt: global), line, rectangle (Shift: filled), selection with move / Alt-copy / copy-paste between frames / flip /
+  clear, mirror frame, brush size 1–3, palette from the animation, two colours (X swaps), zoom / fit / pan, pixel grid,
+  ground line + pivot, onion skin, playback, per-frame duration, duplicate / move / delete frames, undo / redo, Ctrl+S.
+- **Patch layer**: hand edits are stored per frame (`patches/<fid>.png` + `_erase.png`, anchored to the pivot) over the
+  processed frame (`frames_base/`). Reprocessing or re-cutting keeps them; a scale change flags them `stale`.
+  API `POST …/pixels`, `…/pixels/clear`. Versions snapshot patches too.
+- Tests: `tests/test_sprite_edit.py` (5) + new cases in `tests/test_actions.py` (regeneration, retry cap, core presets);
+  Playwright covers the sprite editor and the description start.
+
+### Changed
+- `strip_layout` (auto/even-grid guessing) replaced by grid-based cutting; `action.layout` is now `grid CxR`.
+- The mock provider builds a labelled test sheet from the knight sample in the requested grid.
+- Review step: "Fine-tune…" → "Timing & events…"; new "✎ Edit pixels".
+
 ## [0.4.0] — 2026-11-26
 
 Tools get names, Pixel Forge gets a live editor and six skill effects, and the UI gets a theme choice.

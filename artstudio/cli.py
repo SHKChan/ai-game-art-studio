@@ -176,8 +176,15 @@ def build_parser():
     rs.add_argument("archive")
     rs.add_argument("target")
 
-    an = sub.add_parser("animate", help="Motion Studio guided flow: reference image -> actions -> prompts -> one strip per action")
-    an.add_argument("action", choices=["new", "add", "remove", "show", "prompts", "generate"])
+    an = sub.add_parser("animate", help="Motion Studio: reference (image or description) -> actions -> prompts -> one sheet per action")
+    an.add_argument("action", choices=["new", "describe", "candidates", "pick", "add", "core", "remove", "show", "prompts", "generate"],
+                    help="new: from an image; describe: from text (+ generated candidates); candidates: more candidates; "
+                         "pick: lock a candidate as reference; core: add walk/attack/hit")
+    an.add_argument("--candidate", help="pick: candidate id")
+    an.add_argument("--count", type=int, default=4, help="describe/candidates: how many reference candidates")
+    an.add_argument("--note", default="", help="candidates: what should change")
+    an.add_argument("--height", type=int, help="generate: character height in px (default 64)")
+    an.add_argument("--retries", type=int, help="generate: automatic regenerations of a failed sheet (default 2)")
     an.add_argument("--project", required=True)
     an.add_argument("--character", help="character id (all actions except new)")
     an.add_argument("--name", help="new: character name; add: custom action name")
@@ -379,9 +386,26 @@ def _animate(s, a) -> dict:
             raise StudioError("animate new needs --name and --image")
         c = s.create_character_from_reference(a.project, a.name, Path(a.image), art_style=a.style, view=a.view, description=a.notes)
         return {"character_id": c["id"], "directions": c["directions"], "masters": list(c["masters"])}
+    if a.action == "describe":
+        if not (a.name and a.description):
+            raise StudioError("animate describe needs --name and --description")
+        c = s.create_character_from_description(a.project, a.name, a.description, art_style=a.style, view=a.view, visual_style=a.notes)
+        r = s.generate_reference_candidates(a.project, c["id"], a.provider, a.count, ctx=_ctx(), budget=Budget(a.count))
+        return {"character_id": c["id"], **r}
     if not a.character:
         raise StudioError("--character is required")
+    if a.action == "candidates":
+        return s.generate_reference_candidates(a.project, a.character, a.provider, a.count, a.note, ctx=_ctx(), budget=Budget(a.count))
+    if a.action == "pick":
+        c = s.pick_reference(a.project, a.character, a.candidate)
+        return {"character_id": c["id"], "masters": c["masters"]}
     plan = plans.load_plan(s.ws, a.project, a.character)
+    if a.action == "core":
+        c = s.ws.get_character(a.project, a.character)
+        have = {x.get("preset") for x in plan["actions"]}
+        plan["actions"] += [{"preset": k, "direction": c["directions"][0]} for k in plans.CORE_ACTIONS if k not in have]
+        plan.setdefault("language", s.prompt_language(a.project))
+        return plans.save_plan(s.ws, a.project, a.character, plan)
     if a.action == "show":
         return plan
     if a.action == "add":
@@ -397,7 +421,12 @@ def _animate(s, a) -> dict:
     if a.action == "prompts":
         return s.write_action_prompts(a.project, a.character, a.method, a.actions, a.language, ctx=_ctx())
     ids = a.actions or [x["id"] for x in plan["actions"]]
-    budget = Budget(a.budget if a.budget is not None else len(ids))
+    if a.height or a.retries is not None:
+        plan["settings"] = {**plan.get("settings", {}), **({"target_height": a.height} if a.height else {}),
+                            **({"max_retries": a.retries} if a.retries is not None else {})}
+        plan = plans.save_plan(s.ws, a.project, a.character, plan)
+    retries = plans.plan_settings(plan)["max_retries"]
+    budget = Budget(a.budget if a.budget is not None else len(ids) * (1 + retries))
     return s._job_batch_actions({"character_id": a.character, "action_ids": ids, "provider_id": a.provider,
                                  "workflow_id": a.workflow, "params": json.loads(a.params)}, _ctx(), budget, {"project_id": a.project})
 

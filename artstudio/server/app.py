@@ -21,7 +21,7 @@ from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
 from .. import __version__
-from ..animation import edit_frames, reprocess, replace_frame, template_info
+from ..animation import clear_patch, edit_frames, reprocess, replace_frame, save_frame_edits, template_info
 from ..i18n import localize, localize_exc, normalize
 from ..providers.base import GenerationError
 from ..qa import check_asset
@@ -110,6 +110,32 @@ def api_frames(s, h, m, q, body):
     a = s.ws.get_asset(m["pid"], m["aid"])
     op = body.pop("op")
     return edit_frames(s.ws, a, op, **body)
+
+
+@route("POST", r"/api/projects/(?P<pid>[a-z0-9_-]+)/assets/(?P<aid>[a-z0-9_-]+)/pixels")
+def api_pixels(s, h, m, q, body):
+    """Sprite editor save: full edited frames (data URLs); the server stores the difference as per-frame patches."""
+    a = s.ws.get_asset(m["pid"], m["aid"])
+    edits = [{"index": int(e["index"]), "image": open_image_bytes(decode_data_url(e["image"])).convert("RGBA")}
+             for e in body.get("edits", [])]
+    if not edits:
+        raise StudioError("No edited frames")
+    a = save_frame_edits(s.ws, a, edits)
+    check_asset(s.ws, a)
+    return s.ws.get_asset(m["pid"], m["aid"])
+
+
+@route("POST", r"/api/projects/(?P<pid>[a-z0-9_-]+)/assets/(?P<aid>[a-z0-9_-]+)/pixels/clear")
+def api_pixels_clear(s, h, m, q, body):
+    a = s.ws.get_asset(m["pid"], m["aid"])
+    return clear_patch(s.ws, a, int(body["index"]))
+
+
+@route("POST", r"/api/projects/(?P<pid>[a-z0-9_-]+)/assets/(?P<aid>[a-z0-9_-]+)/recut")
+def api_recut(s, h, m, q, body):
+    a = s.recut_action(m["pid"], m["aid"], body.get("settings", {}))
+    check_asset(s.ws, a)
+    return s.ws.get_asset(m["pid"], m["aid"])
 
 
 @route("POST", r"/api/projects/(?P<pid>[a-z0-9_-]+)/assets/(?P<aid>[a-z0-9_-]+)/reprocess")
@@ -362,6 +388,35 @@ def api_char_from_ref(s, h, m, q, body):
     p = _save_upload(s, body.get("filename", "reference.png"), body["data"])
     return s.create_character_from_reference(m["pid"], body["name"], p, art_style=body.get("art_style", "pixel"),
                                              view=body.get("view", "side"), description=body.get("description", ""))
+
+
+@route("POST", r"/api/projects/(?P<pid>[a-z0-9_-]+)/characters/from-description")
+def api_char_from_desc(s, h, m, q, body):
+    c = s.create_character_from_description(m["pid"], body["name"], body.get("description", ""), art_style=body.get("art_style", "pixel"),
+                                            view=body.get("view", "side"), visual_style=body.get("visual_style", ""))
+    return {"character": c, "job": _ref_job(s, m["pid"], c["id"], body)}
+
+
+def _ref_job(s, pid, cid, body):
+    n = max(1, min(8, int(body.get("count", 4))))
+    return s.jobs.submit("reference_candidates", {"character_id": cid, "provider_id": body["provider_id"], "count": n,
+                                                  "note": body.get("note", ""), "workflow_id": body.get("workflow_id") or None,
+                                                  "params": body.get("params", {})},
+                         project_id=pid, budget=n, label=f"{n} reference candidates via {body['provider_id']}")
+
+
+@route("POST", r"/api/projects/(?P<pid>[a-z0-9_-]+)/characters/(?P<cid>[a-z0-9_-]+)/reference-candidates")
+def api_char_ref_candidates(s, h, m, q, body):
+    if body.get("description"):
+        c = s.ws.get_character(m["pid"], m["cid"])
+        c["description"] = str(body["description"])[:2000]
+        s.ws.save_character(c)
+    return _ref_job(s, m["pid"], m["cid"], body)
+
+
+@route("POST", r"/api/projects/(?P<pid>[a-z0-9_-]+)/characters/(?P<cid>[a-z0-9_-]+)/pick-reference")
+def api_char_pick_reference(s, h, m, q, body):
+    return s.pick_reference(m["pid"], m["cid"], body["candidate_id"])
 
 
 @route("POST", r"/api/projects/(?P<pid>[a-z0-9_-]+)/characters/(?P<cid>[a-z0-9_-]+)/reference")

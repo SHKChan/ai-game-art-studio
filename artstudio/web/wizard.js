@@ -1,10 +1,12 @@
 // Guided flow: animate a character (Motion Studio).
 // 1 Character (reference image) → 2 Actions → 3 Prompts (Codex or template, editable) → 4 Generate (Codex / ComfyUI) → 5 Review & export.
-import { t } from './i18n.js';
+import { t, getLang } from './i18n.js';
+const getZh = () => getLang().startsWith('zh');
 import { S, api, el, toast, guard, emit, fileUrl, charUrl, exportUrl, badge, fixtureBadge, readFile, select, field, waitJob, refreshProject } from './core.js';
+import { openSpriteEditor } from './sprite.js';
 
 const STEPS = ['Character', 'Actions', 'Prompts', 'Generate', 'Review & export'];
-export const W = { step: 0, cid: null, char: null, plan: null, provider: null, workflow: '', checkpoint: '', denoise: 0.62, presets: null };
+export const W = { step: 0, cid: null, char: null, plan: null, provider: null, workflow: '', checkpoint: '', denoise: 0.62, presets: null, start: 'upload', refProvider: null };
 
 const proj = () => `/api/projects/${S.project}`;
 const provider = (id) => S.providers.find(p => p.id === id);
@@ -69,8 +71,33 @@ async function stepCharacter(body, go, root) {
     const name = el('input', { placeholder: 'e.g. Fire Knight', 'aria-label': 'Character name' });
     const style = select([['pixel', 'Pixel art'], ['hd', 'HD illustration']], S.data.project.default_style || 'pixel');
     const view = select([['side', 'Side view (platformer / side-scroller)'], ['top_down', 'Top-down / RPG (4 directions)']], 'side');
+    const modeTabs = el('div', { class: 'segmented' }, ...[['upload', 'I have a reference image'], ['describe', 'Describe it — generate a reference']].map(([k, label]) =>
+      el('button', { class: W.start === k ? 'on' : '', onclick: () => { W.start = k; renderWizard(root); } }, label)));
+    if (W.start === 'describe') {
+      const desc = el('textarea', { rows: 5, placeholder: 'e.g. chibi knight, spiky blond hair, silver armour with gold trim, red cape, holds a big two-handed sword on the shoulder' });
+      const vstyle = el('input', { placeholder: 'optional style notes, e.g. 16-bit SNES look, dark outline' });
+      const provs = refProviders();
+      body.append(el('div', { class: 'card' }, el('h3', {}, 'Your characters'), pick), modeTabs,
+        el('div', { class: 'grid cols2' },
+          el('div', { class: 'card' }, el('h3', {}, 'New character'),
+            el('div', { class: 'form' }, ...field('Name', name), ...field('Art style', style), ...field('View', view), ...field('Style notes', vstyle))),
+          el('div', { class: 'card' }, el('h3', {}, 'Describe the character'), desc,
+            el('p', { class: 'small muted' }, 'The generator draws 4 candidates from this description. You pick one; it becomes the locked reference that every action must match.'),
+            el('h4', {}, 'Generator'), provs.box)),
+        nav(go, null, async () => {
+          if (!name.value.trim()) throw new Error('Enter a character name');
+          if (!desc.value.trim()) throw new Error('Describe the character first');
+          if (!provs.value()) throw new Error('Choose a generator');
+          const r = await api(`${proj()}/characters/from-description`, { body: { name: name.value.trim(), description: desc.value.trim(), visual_style: vstyle.value,
+            art_style: style.value, view: view.value, provider_id: provs.value(), count: 4, params: refParams(provs.value()) } });
+          W.cid = r.character.id; await refreshProject(); await loadChar(); renderWizard(root);
+          await waitJob(r.job, async () => { toast('Candidates ready — pick one'); });
+          await loadChar(); renderWizard(root);
+        }, 'Generate 4 candidates →'));
+      return;
+    }
     const notes = el('input', { placeholder: 'optional: anything the image does not show (e.g. carries a shield on the back)' });
-    body.append(el('div', { class: 'card' }, el('h3', {}, 'Your characters'), pick),
+    body.append(el('div', { class: 'card' }, el('h3', {}, 'Your characters'), pick), modeTabs,
       el('div', { class: 'grid cols2' },
         el('div', { class: 'card' }, el('h3', {}, 'New character'),
           el('div', { class: 'form' }, ...field('Name', name), ...field('Art style', style), ...field('View', view), ...field('Notes', notes)),
@@ -85,15 +112,61 @@ async function stepCharacter(body, go, root) {
     return;
   }
   const m = master(W.char);
-  preview.append(m ? el('img', { src: charUrl(W.char, m.file) }) : el('span', { class: 'muted' }, 'no reference'));
-  body.append(el('div', { class: 'card' }, el('h3', {}, 'Your characters'), pick),
+  preview.append(m ? el('img', { src: charUrl(W.char, m.file) }) : el('span', { class: 'muted' }, 'no reference yet — pick a candidate below'));
+  const cc = candidatesCard(root);
+  body.append(el('div', { class: 'card' }, el('h3', {}, 'Your characters'), pick), ...(m || !cc ? [] : [cc]),
     el('div', { class: 'grid cols2' },
       el('div', { class: 'card' }, el('h3', {}, 'Reference image'), preview),
       el('div', { class: 'card' }, el('h3', {}, 'Replace reference'), dropZone(f => guard(async () => {
         await api(`${proj()}/characters/${W.cid}/reference`, { body: { filename: f.name, data: await readFile(f) } });
         await loadChar(); await refreshProject(); toast('Reference updated'); renderWizard(root);
       }), 'Drop a new reference image here'), el('p', { class: 'small muted' }, 'Replacing keeps the old image in the character history.'))),
+    ...(m && cc ? [cc] : []),
     nav(go, null, 1, 'Next →', !m));
+}
+
+function refProviders() {
+  if (!W.refProvider || !avail(W.refProvider)) W.refProvider = ['codex', 'comfyui', 'mock'].find(avail) || null;
+  const box = el('div', {});
+  for (const [id, title] of [['codex', 'Codex CLI'], ['comfyui', 'Local ComfyUI (text-to-image workflow)'], ['mock', 'Test fixtures (no AI)']]) {
+    const p = provider(id); if (!p) continue;
+    const ok = !!p.status.available;
+    const r = el('input', { type: 'radio', name: 'refprov', value: id, checked: W.refProvider === id, disabled: !ok });
+    r.onchange = () => (W.refProvider = id);
+    box.append(el('label', { class: 'row' + (ok ? '' : ' muted') }, r, el('span', {}, title), ok ? null : el('span', { class: 'small errtext' }, p.status.reason || '')));
+  }
+  return { box, value: () => W.refProvider };
+}
+function refParams(id) { return id === 'comfyui' && W.checkpoint ? { checkpoint: W.checkpoint } : {}; }
+
+function candidatesCard(root) {
+  const c = W.char;
+  const cands = (c.candidates || []).filter(x => x.status !== 'rejected').slice(-12).reverse();
+  if (!cands.length && master(c)) return null;
+  const m = master(c);
+  const provs = refProviders();
+  const note = el('input', { class: 'grow', placeholder: 'what should change? e.g. bigger sword, darker armour' });
+  const desc = el('textarea', { rows: 3, 'data-no-i18n': '' }, c.description || '');
+  const regen = () => guard(async () => {
+    if (!provs.value()) throw new Error('Choose a generator');
+    const job = await api(`${proj()}/characters/${W.cid}/reference-candidates`, { body: { provider_id: provs.value(), count: 4, note: note.value, description: desc.value, params: refParams(provs.value()) } });
+    await waitJob(job, async () => toast('Candidates ready — pick one'));
+    await loadChar(); renderWizard(root);
+  });
+  const grid = el('div', { class: 'cands' }, ...cands.map(x => {
+    const isRef = m && m.candidate === x.id;
+    return el('div', { class: 'cand' + (isRef ? ' sel' : '') },
+      el('div', { class: 'thumb checker' }, el('img', { src: charUrl(c, x.file) })),
+      x.is_test_fixture ? badge('TEST FIXTURE', 'fixture') : null,
+      isRef ? badge('reference', 'ok') : el('button', { class: 'small primary', onclick: () => guard(async () => {
+        await api(`${proj()}/characters/${W.cid}/pick-reference`, { body: { candidate_id: x.id } });
+        await loadChar(); await refreshProject(); toast('Reference locked'); renderWizard(root);
+      }) }, '✓ Use this'));
+  }));
+  return el('div', { class: 'card' }, el('h3', {}, 'Generated candidates'),
+    cands.length ? grid : el('p', { class: 'muted' }, 'No candidates yet.'),
+    el('h4', {}, 'Generate more'), el('div', { class: 'small muted' }, 'Description'), desc,
+    el('div', { class: 'row' }, note, el('button', { onclick: regen }, '↻ Generate 4 more')), provs.box);
 }
 
 // ------------------------------------------------------------------ 2 actions
@@ -105,9 +178,10 @@ function actionRow(a, i, dirs, changed, remove) {
   const ds = el('input', { value: a.description, class: 'grow', placeholder: 'what happens, in one line (e.g. swings the sword overhead and slams it down)', 'data-no-i18n': '' });
   const upd = () => {
     if (!a.asset_id && nm.value !== a.name) { const id = nm.value.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, ''); if (id) a.id = id; }
-    a.name = nm.value; a.frames = Math.max(1, Math.min(16, +fr.value || 1)); a.loop = lp.checked; a.direction = dr.value; a.description = ds.value; changed(); };
+    const nf = Math.max(1, Math.min(16, +fr.value || 1)); if (nf !== a.frames) { a.cols = 0; a.rows = 0; }
+    a.name = nm.value; a.frames = nf; a.loop = lp.checked; a.direction = dr.value; a.description = ds.value; changed(); };
   [nm, fr, dr, ds].forEach(x => x.onchange = upd); lp.onchange = upd;
-  return el('div', { class: 'arow' }, el('span', { class: 'muted small tag' }, a.preset ? a.preset : 'custom'), nm, el('label', { class: 'small' }, 'Frames', fr),
+  return el('div', { class: 'arow' }, el('span', { class: 'muted small tag' }, a.preset ? a.preset : 'custom'), nm, el('label', { class: 'small' }, 'Frames', fr), a.cols ? el('span', { class: 'small muted', title: t('Grid the generator draws: columns × rows'), 'data-no-i18n': '' }, `${a.cols}×${a.rows}`) : null,
     el('label', { class: 'small' }, lp, 'Loop'), dr, ds, a.asset_id ? badge('generated', 'ok') : null,
     el('button', { class: 'small danger', title: 'Remove', onclick: remove }, '✕'));
 }
@@ -124,11 +198,20 @@ async function stepActions(body, go, root) {
   };
   const add = (preset) => guard(async () => {
     const p = preset ? W.presets[preset] : null;
-    W.plan.actions.push(preset ? { preset, frames: p.frames, loop: p.loop, direction: dirs[0], description: p.description }
+    W.plan.actions.push(preset ? { preset, frames: p.frames, loop: p.loop, direction: dirs[0], description: getZh() ? p.description_zh : p.description }
       : { name: 'custom action', frames: 6, loop: false, direction: dirs[0], description: '' });
     await savePlan(); draw();
   });
-  const chips = el('div', { class: 'chips' }, ...Object.keys(W.presets).map(k => el('button', { class: 'chip', onclick: () => add(k) }, '+ ', el('span', {}, k))),
+  const addCore = () => guard(async () => {
+    for (const k of Object.keys(W.presets).filter(k => W.presets[k].core)) {
+      if (W.plan.actions.some(a => a.preset === k)) continue;
+      const p = W.presets[k];
+      W.plan.actions.push({ preset: k, frames: p.frames, loop: p.loop, direction: dirs[0], description: getZh() ? p.description_zh : p.description });
+    }
+    await savePlan(); draw();
+  });
+  const chips = el('div', { class: 'chips' }, el('button', { class: 'chip on', onclick: addCore }, '★ ', el('span', {}, 'Core set: walk · attack · hit')),
+    ...Object.keys(W.presets).map(k => el('button', { class: 'chip', onclick: () => add(k) }, '+ ', el('span', {}, k))),
     el('button', { class: 'chip accent', onclick: () => add(null) }, '+ Custom action'));
   draw();
   body.append(el('div', { class: 'card' }, el('h3', {}, 'Which actions do you need?'),
@@ -158,7 +241,7 @@ async function stepPrompts(body, go, root) {
     const prompt = el('textarea', { rows: 6, 'aria-label': 'Prompt', placeholder: 'No prompt yet — use one of the buttons above, or write your own.' }, a.prompt || '');
     poses.onchange = () => guard(async () => { a.poses = poses.value.split('\n').map(x => x.trim()).filter(Boolean); if (a.poses.length !== a.frames) toast(`Poses: ${a.poses.length}, frames: ${a.frames}`, true); await savePlan(); });
     prompt.onchange = () => guard(async () => { a.prompt = prompt.value; a.prompt_source = 'manual'; await savePlan(); });
-    return el('div', { class: 'card' }, el('div', { class: 'row' }, el('b', { 'data-no-i18n': '' }, a.name), el('span', { class: 'muted small' }, `${a.frames} frames`),
+    return el('div', { class: 'card' }, el('div', { class: 'row' }, el('b', { 'data-no-i18n': '' }, a.name), el('span', { class: 'muted small' }, `${a.frames} frames`), a.cols ? badge(`${a.cols}×${a.rows}`, '') : null,
       a.loop ? badge('Loop', '') : null, a.prompt_source ? badge(a.prompt_source, a.prompt_source === 'codex' ? 'ok' : '') : badge('no prompt', 'warn')),
       el('div', { class: 'small muted', 'data-no-i18n': '' }, a.description),
       el('div', { class: 'grid pgrid' }, el('div', {}, el('h4', {}, 'Frame poses (one per line)'), poses), el('div', {}, el('h4', {}, 'Prompt'), prompt)));
@@ -204,14 +287,26 @@ async function stepGenerate(body, go, root) {
   const rows = W.plan.actions.map(a => { checks[a.id] = el('input', { type: 'checkbox', checked: !a.asset_id || a.status === 'failed' });
     return el('label', { class: 'row' }, checks[a.id], el('span', { 'data-no-i18n': '' }, a.name), el('span', { class: 'muted small' }, `${a.frames} frames`), badge(a.status)); });
   const cost = el('span', { class: 'muted small' });
-  const upd = () => { const n = Object.values(checks).filter(c => c.checked).length; cost.textContent = `${n} generation call(s) — one image per action`; };
+  const upd = () => { const n = Object.values(checks).filter(c => c.checked).length; const r = +(W.plan.settings?.max_retries ?? 2);
+    cost.textContent = getZh() ? `${n} 次生成（每个动作一张图；不合格时最多再画 ${r} 次）` : `${n} generation call(s) — one sheet per action (+ up to ${r} automatic retries each)`; };
   Object.values(checks).forEach(c => c.onchange = upd); upd();
+  const st = W.plan.settings || { target_height: 64, palette_size: 32, max_retries: 2 };
+  const th = el('input', { type: 'number', min: 16, max: 512, step: 8, value: st.target_height, 'aria-label': 'Character height (px)' });
+  const pal = el('input', { type: 'number', min: 4, max: 256, value: st.palette_size, 'aria-label': 'Palette colours' });
+  const rt = select([[0, '0'], [1, '1'], [2, '2'], [3, '3']], st.max_retries, { 'aria-label': 'Automatic retries' });
+  const saveSettings = () => guard(async () => { W.plan.settings = { target_height: +th.value || 64, palette_size: +pal.value || 32, max_retries: +rt.value }; await savePlan(); });
+  [th, pal, rt].forEach(x => x.onchange = saveSettings);
+  const settingsCard = el('div', { class: 'card' }, el('h3', {}, 'Processing'),
+    el('div', { class: 'form' }, ...field('Character height (px)', th), ...field('Palette colours', pal), ...field('Automatic retries', rt)),
+    el('p', { class: 'small muted' }, 'Each action comes back as ONE sheet. It is cut into frames, scaled once so the character is this tall, put on one ground line, snapped to the reference palette and cleaned (halo, stray pixels). A sheet that fails the checks (empty cell, wrong size, merged sprites) is regenerated automatically.'));
   const prog = el('div', {});
   const run = () => guard(async () => {
     const ids = Object.entries(checks).filter(([, c]) => c.checked).map(([id]) => id);
     if (!ids.length) throw new Error('Select at least one action');
     if (!W.provider) throw new Error('Choose a generator');
-    const job = await api(`${proj()}/characters/${W.cid}/plan/generate`, { body: { provider_id: W.provider, workflow_id: W.workflow || null, params: genParams(), action_ids: ids } });
+    await saveSettings();
+    const budget = ids.length * (1 + (+(W.plan.settings?.max_retries ?? 2)));
+    const job = await api(`${proj()}/characters/${W.cid}/plan/generate`, { body: { provider_id: W.provider, workflow_id: W.workflow || null, params: genParams(), action_ids: ids, budget } });
     prog.innerHTML = '';
     const bar = el('i', { style: 'width:2%' }), msg = el('div', { class: 'small muted', 'data-no-i18n': '' }, 'queued');
     prog.append(el('div', { class: 'bar big' }, bar), msg);
@@ -227,13 +322,31 @@ async function stepGenerate(body, go, root) {
       providerCard('codex', 'Codex CLI', 'Uses your logged-in Codex account. Best at keeping the character identical across the strip.'),
       providerCard('comfyui', 'Local ComfyUI', 'Your own models on your GPU. The reference is repeated across the strip and redrawn per pose (img2img).', comfyExtra),
       S.providers.some(p => p.id === 'mock') ? providerCard('mock', 'Test fixtures (no AI)', 'Returns bundled sample art labelled TEST FIXTURE — for trying the workflow only.') : null),
-    el('div', { class: 'card' }, el('h3', {}, 'Actions to generate'), ...rows, el('p', {}, cost),
-      el('p', { class: 'small muted' }, 'Each action is generated as one sprite strip, then cut into frames and aligned to one ground line and scale. You can redo single frames afterwards.'),
-      el('button', { class: 'primary big', onclick: run }, '▶ Generate'), prog)),
+    el('div', {}, el('div', { class: 'card' }, el('h3', {}, 'Actions to generate'), ...rows, el('p', {}, cost),
+      el('p', { class: 'small muted' }, 'Runs as a queue: every selected action is generated, checked and cut one after another. You can leave it running and review everything at the end.'),
+      el('button', { class: 'primary big', onclick: run }, '▶ Run pipeline'), prog), settingsCard)),
     nav(go, 2, W.plan.actions.some(a => a.asset_id) ? 4 : null, 'Review →'));
 }
 
 // ------------------------------------------------------------------ 5 review + export
+function sheetInfo(a, root) {
+  const ac = a.action || {};
+  const att = ac.attempts || [];
+  const qa = ac.sheet_qa;
+  const issues = (qa?.issues || []).filter(i => i.severity === 'error');
+  const edited = a.animation.frames.filter(f => f.patch).length;
+  const stale = a.animation.frames.some(f => f.patch?.stale);
+  const th = el('input', { type: 'number', min: 16, max: 512, step: 8, value: ac.settings?.target_height || 64, 'aria-label': 'Character height (px)' });
+  const recut = () => guard(async () => { await api(`${proj()}/assets/${a.id}/recut`, { body: { settings: { target_height: +th.value || 64 } } }); toast('Re-cut from the original sheet'); renderWizard(root); });
+  return el('div', { class: 'row small' },
+    ac.grid ? badge(`${ac.grid[0]}×${ac.grid[1]} sheet`, '') : null,
+    att.length > 1 ? badge(getZh() ? `第 ${att.length} 次生成通过` : `passed on attempt ${att.length}`, 'warn') : null,
+    qa && qa.status !== 'pass' ? el('span', { class: 'errtext' }, issues.map(i => i.msg).join('; ') || 'needs review') : null,
+    edited ? badge(getZh() ? `${edited} 帧有手改` : `${edited} frame(s) hand-edited`, 'locked') : null,
+    stale ? badge('hand edits need a check', 'warn') : null,
+    ac.grid ? el('label', { class: 'small', title: t('Cut the original sheet again at another size (hand edits are kept)') }, 'Height', th, 'px', el('button', { class: 'small', onclick: recut }, 'Re-cut')) : null);
+}
+
 function player(a) {
   const fr = a.animation.frames.filter(f => f.status !== 'rejected');
   const img = el('img', { alt: a.name });
@@ -265,8 +378,9 @@ async function stepReview(body, go, root) {
         el('span', { class: 'muted small' }, `${a.animation.frames.length} frames · ${a.provider.id}`), el('span', { class: 'spacer' }),
         approved ? null : el('button', { class: 'small primary', onclick: () => guard(async () => { await api(`${proj()}/assets/${a.id}/decision`, { body: { decision: 'approved' } }); toast('Approved'); renderWizard(root); }) }, '✓ Approve'),
         el('button', { class: 'small', onclick: () => { W.step = 3; renderWizard(root); } }, '↻ Redo action'),
-        el('button', { class: 'small ghost', onclick: () => emit('open-asset', a.id) }, 'Fine-tune…')),
-      (a.action?.layout || '').startsWith('grid') ? el('div', { class: 'warnbox' }, 'Frames were cut on an even grid because the generator did not return separate sprites — check the frames.') : null,
+        el('button', { class: 'small primary', onclick: () => guard(() => openSpriteEditor(a.id, { onClose: () => renderWizard(root) })) }, '✎ Edit pixels'),
+        el('button', { class: 'small ghost', onclick: () => emit('open-asset', a.id) }, 'Timing & events…')),
+      sheetInfo(a, root),
       el('div', { class: 'rgrid' }, player(a), el('div', {}, el('div', { class: 'small muted' }, 'Click a frame to redo just that frame.'), strip)));
   });
   const targets = { cocos: ['atlas', 'cocos', 'gif', 'json', 'zip'], godot: ['frames', 'sheet', 'godot', 'json', 'zip'], phaser: ['atlas', 'phaser', 'json', 'zip'],

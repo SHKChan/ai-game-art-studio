@@ -70,12 +70,14 @@ class ActionPlanTests(unittest.TestCase):
         cid = self.char()["id"]
         self.plan(cid, [{"preset": "run"}, {"name": "Spin", "description": "spins once", "frames": 5, "loop": True}])
         p = self.s.write_action_prompts(self.pid, cid, "template")
-        self.assertIn("exactly 8 equal cells", p["actions"][0]["prompt"])
+        self.assertIn("4 columns x 2 rows", p["actions"][0]["prompt"])
+        self.assertIn("3 columns x 2 rows", p["actions"][1]["prompt"])
+        self.assertIn("Leave the last 1 cell(s) empty", p["actions"][1]["prompt"])
         self.assertIn("spins once", p["actions"][1]["prompt"])
         self.assertIn("last frame flows back", p["actions"][1]["prompt"])
         self.assertNotIn("Style: ;", p["actions"][1]["prompt"])
         p = self.s.write_action_prompts(self.pid, cid, "template", language="zh-CN")
-        self.assertIn("单行恰好 8 格", p["actions"][0]["prompt"])
+        self.assertIn("固定 4 列 × 2 行", p["actions"][0]["prompt"])
         self.assertEqual(p["actions"][0]["prompt_source"], "template")
 
     # ---- Codex prompt writing
@@ -116,7 +118,10 @@ class ActionPlanTests(unittest.TestCase):
         a = self.s.generate_action(self.pid, cid, "spin", "codex")
         self.assertEqual(len(a["animation"]["frames"]), 5)
         self.assertEqual(a["action"]["action_id"], "spin")
-        self.assertTrue(a["action"]["layout"].startswith("auto"))
+        self.assertEqual(a["action"]["layout"], "grid 3x2")
+        self.assertEqual(a["action"]["sheet_qa"]["status"], "pass")
+        self.assertEqual(len(a["action"]["attempts"]), 1)
+        self.assertEqual(a["animation"]["anchor"]["kind"], "ground")
         self.assertFalse(a["provider"]["is_test_fixture"])
         self.assertIn("action:spin", a["tags"])
         p = plans.load_plan(self.s.ws, self.pid, cid)
@@ -145,15 +150,44 @@ class ActionPlanTests(unittest.TestCase):
             self.s._job_batch_actions({"character_id": cid, "action_ids": ["run", "idle"], "provider_id": "codex"},
                                       __import__("artstudio.providers.base", fromlist=["JobContext"]).JobContext(), Budget(1), {"project_id": self.pid})
 
-    def test_layout_falls_back_to_grid(self):
-        im = Image.new("RGBA", (300, 60), (0, 0, 0, 0))
-        for x in range(0, 300, 4):  # one connected blob: auto finds 1 sprite, 5 were requested
-            im.paste((90, 90, 200, 255), (x, 20, x + 4, 50))
-        p = self.tmp / "blob.png"
-        im.save(p)
-        lay, note = self.s.strip_layout(p, 5, "pixel", fixture=False)
-        self.assertEqual(lay, {"method": "grid", "cols": 5, "rows": 1})
-        self.assertIn("expected 5", note)
+    def test_bad_sheet_is_regenerated(self):
+        cid = self.char()["id"]
+        self.plan(cid, [{"preset": "hit"}])
+        self.s.write_action_prompts(self.pid, cid, "template")
+        os.environ["FAKE_CODEX_MODE"] = "bad_once"
+        os.environ["FAKE_CODEX_STATE"] = str(self.tmp / "bad_once.flag")
+        try:
+            a = self.s.generate_action(self.pid, cid, "hit", "codex")
+        finally:
+            os.environ.pop("FAKE_CODEX_STATE", None)
+        self.assertEqual([x["status"] for x in a["action"]["attempts"]], ["retry", "pass"])
+        self.assertEqual(a["action"]["attempts"][0]["issues"][0]["code"], "empty_cell")
+        self.assertEqual(len(a["animation"]["frames"]), 4)
+        self.assertEqual(a["action"]["grid"], [2, 2])
+
+    def test_retries_are_capped(self):
+        cid = self.char()["id"]
+        self.plan(cid, [{"preset": "hit"}])
+        plan = plans.load_plan(self.s.ws, self.pid, cid)
+        plan["settings"] = {"max_retries": 0}
+        plans.save_plan(self.s.ws, self.pid, cid, plan)
+        os.environ["FAKE_CODEX_MODE"] = "bad_once"
+        os.environ["FAKE_CODEX_STATE"] = str(self.tmp / "bad_once_cap.flag")
+        try:
+            with self.assertRaises(GenerationError):
+                self.s.generate_action(self.pid, cid, "hit", "codex")
+        finally:
+            os.environ.pop("FAKE_CODEX_STATE", None)
+        self.assertEqual(plans.load_plan(self.s.ws, self.pid, cid)["actions"][0]["status"], "failed")
+
+    def test_core_presets_and_grid(self):
+        from artstudio.processing.sheet import grid_for
+        pr = plans.presets()
+        self.assertEqual(list(pr)[:3], ["walk", "attack", "hit"])
+        self.assertEqual((pr["walk"]["cols"], pr["walk"]["rows"]), (4, 2))
+        self.assertEqual((pr["hit"]["cols"], pr["hit"]["rows"]), (2, 2))
+        self.assertEqual([grid_for(n) for n in (1, 3, 4, 5, 8, 12)], [(1, 1), (3, 1), (2, 2), (3, 2), (4, 2), (4, 3)])
+        self.assertEqual(plans.new_action("hit", lang="zh-CN")["name"], "受击")
 
     def test_strip_reference(self):
         p = self.s.strip_reference(REF, 4, self.tmp / "sr", "pixel")
@@ -191,7 +225,7 @@ class ActionComfyTests(unittest.TestCase):
         ups = self.srv.state.uploads()
         self.assertTrue(ups)
         with Image.open(self.srv.state.dir / "input" / ups[-1]) as im:
-            self.assertEqual(im.size, (128 * 8, 128))  # reference repeated in 8 cells
+            self.assertEqual(im.size, (128 * 4, 128 * 2))  # reference repeated in a 4x2 grid
 
 
 class ActionApiTests(unittest.TestCase):

@@ -14,7 +14,7 @@
 | 工具 | 适合制作 | 方式 |
 |---|---|---|
 | **🔥 像素工坊（Pixel Forge）** | 技能特效、道具、图标、物件、场景 | 内置像素生成器 + **实时编辑器**：样式、尺寸、速度、颜色、描边、光晕、翻转、放大。分层、可回放，离线可用，不需要 AI。 |
-| **🎬 动作工作室（Motion Studio）** | 角色的动作帧：待机、行走、攻击、自定义动作 | 一张参考图 → 动作 → 提示词 → 每个动作一条精灵条，由 **Codex CLI** 或本地 **ComfyUI** 绘制。 |
+| **🎬 动作工作室（Motion Studio）** | 角色的动作帧：待机、行走、攻击、自定义动作 | 参考图（上传或用文字描述生成）→ 动作 → 每个动作一张精灵图表，由 **Codex CLI** 或本地 **ComfyUI** 绘制，本地切图、对齐、清理边缘；带像素级精灵编辑器。 |
 | **📥 素材导入（Asset Import）** | 已有的美术资源 | PNG / 序列帧 / 精灵表 / GIF / APNG / MP4 / WebM：去背景、切图、对齐。 |
 
 通用功能：
@@ -65,14 +65,15 @@ powershell -ExecutionPolicy Bypass -File .\start.ps1      # 自动创建 .venv�
 
 首页有三个入口，对应三个工具。
 
-**🎬 动作工作室** —— 五步制作角色动画：
+**🎬 动作工作室** —— 角色动作帧流水线：
 
-1. **角色**：名称、美术风格、侧视或俯视，以及 **一张参考图**（会锁定为母版）。
-2. **动作**：点击预设（待机、行走、奔跑、攻击、施法、跳跃、受击、死亡……），或添加 **自定义动作** 并用一句话描述，
-   例如「把剑举过头顶再重重劈下」。设置帧数、是否循环和朝向。
-3. **提示词**：**✨ 用 Codex 编写** 会查看参考图，写出角色描述、逐帧姿势和每个动作的提示词；也可以使用内置模板。所有内容都可以修改。
-4. **生成**：选择 **Codex CLI** 或 **本地 ComfyUI**（工作流、模型文件、重绘强度）。每个动作生成一条精灵条，再切成帧并对齐（统一缩放和地面线）。
-5. **检查与导出**：预览每个动画，点击某一帧可只重做这一帧，审核通过后导出到 Cocos Creator、Godot、Phaser/PixiJS 或 PNG/GIF。
+1. **角色**：上传 **一张参考图**，或者 **用文字描述角色**，让 Codex / ComfyUI 画 4 张候选，挑一张。选中的图会锁定为参考图，之后所有动作都以它为准。
+2. **动作**：**★ 核心三件套** 一键加入行走（8 帧）、攻击（8 帧）、受击（4 帧）；也可以选其它预设或用一句话描述自定义动作。每个动作按固定网格画成一张图（8 帧 → 4×2，4 帧 → 2×2）。
+3. **提示词**：**✨ 用 Codex 编写** 会查看参考图，写出角色描述、逐帧姿势和提示词；也可以使用内置模板。所有内容都可以修改。
+4. **生成**（▶ 运行流水线）：选择 **Codex CLI** 或 **本地 ComfyUI**，动作按队列依次运行。每张图会切成单帧，整张统一缩放到 **角色高度**（默认 64 像素），对齐同一条地面线，颜色锁定到参考图调色板并清理边缘。检查不合格会 **自动重画**（默认最多 2 次）。
+5. **检查与导出**：预览每个动作，用 **✎ 编辑像素** 打开精灵编辑器，单帧重做，按新高度重新切图，审核后导出到 Cocos Creator、Godot、Phaser/PixiJS 或 PNG/GIF。
+
+**✎ 精灵编辑器** —— 点任意像素查看颜色并修改、删除，或把这个颜色在本帧 / 整个动画里替换；铅笔、橡皮、吸管、油漆桶、直线、矩形、框选（移动 / 复制 / 粘贴 / 翻转）、镜像、洋葱皮、播放、复制 / 移动 / 删除帧、撤销 / 重做。手改像素存成修补层，重新处理动作也会保留。快捷键：P B E I G L R M（工具），方向键 + Enter / Delete（单个像素），Ctrl+Z / Ctrl+S，, 和 .（切换帧）。
 
 **🔥 像素工坊** —— 左侧选择生成器，中间实时预览，右侧调整：
 
@@ -102,10 +103,14 @@ python -m artstudio procedural hero_shrine --project my-rpg --params '{"banner":
 python -m artstudio procedural heal --project my-rpg --params '{"color":"gold"}' --edits '{"speed":1.5,"outline":1,"glow":2}'
 # 动作工作室（角色动画）
 python -m artstudio animate new --project my-rpg --name "火焰骑士" --image knight.png --view side
+#   ……或者用文字描述：生成 4 张候选，再锁定一张
+python -m artstudio animate describe --project my-rpg --name "火焰骑士" --description "Q版骑士，红披风，大剑" --provider codex
+python -m artstudio animate pick --project my-rpg --character <角色ID> --candidate <候选ID>
+python -m artstudio animate core --project my-rpg --character <角色ID>                   # 行走 + 攻击 + 受击
 python -m artstudio animate add --project my-rpg --character <角色ID> --preset attack
 python -m artstudio animate add --project my-rpg --character <角色ID> --name "旋风斩" --description "伸剑原地转一圈" --frames 6
 python -m artstudio animate prompts --project my-rpg --character <角色ID> --method codex --language zh-CN
-python -m artstudio animate generate --project my-rpg --character <角色ID> --provider codex
+python -m artstudio animate generate --project my-rpg --character <角色ID> --provider codex --height 64 --retries 2
 python -m artstudio draw my_gem.jsonl --project my-rpg --name "红宝石" --type icon
 python -m artstudio generate --project my-rpg --provider comfyui --workflow sd-image-to-image --character hero --template walk --direction east --prompt-language zh-CN --params '{"checkpoint":"<文件>.safetensors"}'
 python -m artstudio export --project my-rpg --assets <素材ID…> --formats atlas cocos gif json zip

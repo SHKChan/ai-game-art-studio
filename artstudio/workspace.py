@@ -339,8 +339,9 @@ class Workspace:
         v = (a["versions"][-1]["version"] + 1) if a["versions"] else 1
         vd = d / "versions" / f"v{v}"
         vd.mkdir(parents=True, exist_ok=True)
-        if (d / "frames").is_dir():
-            shutil.copytree(d / "frames", vd / "frames", dirs_exist_ok=True)
+        for sub in ("frames", "patches"):
+            if (d / sub).is_dir():
+                shutil.copytree(d / sub, vd / sub, dirs_exist_ok=True)
         prev = d / "asset.json"
         if prev.exists():
             shutil.copyfile(prev, vd / "asset.json")
@@ -355,9 +356,10 @@ class Workspace:
         self._snapshot(cur, d, f"before restore of v{version}")
         old = read_json(vd / "asset.json")
         old["versions"] = cur["versions"]
-        if (vd / "frames").is_dir():
-            shutil.rmtree(d / "frames", ignore_errors=True)
-            shutil.copytree(vd / "frames", d / "frames")
+        for sub in ("frames", "patches"):
+            if (vd / sub).is_dir():
+                shutil.rmtree(d / sub, ignore_errors=True)
+                shutil.copytree(vd / sub, d / sub)
         return self.save_asset(old)
 
     def delete_asset(self, pid: str, aid: str) -> None:

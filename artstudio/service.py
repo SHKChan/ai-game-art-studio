@@ -15,11 +15,12 @@ from .export import contact_sheet, export_assets
 from .jobs import JobQueue
 from .processing import importers
 from .processing.frames import (depixelate, estimate_pixel_scale, remove_background, slice_auto, slice_grid)
+from .processing.sheet import SheetRejected, process_sheet, reference_palette
 from .prompts import build_keyframe_prompt, build_master_prompt
 from .providers import Registry
 from .providers.base import GenerationError, GenerationRequest
 from .qa import check_asset, check_animation_set, check_character_directions
-from .util import StudioError, new_id, now
+from .util import StudioError, new_id, now, read_json, write_json
 from .workspace import Workspace
 
 log = logging.getLogger("artstudio.service")
@@ -41,6 +42,7 @@ class Studio:
             "replay_recipe": self._job_replay,
             "action_prompts": self._job_action_prompts,
             "batch_actions": self._job_batch_actions,
+            "reference_candidates": self._job_reference_candidates,
         }, workers=workers)
 
     # ------------------------------------------------------------------ Pixel Forge
@@ -335,6 +337,88 @@ class Studio:
         c = self.ws.review_candidate(pid, c["id"], c["candidates"][-1]["id"], "approved", "reference uploaded in guided flow")
         return c
 
+    # ---- start option 2: describe the character -> generated reference candidates -> pick one
+    def create_character_from_description(self, pid: str, name: str, description: str, *, art_style: str = "pixel",
+                                          view: str = "side", visual_style: str = "") -> dict:
+        if not str(description or "").strip():
+            raise StudioError("Describe the character first", code="no_description")
+        mode = "side2" if view == "side" else "four"
+        return self.ws.create_character(pid, name, mode, art_style, description=str(description).strip()[:2000],
+                                        visual_style=str(visual_style or "")[:400], camera="side" if view == "side" else "three_quarter")
+
+    @staticmethod
+    def reference_prompt(c: dict, lang: str = "en", note: str = "") -> dict:
+        from .prompts import BASE_NEGATIVE, BASE_NEGATIVE_ZH, STYLE_TEXT, STYLE_TEXT_ZH, character_block, character_block_zh
+        side = c.get("direction_mode") == "side2"
+        mode = c.get("art_style", "pixel")
+        if str(lang).startswith("zh"):
+            view = "侧视，朝右" if side else "四分之三正面，朝向镜头偏下"
+            pos = (f"{character_block_zh(c)} 2D 游戏角色设定参考图：只有一名完整角色，全身，{view}，自然的准备站姿，手持自己的武器/道具，"
+                   f"全身完整可见，四周留白。画风：{'；'.join(x for x in (c.get('visual_style'), STYLE_TEXT_ZH[mode]) if x)}。"
+                   "输出真实透明背景，没有地面、阴影、文字或边框。" + (f"本轮修改：{note}" if note else ""))
+            return {"positive": pos, "negative": BASE_NEGATIVE_ZH}
+        view = "side view facing right" if side else "three-quarter front view facing down-camera"
+        pos = (f"{character_block(c)} Character reference for a 2D game: ONE complete character, full body, {view}, neutral ready "
+               f"stance holding its own weapon/props, whole body visible with empty margin. "
+               f"Style: {'; '.join(x for x in (c.get('visual_style'), STYLE_TEXT[mode]) if x)}. Real transparent background, no floor, shadow, text or frame." + (f" Revision: {note}" if note else ""))
+        return {"positive": pos, "negative": BASE_NEGATIVE}
+
+    def generate_reference_candidates(self, pid: str, cid: str, provider_id: str, count: int = 4, note: str = "",
+                                      workflow_id: str | None = None, params: dict | None = None, ctx=None, budget=None) -> dict:
+        """Generate `count` reference candidates from the character description (no reference image needed)."""
+        from .providers.base import JobContext
+        ctx = ctx or JobContext()
+        c = self.ws.get_character(pid, cid)
+        count = max(1, min(8, int(count)))
+        prov = self.registry.get(provider_id)
+        st = prov.status()
+        if not st.available:
+            raise GenerationError(f"Provider '{provider_id}' unavailable: {st.reason}", "provider_unavailable")
+        pr = self.reference_prompt(c, self.prompt_language(pid), note)
+        direction = "right" if c["direction_mode"] == "side2" else "south"
+        params = dict(params or {})
+        if provider_id == "comfyui":
+            workflow_id = workflow_id or "sd-text-to-image"
+        made, failed = [], []
+        for i in range(count):
+            ctx.check_cancel()
+            if budget is not None and prov.counts_toward_budget:
+                budget.spend(1)
+            ctx.progress(i / count, f"reference candidate {i + 1}/{count} via {provider_id}")
+            out = self.ws.root / "tmp" / new_id("ref")
+            p = dict(params)
+            if provider_id == "comfyui":
+                p["seed"] = int(p.get("seed", 1000)) + i * 7919
+            if provider_id == "mock":
+                p.setdefault("fixture", "knight_poster")
+            try:
+                res = prov.generate(GenerationRequest("master_candidate", p, pr["positive"], pr["negative"], [], p.get("seed"),
+                                                      workflow_id, out), ctx)
+                fixture = res.is_test_fixture or bool(res.metadata.get("is_test_fixture"))
+                for img in res.images[:1]:
+                    c = self.ws.add_character_image(pid, cid, img, "candidate", direction,
+                                                    note=("generated: " + (note or "from description"))[:200], is_test_fixture=fixture)
+                    made.append(c["candidates"][-1]["id"])
+            except GenerationError as e:
+                failed.append(str(e))
+                if e.code == "provider_unavailable":
+                    raise
+            finally:
+                shutil.rmtree(out, ignore_errors=True)
+        if not made:
+            raise GenerationError("No reference candidate was generated: " + "; ".join(failed)[:800], "execution_error")
+        return {"character_id": cid, "candidates": made, "failed": failed, "prompt": pr["positive"]}
+
+    def pick_reference(self, pid: str, cid: str, cand_id: str) -> dict:
+        """Lock a generated candidate as the character reference (replaces an earlier locked one, keeping history)."""
+        c = self.ws.get_character(pid, cid)
+        cand = next((x for x in c["candidates"] if x["id"] == cand_id), None)
+        if not cand:
+            raise StudioError("Unknown candidate")
+        if c["masters"].get(cand["direction"], {}).get("locked"):
+            return self.ws.replace_master(pid, cid, cand["direction"], cand_id, "picked a new generated reference")
+        return self.ws.review_candidate(pid, cid, cand_id, "approved", "picked as reference")
+
     def set_character_reference(self, pid: str, cid: str, image: Path) -> dict:
         """Replace the reference used for action generation (keeps history; explicit replace of a locked master)."""
         c = self.ws.get_character(pid, cid)
@@ -358,41 +442,66 @@ class Studio:
         return "sd-character-reference" if "sd-character-reference" in ids else "sd-image-to-image"
 
     @staticmethod
-    def strip_reference(ref: Path, n: int, out_dir: Path, mode: str = "pixel", cell: int | None = None) -> Path:
-        """ComfyUI img2img input: the reference repeated in n cells on white, so the model keeps the identity
+    def strip_reference(ref: Path, n: int, out_dir: Path, mode: str = "pixel", cell: int | None = None,
+                        cols: int | None = None, rows: int | None = None) -> Path:
+        """ComfyUI img2img input: the reference repeated in every grid cell on white, so the model keeps the identity
         and only changes the pose per cell (denoise controls how much)."""
+        cols, rows = (cols, rows) if cols and rows else (n, 1)
         with Image.open(ref) as im:
             r = im.convert("RGBA")
         r = r.crop(r.getchannel("A").getbbox() or (0, 0, r.width, r.height))
-        cell = int(cell or max(64, min(512, (2048 // max(1, n)) // 8 * 8)))
-        k = min(cell * 0.8 / r.width, cell * 0.85 / r.height)
+        cell = int(cell or max(64, min(512, (2048 // max(1, cols, rows)) // 8 * 8)))
+        k = min(cell * 0.7 / r.width, cell * 0.75 / r.height)
         r = r.resize((max(1, round(r.width * k)), max(1, round(r.height * k))), Image.NEAREST if mode == "pixel" else Image.LANCZOS)
-        strip = Image.new("RGBA", (cell * n, cell), (255, 255, 255, 255))
+        strip = Image.new("RGBA", (cell * cols, cell * rows), (255, 255, 255, 255))
         for i in range(n):
-            strip.alpha_composite(r, (i * cell + (cell - r.width) // 2, round(cell * 0.93) - r.height))
+            cx, cy = i % cols, i // cols
+            strip.alpha_composite(r, (cx * cell + (cell - r.width) // 2, cy * cell + round(cell * 0.9) - r.height))
         out_dir.mkdir(parents=True, exist_ok=True)
         p = out_dir / "strip_reference.png"
         strip.convert("RGB").save(p)
         return p
 
+    def sheet_palette(self, pid: str, c: dict, size: int, target_height: int) -> list[str] | None:
+        """Character palette from the locked reference (cached per reference file and size)."""
+        if c["art_style"] != "pixel":
+            return None
+        ref = self.reference_for(pid, c)
+        if ref is None or not ref.is_file():
+            return None
+        cache = self.ws.char_dir(pid, c["id"]) / "sheet_palette.json"
+        key = {"ref": ref.name, "size": size, "mtime": int(ref.stat().st_mtime)}
+        if cache.is_file():
+            data = read_json(cache)
+            if data.get("key") == key:
+                return data["palette"]
+        with Image.open(ref) as im:
+            pal = reference_palette(im, size, target_height)
+        write_json(cache, {"key": key, "palette": pal})
+        return pal
+
     @staticmethod
-    def strip_layout(img: Path, frames: int, mode: str, fixture: bool) -> tuple[dict, str]:
-        with Image.open(img) as im:
-            sheet = im.convert("RGBA")
-        if sheet.getchannel("A").getextrema()[0] == 255:
-            sheet, _ = remove_background(sheet, mode=mode)
-        n = len(slice_auto(sheet))
-        if n == frames or (fixture and n >= 1):
-            return {"method": "auto"}, f"auto: {n} sprites found"
-        return {"method": "grid", "cols": frames, "rows": 1}, f"grid {frames}x1 (auto found {n}, expected {frames})"
+    def action_canvas(target_height: int) -> tuple[list[int], list[int]]:
+        """Fixed per-character frame canvas + pivot (feet on the ground line), like Pixel Atelier's frameSize/pivot."""
+        w, h = round(target_height * 2.5), round(target_height * 1.75)
+        w += w % 2
+        return [w, h], [w // 2, h - max(3, target_height // 16)]
+
+    def build_action_frames(self, sheet: Image.Image, a: dict, settings: dict, palette) -> tuple[list[Image.Image], dict]:
+        cols, rows = action_plans.layout(a)
+        return process_sheet(sheet, int(a["frames"]), cols, rows,
+                             {"target_height": settings["target_height"], "palette": palette,
+                              "scale_ref": "median" if a.get("loop") else "first"})
 
     def generate_action(self, pid: str, cid: str, action_id: str, provider_id: str, workflow_id: str | None = None,
                         params: dict | None = None, ctx=None, budget=None) -> dict:
-        """Generate every frame of one action as a single sprite strip, then slice, align and store it."""
+        """Generate every frame of one action as ONE sprite sheet (fixed grid), cut + clean it locally, and store it.
+        A sheet that fails the automatic checks is regenerated up to `settings.max_retries` times."""
         from .providers.base import JobContext
         ctx = ctx or JobContext()
         c = self.ws.get_character(pid, cid)
         plan = action_plans.load_plan(self.ws, pid, cid)
+        settings = action_plans.plan_settings(plan)
         a = action_plans.get_action(plan, action_id)
         prov = self.registry.get(provider_id)
         st = prov.status()
@@ -408,27 +517,69 @@ class Studio:
             raise StudioError("Add a reference image for this character first", code="no_reference")
         a["status"] = "generating"
         action_plans.save_plan(self.ws, pid, cid, plan)
+        cols, rows = action_plans.layout(a)
+        n = int(a["frames"])
+        palette = self.sheet_palette(pid, c, settings["palette_size"], settings["target_height"])
         out = self.ws.root / "tmp" / new_id("act")
         params = dict(params or {})
         refs = [ref] if ref else []
+        if provider_id == "comfyui":
+            workflow_id = workflow_id or self.default_strip_workflow()
+            params["reference_image"] = str(self.strip_reference(ref, n, out, mode, params.pop("cell", None), cols, rows))
+            params.setdefault("denoise", 0.62)
+            refs = []
+        if provider_id == "mock":
+            params.setdefault("sheet_layout", {"cols": cols, "rows": rows, "frames": n, "preset": a.get("preset") or a["id"]})
+        attempts, frames, rec, res, sheet_path = [], None, None, None, None
+        max_attempts = settings["max_retries"] + 1
         try:
-            if provider_id == "comfyui":
-                workflow_id = workflow_id or self.default_strip_workflow()
-                params["reference_image"] = str(self.strip_reference(ref, a["frames"], out, mode, params.pop("cell", None)))
-                params.setdefault("denoise", 0.62)
-                refs = []
-            if budget is not None and prov.counts_toward_budget:
-                budget.spend(1)
-            ctx.progress(0.02, f"{a['name']}: generating {a['frames']}-frame strip via {provider_id}")
-            res = prov.generate(GenerationRequest("action_strip", params, a["prompt"], a["negative"], refs, params.get("seed"),
-                                                  workflow_id, out), ctx)
-            fixture = res.is_test_fixture or bool(res.metadata.get("is_test_fixture"))
-            layout, layout_note = self.strip_layout(res.images[0], a["frames"], mode, fixture)
+            for attempt in range(max_attempts):
+                ctx.check_cancel()
+                if budget is not None and prov.counts_toward_budget:
+                    budget.spend(1)
+                note = ""
+                if attempts:
+                    last = "; ".join(i["msg"] for i in attempts[-1]["issues"] if i["severity"] == "error")[:400]
+                    note = (f"\n本轮修改（第 {attempt + 1} 次）：上一张图不合格（{last}）。严格按 {cols} 列 × {rows} 行画满 {n} 格，每格一个完整角色，大小一致。"
+                            if str(lang).startswith("zh") else
+                            f"\nRevision (attempt {attempt + 1}): the previous sheet failed checks ({last}). Draw exactly {n} cells in the "
+                            f"{cols} x {rows} grid, one complete character per cell, all the same size.")
+                ctx.progress(0.02 + 0.9 * attempt / max_attempts,
+                             f"{a['name']}: {n}-frame sheet ({cols}x{rows}) via {provider_id}" + (f" — retry {attempt}" if attempt else ""))
+                res = prov.generate(GenerationRequest("action_strip", params, a["prompt"] + note, a["negative"], refs, params.get("seed"),
+                                                      workflow_id, out / f"try{attempt}"), ctx)
+                fixture = res.is_test_fixture or bool(res.metadata.get("is_test_fixture"))
+                sheet_path = res.images[0]
+                with Image.open(sheet_path) as im:
+                    sheet = im.convert("RGBA")
+                try:
+                    frames, rec = self.build_action_frames(sheet, a, settings, palette)
+                except SheetRejected as e:
+                    frames, rec = None, e.record
+                status = rec.get("qa", {}).get("status", "retry")
+                attempts.append({"attempt": attempt + 1, "status": status, "issues": rec.get("qa", {}).get("issues", []),
+                                 "step": rec.get("step")})
+                if frames is not None and status == "pass":
+                    break
+                if fixture:  # identical fixture every time: retrying cannot help
+                    break
+                if attempt + 1 < max_attempts:
+                    ctx.progress(0.02 + 0.9 * (attempt + 1) / max_attempts, f"{a['name']}: sheet rejected, regenerating")
+            if frames is None:
+                msg = "; ".join(i["msg"] for i in attempts[-1]["issues"] if i["severity"] == "error") or "sheet could not be cut"
+                raise GenerationError(f"{a['name']}: generated sheet rejected after {len(attempts)} attempt(s): {msg}", "sheet_rejected")
+            canvas, pivot = self.action_canvas(settings["target_height"])
+            tpl = TEMPLATES.get(a.get("preset") or "") or {}
+            durs = list(tpl["durations"]) if tpl and len(tpl.get("durations", [])) == n else [100] * n
+            norm = {"mode": mode, "anchor": "ground_torso" if a.get("loop") else "ground", "canvas": canvas, "pivot": pivot,
+                    "padding": 2, **({"palette": palette} if palette else {})}
             pmeta = {"id": provider_id, "kind": prov.kind, "is_test_fixture": fixture,
                      "details": {k: v for k, v in res.metadata.items() if k != "events"}}
-            asset = self.import_file(pid, res.images[0], name=f"{c['name']} — {a['name']}", mode=mode, slicing=layout,
-                                     background={"method": "auto"}, anim_name=a["id"], direction=a["direction"], character_id=cid,
-                                     template=a["preset"], provider=pmeta, origin="fixture" if fixture else "generated")
+            asset = create_animation_asset(
+                self.ws, pid, f"{c['name']} — {a['name']}", list(zip(frames, durs)), anim_name=a["id"], direction=a["direction"],
+                mode=mode, params=norm, provider=pmeta, character_id=cid, template=a["preset"], source_file=sheet_path,
+                source_rects=[f["sheet_rect"] for f in rec["frames"]], origin="fixture" if fixture else "generated",
+                loop=bool(a["loop"]), durations=durs, processing_note={"sheet": rec, "attempts": attempts})
         except Exception:
             plan = action_plans.load_plan(self.ws, pid, cid)
             action_plans.get_action(plan, action_id)["status"] = "failed"
@@ -436,15 +587,17 @@ class Studio:
             raise
         finally:
             shutil.rmtree(out, ignore_errors=True)
-        asset["animation"]["loop"]["enabled"] = bool(a["loop"])
+        layout_note = f"grid {cols}x{rows}"
         asset["prompt"] = {"positive": a["prompt"], "negative": a["negative"], "template": a["preset"] or a["id"]}
         asset["action"] = {"character_id": cid, "action_id": a["id"], "name": a["name"], "description": a["description"],
-                           "poses": a["poses"], "prompt_source": a["prompt_source"], "layout": layout_note, "frames_requested": a["frames"]}
+                           "poses": a["poses"], "prompt_source": a["prompt_source"], "layout": layout_note, "frames_requested": n,
+                           "grid": [cols, rows], "sheet_qa": rec["qa"], "attempts": attempts, "settings": settings}
         asset["reference_images"] = [str(ref)] if ref else []
         for f in asset["animation"]["frames"]:
             f["generation"] = {"provider": provider_id, "workflow_id": workflow_id, "is_test_fixture": fixture,
                                "prompt_id": res.metadata.get("prompt_id")}
-        asset["tags"] = sorted(set(asset["tags"] + [f"action:{a['id']}"] + (["test-fixture"] if fixture else [])))
+        asset["tags"] = sorted(set(asset["tags"] + [f"action:{a['id']}"] + (["test-fixture"] if fixture else [])
+                                   + (["needs-review"] if rec["qa"]["status"] != "pass" else [])))
         self.ws.save_asset(asset)
         check_asset(self.ws, asset)
         plan = action_plans.load_plan(self.ws, pid, cid)
@@ -452,6 +605,39 @@ class Studio:
         pa.update(asset_id=asset["id"], status="generated", attempts=(pa.get("attempts") or []) + [asset["id"]])
         action_plans.save_plan(self.ws, pid, cid, plan)
         return self.ws.get_asset(pid, asset["id"])
+
+    def recut_action(self, pid: str, aid: str, settings: dict | None = None) -> dict:
+        """Re-cut a generated action from its preserved sheet with new settings (e.g. another target height).
+        Hand edits (patches) are kept and re-applied; they are flagged stale when the scale changed."""
+        a = self.ws.get_asset(pid, aid)
+        if not a.get("action") or "sheet" not in a.get("processing", {}):
+            raise StudioError("Only actions generated as a sheet can be re-cut")
+        d = self.ws.asset_dir(pid, aid)
+        src = next((d / f["path"] for f in a.get("source_files", []) if f.get("role") == "original"), None)
+        if src is None or not src.is_file():
+            raise StudioError("The original sheet of this action is missing")
+        st = {**a["action"].get("settings", action_plans.DEFAULT_SETTINGS), **(settings or {})}
+        st = action_plans.plan_settings({"settings": st})
+        c = self.ws.get_character(pid, a["character_id"]) if a.get("character_id") else None
+        palette = self.sheet_palette(pid, c, st["palette_size"], st["target_height"]) if c else None
+        cols, rows = a["action"].get("grid") or action_plans.layout({"frames": len(a["animation"]["frames"])})
+        n = a["action"].get("frames_requested") or len(a["animation"]["frames"])
+        with Image.open(src) as im:
+            sheet = im.convert("RGBA")
+        frames, rec = process_sheet(sheet, n, cols, rows, {"target_height": st["target_height"], "palette": palette,
+                                                          "scale_ref": a["processing"]["sheet"]["params"].get("scale_ref", "first")})
+        fr = a["animation"]["frames"]
+        if len(frames) != len(fr):
+            raise StudioError("Frames were added or removed after generation; re-cut is only possible with the original frame count")
+        self.ws._snapshot(a, d, "before re-cut")
+        for f, im in zip(fr, frames):
+            im.save(d / f["source_file"])
+        canvas, pivot = self.action_canvas(st["target_height"])
+        a["processing"]["sheet"] = rec
+        a["action"]["settings"] = st
+        a["action"]["sheet_qa"] = rec["qa"]
+        self.ws.save_asset(a)
+        return reprocess(self.ws, a, {"canvas": canvas, "pivot": pivot, **({"palette": palette} if palette else {})})
 
     def regenerate_frame(self, pid: str, aid: str, index: int, provider_id: str, workflow_id: str | None = None,
                          params: dict | None = None, note: str = "", ctx=None, budget=None) -> dict:
@@ -557,6 +743,10 @@ class Studio:
         plan = self.write_action_prompts(job["project_id"], p["character_id"], p.get("method", "template"), p.get("action_ids"),
                                          p.get("language"), ctx=ctx)
         return {"character_id": p["character_id"], "actions": [a["id"] for a in plan["actions"]]}
+
+    def _job_reference_candidates(self, p, ctx, budget, job):
+        return self.generate_reference_candidates(job["project_id"], p["character_id"], p["provider_id"], p.get("count", 4),
+                                                  p.get("note", ""), p.get("workflow_id"), p.get("params"), ctx=ctx, budget=budget)
 
     def _job_batch_actions(self, p, ctx, budget, job):
         """p: {"character_id", "action_ids", "provider_id", "workflow_id", "params"} — one strip per action, budgeted."""

@@ -320,7 +320,7 @@ def apply_palette(im: Image.Image, palette: list[str], alpha_threshold: int = 12
 @dataclass
 class NormalizeParams:
     mode: str = "pixel"                 # pixel | hd
-    anchor: str = "source"              # source | ground | support_foot | torso | custom
+    anchor: str = "source"              # source | ground | ground_torso | support_foot | torso | custom
     scale: float = 1.0                  # one uniform scale for the whole group
     target_height: int | None = None    # alternative: scale so the reference frame's height == this
     reference_frame: int = 0
@@ -343,7 +343,7 @@ class NormalizeParams:
         p = cls(**{k: v for k, v in d.items() if k in cls.__dataclass_fields__})
         if p.mode not in MODES:
             raise StudioError("mode must be pixel or hd")
-        if p.anchor not in ("source", "ground", "support_foot", "torso", "custom"):
+        if p.anchor not in ("source", "ground", "ground_torso", "support_foot", "torso", "custom"):
             raise StudioError("unknown anchor")
         p.manual_offsets = {int(k): list(v) for k, v in (p.manual_offsets or {}).items()}
         p.airborne = [int(x) for x in p.airborne]
@@ -393,12 +393,12 @@ def normalize_group(frames: list[Image.Image], params: NormalizeParams | dict | 
         al = to_np(f)[..., 3] >= p.alpha_threshold
         h = b[3] - b[1]
         rx, ry = common_x, common_y
-        if p.anchor in ("ground", "support_foot") and i not in p.airborne:
+        if p.anchor in ("ground", "ground_torso", "support_foot") and i not in p.airborne:
             ry = b[3]
         if p.anchor == "support_foot":
             cx = _band_centroid_x(al, b[3] - max(1, round(h * p.foot_band)), b[3])
             rx = cx if cx is not None else rx
-        if p.anchor == "torso":
+        if p.anchor in ("torso", "ground_torso"):
             ut = min(x[1] for x in sbbs)
             uh = ub - ut
             cx = _band_centroid_x(al, round(ut + uh * p.torso_band[0]), round(ut + uh * p.torso_band[1]))

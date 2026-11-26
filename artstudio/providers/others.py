@@ -83,6 +83,9 @@ class MockGenerationProvider(Provider):
             ctx.progress((i + 1) / steps, f"mock step {i + 1}/{steps}")
         if self.fail_mode == "timeout":
             raise GenerationError("Mock provider simulated timeout", "timeout", retryable=True)
+        lay = req.params.get("sheet_layout")
+        if req.kind == "action_strip" and lay and not req.params.get("fixture"):
+            return self._fixture_sheet(req, lay)
         key = req.params.get("fixture") or {"pose_keyframe": "knight_light", "sheet": "knight_run", "action_strip": "knight_run"}.get(req.kind, "knight_poster")
         src = self.FIXTURES.get(key)
         if not src or not src.exists():
@@ -93,6 +96,36 @@ class MockGenerationProvider(Provider):
         shutil.copyfile(src, dst)
         return GenerationResult([dst], {"provider": "mock", "fixture": key, "source": src.relative_to(APP_ROOT).as_posix(),
                                         "is_test_fixture": True, "warning": FIXTURE_NOTE, "prompt": req.prompt}, is_test_fixture=True)
+
+
+    # knight sample action used for each preset when a test sheet is requested
+    SHEET_SOURCE = {"walk": "run", "run": "run", "idle": "idle", "attack": "heavy", "combo_attack": "light", "hit": "hurt",
+                    "death": "knockdown", "jump": "jump", "dash": "dash", "dodge": "dash"}
+
+    def _fixture_sheet(self, req: GenerationRequest, lay: dict) -> GenerationResult:
+        """Arrange genuine knight-sample frames in the requested grid and enlarge them on white, imitating the shape of
+        a generated 'pixel art' sheet (soft pseudo-pixels, solid background). Labelled TEST FIXTURE — not AI output."""
+        from PIL import Image, ImageFilter
+
+        from ..adapters import knight_frames
+        src = self.SHEET_SOURCE.get(str(lay.get("preset")), "run")
+        frames, _, _ = knight_frames(src)
+        cols, rows, n = int(lay["cols"]), int(lay["rows"]), int(lay["frames"])
+        k = float(lay.get("upscale", 16 / 3))
+        cw, ch = frames[0].size
+        sheet = Image.new("RGBA", (round(cw * cols * k), round(ch * rows * k)), (255, 255, 255, 255))
+        for i in range(n):
+            f = frames[i % len(frames)]
+            big = f.resize((round(f.width * k), round(f.height * k)), Image.Resampling.NEAREST)
+            sheet.alpha_composite(big, (round(i % cols * cw * k), round(i // cols * ch * k)))
+        sheet = sheet.convert("RGB").filter(ImageFilter.GaussianBlur(0.6))
+        out = Path(req.out_dir)
+        out.mkdir(parents=True, exist_ok=True)
+        dst = out / f"fixture_sheet_{src}.png"
+        sheet.save(dst)
+        return GenerationResult([dst], {"provider": "mock", "fixture": f"knight_{src}_sheet", "is_test_fixture": True,
+                                        "source": f"samples/knight/{src}/atlas.png", "warning": FIXTURE_NOTE, "prompt": req.prompt},
+                                is_test_fixture=True)
 
 
 class CodexImageProvider(Provider):

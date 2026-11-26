@@ -7,7 +7,9 @@ from pathlib import Path
 
 from PIL import Image
 
-from .processing.frames import NormalizeParams, normalize_group
+import numpy as np
+
+from .processing.frames import NormalizeParams, from_np, normalize_group, to_np
 from .util import StudioError, new_id, safe_join
 from .workspace import Workspace
 
@@ -106,10 +108,13 @@ def create_animation_asset(ws: Workspace, pid: str, name: str, frames, *, anim_n
     if tpl and not durations and len(tpl["durations"]) == len(frames) and all(dd == 100 for _, dd in frames):
         durs = list(tpl["durations"])
     fr = []
+    (d / "frames_base").mkdir(exist_ok=True)
     for i, ((fid, sp), im, r) in enumerate(zip(src_paths, processed, rec["frames"])):
         out = d / "frames" / f"{fid}.png"
         im.save(out)
-        fr.append({"id": fid, "file": f"frames/{fid}.png", "source_file": f"frames_src/{fid}.png", "duration_ms": int(durs[i]),
+        im.save(d / "frames_base" / f"{fid}.png")
+        fr.append({"id": fid, "file": f"frames/{fid}.png", "source_file": f"frames_src/{fid}.png", "base_file": f"frames_base/{fid}.png",
+                   "patch": None, "duration_ms": int(durs[i]),
                    "offset": r["offset"], "source_rect": (source_rects[i] if source_rects else None), "source_size": r["source_size"],
                    "trimmed_rect": r["trimmed_rect"], "origin": origin, "status": "ok", "phase": _phase_for(tpl, i),
                    "airborne": r["airborne"], "generation": None})
@@ -163,8 +168,15 @@ def reprocess(ws: Workspace, a: dict, params: dict) -> dict:
     ws._snapshot(a, ws.asset_dir(a["project_id"], a["id"]), "before reprocess")
     processed, rec = normalize_group(srcs, base)
     d = ws.asset_dir(a["project_id"], a["id"])
+    (d / "frames_base").mkdir(exist_ok=True)
     for f, im, r in zip(anim["frames"], processed, rec["frames"]):
-        im.save(safe_join(d, f["file"]))
+        f["base_file"] = f"frames_base/{Path(f['file']).stem}.png"
+        im.save(safe_join(d, f["base_file"]))
+        final = im
+        if f.get("patch"):
+            final = apply_patch(d, im, f["patch"], rec["pivot"])
+            f["patch"]["stale"] = abs(float(f["patch"].get("scale", 0)) - _scale_key(a, rec["scale"])) > 1e-6
+        final.save(safe_join(d, f["file"]))
         f.update(offset=r["offset"], trimmed_rect=r["trimmed_rect"], airborne=r["airborne"], source_size=r["source_size"])
     anim["canvas"], anim["pivot"] = rec["canvas"], rec["pivot"]
     anim["anchor"] = {"kind": rec["params"]["anchor"], "ground_y": rec["pivot"][1]}
@@ -203,12 +215,18 @@ def edit_frames(ws: Workspace, a: dict, op: str, **kw) -> dict:
         i = idx()
         nf = copy.deepcopy(fr[i])
         nf["id"] = f"f{len(fr):03d}-{new_id()[:4]}"
-        for key in ("file", "source_file"):
-            if nf.get(key):
+        for key in ("file", "source_file", "base_file"):
+            if nf.get(key) and safe_join(d, nf[key]).is_file():
                 src = safe_join(d, nf[key])
                 newp = src.with_name(nf["id"] + ".png")
                 shutil.copyfile(src, newp)
                 nf[key] = newp.relative_to(d).as_posix()
+        if nf.get("patch"):
+            for key in ("paint", "erase"):
+                src = safe_join(d, nf["patch"][key])
+                newp = src.with_name(nf["id"] + ("" if key == "paint" else "_erase") + ".png")
+                shutil.copyfile(src, newp)
+                nf["patch"][key] = newp.relative_to(d).as_posix()
         fr.insert(i + 1, nf)
         for e in anim.get("events", []):
             if e["frame"] > i:
@@ -287,7 +305,8 @@ def replace_frame(ws: Workspace, a: dict, index: int, image: Image.Image, origin
     nid = f"f{index:03d}-{new_id()[:4]}"
     sp = d / "frames_src" / f"{nid}.png"
     image.convert("RGBA").save(sp)
-    f.update(id=nid, source_file=f"frames_src/{nid}.png", file=f"frames/{nid}.png", origin=origin, status="ok", generation=generation)
+    f.update(id=nid, source_file=f"frames_src/{nid}.png", file=f"frames/{nid}.png", base_file=f"frames_base/{nid}.png",
+             origin=origin, status="ok", generation=generation, patch=None)
     shutil.copyfile(sp, d / f["file"])
     if reprocess_group:
         return reprocess(ws, a, {"canvas": a["animation"]["canvas"], "pivot": a["animation"]["pivot"]})
@@ -318,3 +337,95 @@ def timeline(anim: dict) -> list[int]:
         out.append(t)
         t += f["duration_ms"]
     return out
+
+
+# ------------------------------------------------------------------ pixel patches (sprite editor)
+# Hand edits are stored per frame as a patch on top of the processed ("base") frame:
+#   patches/<fid>.png        RGBA — pixels to paint (alpha > 0 = this pixel is replaced)
+#   patches/<fid>_erase.png  L    — 255 = this pixel is erased
+# Patches are anchored to the animation pivot, so they survive canvas growth when the action is reprocessed.
+# If the scale changes, the patch is still applied but flagged `stale` so the editor asks the user to check it.
+
+def _scale_key(a: dict, norm_scale) -> float:
+    """Effective source->frame scale: sheet sampling step (generated actions) combined with the normalize scale."""
+    step = float(a.get("processing", {}).get("sheet", {}).get("step") or 1.0)
+    return round(float(norm_scale) / step, 6)
+
+
+def apply_patch(d: Path, base: Image.Image, patch: dict, pivot) -> Image.Image:
+    a = to_np(base).copy()
+    with Image.open(safe_join(d, patch["paint"])) as im:
+        paint = to_np(im)
+    with Image.open(safe_join(d, patch["erase"])) as im:
+        erase = np.asarray(im.convert("L"))
+    dx = int(pivot[0]) - int(patch["pivot"][0])
+    dy = int(pivot[1]) - int(patch["pivot"][1])
+    H, W = a.shape[:2]
+    h, w = paint.shape[:2]
+    x0, y0 = max(0, dx), max(0, dy)
+    x1, y1 = min(W, dx + w), min(H, dy + h)
+    if x1 > x0 and y1 > y0:
+        sub_p = paint[y0 - dy:y1 - dy, x0 - dx:x1 - dx]
+        sub_e = erase[y0 - dy:y1 - dy, x0 - dx:x1 - dx] > 127
+        tgt = a[y0:y1, x0:x1]
+        tgt[sub_e] = 0
+        m = sub_p[..., 3] > 0
+        tgt[m] = sub_p[m]
+    return from_np(a)
+
+
+def save_frame_edits(ws: Workspace, a: dict, edits: list[dict]) -> dict:
+    """edits: [{"index": i, "image": PIL RGBA at canvas size}]. Stores the difference to the base frame as a patch."""
+    anim = a["animation"]
+    fr = anim["frames"]
+    d = ws.asset_dir(a["project_id"], a["id"])
+    W, H = anim["canvas"]
+    ws._snapshot(a, d, f"pixel edit ({len(edits)} frame(s))")
+    (d / "patches").mkdir(exist_ok=True)
+    (d / "frames_base").mkdir(exist_ok=True)
+    scale = _scale_key(a, a.get("processing", {}).get("normalize", {}).get("scale", 1.0))
+    for e in edits:
+        i = int(e["index"])
+        if not 0 <= i < len(fr):
+            raise StudioError("Frame index out of range")
+        img = e["image"].convert("RGBA")
+        if img.size != (W, H):
+            raise StudioError(f"Edited frame {i + 1} is {img.size[0]}x{img.size[1]}, expected {W}x{H}")
+        f = fr[i]
+        if not f.get("base_file") or not safe_join(d, f["base_file"]).is_file():
+            # older asset (no stored base): the current frame becomes the base
+            f["base_file"] = f"frames_base/{Path(f['file']).stem}.png"
+            shutil.copyfile(safe_join(d, f["file"]), safe_join(d, f["base_file"]))
+        with Image.open(safe_join(d, f["base_file"])) as im:
+            base = to_np(im)
+        new = to_np(img)
+        if a.get("art_style") == "pixel":  # pixel art keeps binary alpha
+            on = new[..., 3] >= 128
+            new = new.copy(); new[..., 3] = np.where(on, 255, 0); new[~on, :3] = 0
+        diff = np.any(base != new, axis=-1)
+        erase = diff & (new[..., 3] == 0)
+        paint = diff & ~erase
+        stem = Path(f["file"]).stem
+        if not diff.any():
+            f["patch"] = None
+        else:
+            p_img = np.zeros_like(new)
+            p_img[paint] = new[paint]
+            from_np(p_img).save(d / "patches" / f"{stem}.png")
+            Image.fromarray(np.where(erase, 255, 0).astype(np.uint8), "L").save(d / "patches" / f"{stem}_erase.png")
+            f["patch"] = {"paint": f"patches/{stem}.png", "erase": f"patches/{stem}_erase.png", "pivot": list(anim["pivot"]),
+                          "scale": scale, "pixels": int(diff.sum()), "stale": False}
+        from_np(new).save(safe_join(d, f["file"]))
+        f["origin"] = "edited" if f["patch"] else f.get("origin")
+    return ws.save_asset(a, snapshot_note=None)
+
+
+def clear_patch(ws: Workspace, a: dict, index: int) -> dict:
+    fr = a["animation"]["frames"]
+    f = fr[int(index)]
+    d = ws.asset_dir(a["project_id"], a["id"])
+    if f.get("patch") and f.get("base_file"):
+        ws._snapshot(a, d, f"clear pixel edits frame {index}")
+        shutil.copyfile(safe_join(d, f["base_file"]), safe_join(d, f["file"]))
+        f["patch"] = None
+    return ws.save_asset(a)

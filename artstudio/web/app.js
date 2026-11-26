@@ -5,6 +5,7 @@ import { renderCharacter, renderProcedural, renderImport, renderGenerate, render
 import { renderWizard } from './wizard.js';
 import { renderHome } from './home.js';
 import { renderForge } from './forge.js';
+import { openSpriteEditor } from './sprite.js';
 
 const RENDER = { home: (r) => renderHome(r, { show: showTab, projectForm }), wizard: renderWizard, forge: renderForge, library: renderLibrary, character: renderCharacter,
   animation: renderAnimation, procedural: renderProcedural, import: renderImport, generate: renderGenerate, export: renderExport };
@@ -64,7 +65,8 @@ function renderLibrary(root) {
         el('div', { class: 'thumb checker' }, f ? el('img', { src: fileUrl(a, f.file), alt: a.name, loading: 'lazy' }) : '—'),
         el('div', { class: 'name', title: a.name }, a.name),
         el('div', { class: 'row small' }, badge(a.type, ''), badge(a.art_style, ''), badge(a.status), fixtureBadge(a),
-          a.animation ? el('span', { class: 'muted' }, `${a.animation.frames.length}f ${a.animation.direction !== 'none' ? a.animation.direction : ''}`) : null)));
+          a.animation ? el('span', { class: 'muted' }, `${a.animation.frames.length}f ${a.animation.direction !== 'none' ? a.animation.direction : ''}`) : null,
+          a.animation ? el('button', { class: 'small asset-edit', title: 'Edit pixels', onclick: (e) => { e.stopPropagation(); guard(() => openSpriteEditor(a.id, { onClose: () => guard(refreshProject).then(() => renderLibrary(root)) })); } }, '✎') : null)));
     }
     if (!list.length) grid.append(el('p', { class: 'muted' }, 'No assets yet — use Procedural, Import or Generation.'));
   };
