@@ -5,6 +5,47 @@ versions follow [Semantic Versioning](https://semver.org/). The current version 
 
 ## [Unreleased]
 
+## [0.8.0] — 2026-11-27
+
+Casters cast, archers draw with their hand, and the undead arrive: necromancer and a see-through skeleton soldier.
+
+### Added
+- **Character kit: `Cast_Spell`** — synthesised spell cast (rune circle under the feet, motes gathering at the staff
+  head, staff raised with a glowing head, burst + bolt flying forward, recover) for all four facings. **Mage, priest and
+  necromancer now cast for `Sword_Attack`** instead of swinging the staff like a sword (`presets.ATTACK`).
+- **`necromancer` preset**: black hood, glowing green eyes, dark robe, black cape, skull staff, green magic.
+- **`skeleton` preset** built on the base body: skin re-materialled as bone (pack shading kept), ribs / spine / pelvis,
+  skull head with dark sockets, glowing pupils, nasal hole and teeth; old iron sword. Plays every base action.
+- **`Summon_Rise`**: the character climbs out of the ground inside a necromantic circle (crack, dirt, wisps) — the
+  skeleton's entrance when a necromancer summons it.
+- Outfit keys `magic`, `eyes`, `skeleton`, `hair: None`, and costume pieces that set the three casters apart:
+  `pattern: stars`, `sash`, `robe_trim`, `stole`, `mantle`, `emblem`, `hem: tattered` (robe + cape), `collar: spikes`,
+  `pauldrons: skull`, `face_shadow`, `buckle`; headgear `mitre`.
+
+### Changed
+- **Casters look distinct**: mage = wizard hat, star-patterned blue robe, red sash; priest = hood + mitre, gold stole,
+  shoulder mantle (no belt); necromancer = shadowed face with glowing eyes, bone-spike collar, skull pauldrons, tattered
+  dark robe and black cape.
+- **Skeleton reads as a skeleton**: skull with big dark sockets, teeth, jaw hinge, cracked cranium, pinched temples and
+  a narrow jaw; see-through body — the torso is a single spine pole (collarbone and pelvis bars to hang the limbs on,
+  placed from the chin so they follow the pose) and every limb is thinned to one outlined bone; a small wooden round
+  shield with a metal band on the off hand (outfit `shield`); stiff, jerky, slower movement (outfit `stiff`: every other
+  in-between frame dropped, the action played 1.35× slower). Its sword attack is a short telegraphed chop (rest → small
+  raise, held → quick strike → stuck → slow recover, `charkit.STIFF_POSES`) with no swing trail.
+- **Faster Pixel Forge**: `Engine.run` / `replay` batch their writes — each document and its recipe are saved once at
+  the end instead of after every call (a builder sends 10–100 calls and every save rewrote all cels). Builder call
+  lists are cached per (builder, params), so editor tweaks (speed, colours, outline …) skip the build; the preview no
+  longer builds twice. Character kit preview 0.7 s → 0.1 s in the cloud test box, test suite 108 s → 72 s.
+
+### Fixed
+- **Bow attack: the string now follows the draw hand.** In the side views the pose's own arms are replaced by drawn
+  arms — bow arm to the grip, draw arm shoulder → elbow → hand — and the string is pulled exactly where the hand is
+  (nock → draw → anchor under the chin → release, hand flies back). Before, the string went to a fixed point at the
+  face while the pose's hand stayed far behind.
+- **Windows: Pixel Forge preview / thumbnails crashed with `PermissionError: [WinError 5] Access is denied`** when the
+  engine renamed a just-written cels folder or `doc.json` (antivirus / indexer briefly lock new files). Renames now
+  retry with a short back-off.
+
 ## [0.7.0] — 2026-11-27
 
 Pixel Forge gets a character kit: a 4-direction base character with five fantasy class costumes and a bow attack.
@@ -218,6 +259,8 @@ First Stage A (offline) implementation of SPECIFICATION.md.
 - Stage B (real ComfyUI inference) not run. AI generation is mock-tested only.
 
 [Unreleased]: #unreleased
+[0.8.0]: #080--2026-11-27
+[0.7.0]: #070--2026-11-27
 [0.4.0]: #040--2026-11-26
 [0.3.0]: #030--2026-11-26
 [0.2.0]: #020--2026-11-26

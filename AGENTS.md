@@ -9,7 +9,7 @@ Read this first, then `SPECIFICATION.md` (authoritative requirements) and `DEVEL
   - **Motion Studio** (动作工作室) — character animation via Codex CLI or ComfyUI. Code: `actions.py`, `web/wizard.js`.
   - **Asset Import** (素材导入) — import/clean/align existing art. Code: `processing/`, `Studio.import_file`.
   User-facing overview: `README.md` / `README.zh-CN.md`.
-- **Version:** `VERSION` (currently 0.6.0). History: `CHANGELOG.md`.
+- **Version:** `VERSION` (currently 0.8.0). History: `CHANGELOG.md`.
 - **Based on (MIT):** Atelier (marmikshah/atelier @ 8ac6adf) — call format re-implemented in `artstudio/engine`;
   Pixel Atelier (jinxingtaire/pixel-atelier @ 15d199f) — code moved into `artstudio/pipeline`, `prompts_zh_sheet.py`,
   `providers/codex_rpc.py`, `samples/knight`. Neither is a dependency any more; do not re-add them as checkouts.
@@ -150,6 +150,13 @@ python scripts/production_smoke_test.py --comfy URL --checkpoint FILE   # Stage 
 - **Builder QA:** keep art 1–2 px off the canvas edge, or QA reports `source_clipped`. A transparent border is expected
   for round icons (`detect_background` handles it). Tile-aligned ground skills and framed icons declare `FULL_BLEED`
   (bool, or a function of the params) and QA accepts edge contact for them.
+- **Engine writes:** `Engine.run`/`replay` run in batch mode (`with eng.batch():`) and flush once; `call()` outside a
+  batch still saves immediately. Tools that touch the store on disk are listed in `DISK_TOOLS` (flush first). File
+  renames go through `document._retry` because Windows antivirus briefly locks new files (WinError 5).
+- **Character kit:** class presets are outfit dicts in `charkit/presets.py`; synthesised actions live in `bow.py`
+  (`Bow_Attack`), `cast.py` (`Cast_Spell`, used for a preset's `Sword_Attack` via `presets.ATTACK`) and `skeleton.py`
+  (`Summon_Rise`, bone body, shield). Outfit `stiff` re-times actions (`charkit.stiffen` / `STIFF_POSES`). The Craftpix
+  base and anything rendered from it stay in git-ignored `assets_local/` — never commit them.
 - **Pixel Forge parity:** brushes anchor at `size // 2`; `doc_region` rects are inclusive `[x0,y0,x1,y1]`; ellipses use
   Atelier's +0.5 inflation. Changing any of these breaks `tests/fixtures/showcase` replay.
 - **New builder checklist:** module in `artstudio/procedural/` (`DESCRIPTION`, `ASSET_TYPE`, `PARAMS`, optional `LOOP = True` (or a function of the params),

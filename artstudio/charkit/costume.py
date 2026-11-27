@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from PIL import Image
 
-from . import doll, equip
+from . import doll, equip, skeleton
 from .base import CELL, DIRS, layer_sheets
 
 GROUPS = ["shadow", "back", "body", "gear", "front", "flash"]
@@ -84,10 +84,21 @@ def compose(sex: str, act: str, outfit: dict | None, dirs=None) -> dict:
         for c, cell in _cells(L, r):
             lying = _lying(cell["body"])
             o = dict(outfit)
-            if lying and o.get("hair", ("short",))[0] in ("long", "ponytail"):
+            if lying and (o.get("hair") or ("short",))[0] in ("long", "ponytail"):
                 o["hair"] = ("short", o["hair"][1])
             body = doll.recolor_body(cell["body"], rank, o, dirn)
-            hair_f, hair_b = doll.hair_layers(cell["head"], o, dirn, True)
+            head = cell["head"]
+            if o.get("skeleton"):
+                body = skeleton.bone_body(body, cell["body"], dirn, cell["head"])
+                head = skeleton.skull(head, dirn, o.get("magic", "necro"))
+            elif o.get("eyes"):
+                head = skeleton.glowing_eyes(head, o["eyes"])
+            if o.get("face_shadow"):
+                head = skeleton.shadow_face(head)
+            if "hair" in o and not o["hair"]:
+                hair_f, hair_b = blank(), blank()
+            else:
+                hair_f, hair_b = doll.hair_layers(cell["head"], o, dirn, True)
             hi, bi = equip.head_info(cell["head"]), equip.body_info(cell["body"])
             under, over, top = equip.body_pieces(bi, {k: v for k, v in o.items() if not (lying and k == "cape")}, dirn, c)
             hg = []
@@ -97,7 +108,7 @@ def compose(sex: str, act: str, outfit: dict | None, dirs=None) -> dict:
                     hg += equip.headgear(hi, hs, dirn, o.get("head_ramp", "steel"), o.get("accent", "gold"))
             sf = cell["sword_front"] if cell.get("sword_front") is not None else blank()
             sb = cell["sword_back"] if cell.get("sword_back") is not None else blank()
-            swing = cell.get("swing")
+            swing = cell.get("swing") if not o.get("stiff") else None    # no speed trail on slow undead swings
             w = o.get("weapon")
             if w == "none":
                 sf, sb, swing = blank(), blank(), None
@@ -111,11 +122,21 @@ def compose(sex: str, act: str, outfit: dict | None, dirs=None) -> dict:
                 swing = None
             else:
                 sf, sb = doll.recolor_weapon(sf, o), doll.recolor_weapon(sb, o)
+            sh_front = sh_back = None
+            if o.get("shield") and not lying:
+                from .bow import hands
+                off = hands(cell["body"], dirn)[0]                   # the left (off) hand
+                sh = skeleton.shield(off, dirn, *o["shield"]) if isinstance(o["shield"], (list, tuple)) else \
+                    skeleton.shield(off, dirn)
+                if dirn in ("front", "side_left"):
+                    sh_front = sh
+                else:
+                    sh_back = sh
             fr.append({"shadow": cell.get("shadow"),
-                       "back": stack(render_pieces(under), hair_b, sb),
+                       "back": stack(render_pieces(under), hair_b, sb, sh_back),
                        "body": body,
-                       "gear": stack(render_pieces(over), cell["head"], hair_f, render_pieces(hg),
-                                     render_pieces(top) if dirn == "back" else None),
-                       "front": stack(sf, swing), "flash": cell.get("red")})
+                       "gear": stack(render_pieces(over), head, hair_f, render_pieces(hg),
+                                     render_pieces(top)),
+                       "front": stack(sh_front, sf, swing), "flash": cell.get("red")})
         out[dirn] = fr
     return out

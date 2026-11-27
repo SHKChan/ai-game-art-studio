@@ -6,6 +6,7 @@ import os
 import re
 import shutil
 import tempfile
+import time
 import threading
 import uuid
 from pathlib import Path
@@ -19,6 +20,20 @@ MAX_FRAMES = 512
 MAX_LAYERS = 64
 HEX = re.compile(r"^#([0-9a-fA-F]{6})([0-9a-fA-F]{2})?$")
 
+
+
+def _retry(fn, tries: int = 12):
+    """Windows: antivirus / search indexer / sync clients briefly lock files that were just written, so a rename
+    right after a write can fail with "Access is denied" (WinError 5/32). Retry with a short back-off."""
+    delay = 0.02
+    for k in range(tries):
+        try:
+            return fn()
+        except PermissionError:
+            if k == tries - 1:
+                raise
+            time.sleep(delay)
+            delay = min(delay * 2, 0.5)
 
 class EngineError(ValueError):
     pass
@@ -156,19 +171,23 @@ class Store:
             meta["cels"] = sorted(n[:-4] for n in os.listdir(tmp))
             old = p / "cels"
             if old.exists():
-                shutil.rmtree(old)
-            tmp.rename(old)
+                _retry(lambda: shutil.rmtree(old))
+            _retry(lambda: tmp.rename(old))
             fd, t = tempfile.mkstemp(prefix=".doc-", dir=p)
             with os.fdopen(fd, "w", encoding="utf-8") as fh:
                 json.dump(meta, fh, ensure_ascii=False, indent=1)
-            os.replace(t, p / "doc.json")
+            _retry(lambda: os.replace(t, p / "doc.json"))
         finally:
             if tmp.exists():
                 shutil.rmtree(tmp, ignore_errors=True)
 
     def append_recipe(self, doc_id: str, call: dict) -> None:
+        self.append_recipe_lines(doc_id, [call])
+
+    def append_recipe_lines(self, doc_id: str, calls: list[dict]) -> None:
+        (self.docs / doc_id).mkdir(parents=True, exist_ok=True)
         with open(self.docs / doc_id / "doc.recipe", "a", encoding="utf-8", newline="\n") as fh:
-            fh.write(json.dumps(call, ensure_ascii=False, sort_keys=True) + "\n")
+            fh.write("".join(json.dumps(c, ensure_ascii=False, sort_keys=True) + "\n" for c in calls))
 
     def list(self) -> list[dict]:
         out = []

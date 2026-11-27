@@ -1,6 +1,6 @@
 # AI Game Art Studio
 
-[简体中文](README.zh-CN.md) · Version **0.7.0** ([CHANGELOG](CHANGELOG.md)) · Licence MIT
+[简体中文](README.zh-CN.md) · Version **0.8.0** ([CHANGELOG](CHANGELOG.md)) · Licence MIT
 
 A **local-first studio for 2D game art**: pixel art and HD illustration, from a single icon to animated character
 sprites, exported straight into game engines. It is a self-contained Python app (Pillow + numpy) with a web UI in
@@ -93,13 +93,18 @@ costumes drawn on top of every frame, so clothes, hair, headgear and weapons fol
 |---|---|---|---|
 | `base` | — (plain Craftpix base; `base` = male / female) | — | sword |
 | `knight` | steel helmet (rim, nose guard, cheek guards, ridge) | plate armour, pauldrons, red tabard, belt, red cape | steel sword |
-| `mage` | purple wizard hat (brim, gold band, bent tip) | blue robe with gold trim | staff with a blue orb |
+| `mage` | purple wizard hat (brim, gold band, bent tip), long purple hair | blue robe with gold stars, red sash | staff with a blue orb; attack = **spell cast** |
 | `ranger` | green hood (pointed tail, falls over the shoulders) | leather vest, belt, green cloak | short sword; **bow attack** |
-| `priest` | white hood + gold circlet with a red gem | white robe with gold trim | gold cross staff |
+| `priest` | white hood + mitre with a gold cross | white robe, gold stole, shoulder mantle | gold cross staff; attack = **spell cast** (holy gold) |
 | `berserker` | horned helmet | fur pauldrons over leather | axe |
+| `necromancer` | black hood, face in shadow, glowing green eyes | bone-spike collar, skull pauldrons, tattered dark robe and black cape | skull staff; attack = **spell cast** (green) |
+| `skeleton` | skull (big dark sockets, glowing pupils, teeth, cracked cranium, pinched temples, narrow jaw) | see-through: the torso is a single spine pole with collarbone and pelvis bars, every limb one thin bone; stiff, jerky, slow movement | old iron sword + small wooden round shield with a metal band; **`Summon_Rise`** |
 
 Options: `action` = the pack's 13 actions (Unarmed / Sword × Idle, Walk, Run, Hurt, Death, Sword Attack, Walk/Run
-Attack) **+ `Bow_Attack`** (synthesised on the sword-attack body poses: nock → draw → release → follow-through);
+Attack) **+ `Bow_Attack`** (synthesised on the sword-attack body poses: nock → draw → release → follow-through; in the side
+views the arms are re-drawn and the string is pulled by the draw hand) **+ `Cast_Spell`** (staff held upright: rune
+circle → motes gather → staff raised, head glows → burst / bolt → recover; mage, priest and necromancer play it for
+`Sword_Attack`) **+ `Summon_Rise`** (climbs out of the ground in a necromantic circle — meant for the skeleton);
 `facing` front / left / right / rear; `base` auto / male / female. Layers: shadow, back, body, gear, front, flash —
 the near-side weapon of a right-handed character is drawn over the face. Pivot = feet (32, 44); idle / walk / run loop.
 

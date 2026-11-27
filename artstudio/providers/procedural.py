@@ -28,7 +28,7 @@ class ProceduralProvider(Provider):
 
     def generate(self, req: GenerationRequest, ctx: JobContext) -> GenerationResult:
         """req.params: {"home", "builder" + "builder_params"} | {"home", "calls"} | {"home", "recipe"}."""
-        from ..procedural import BUILDERS
+        from ..procedural import BUILDERS, cached_build
         home = Path(req.params["home"])
         out = Path(req.out_dir or home / "out")
         out.mkdir(parents=True, exist_ok=True)
@@ -45,7 +45,7 @@ class ProceduralProvider(Provider):
                     if not b:
                         raise GenerationError(f"Unknown builder {req.params['builder']}", "bad_request")
                     try:
-                        calls = b.build(**(req.params.get("builder_params") or {}))
+                        calls = cached_build(req.params["builder"], req.params.get("builder_params") or {})
                     except (TypeError, ValueError, KeyError) as e:
                         raise GenerationError(f"Invalid parameters for {req.params['builder']}: {e}", "bad_request") from None
                 else:

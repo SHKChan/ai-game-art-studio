@@ -7,6 +7,7 @@ Unknown tools or arguments raise EngineError (no silent no-ops).
 from __future__ import annotations
 
 import copy
+from contextlib import contextmanager
 import json
 from pathlib import Path
 
@@ -93,6 +94,11 @@ class Engine:
         self.home = self.store.home
         self.calls = 0
         self._cache: dict[str, Document] = {}
+        # batch mode (run / replay): documents and recipe lines are written once at the end instead of after every
+        # call — a builder sends dozens of paint calls and re-saving every cel each time was O(calls × cels)
+        self._batch = 0
+        self._dirty: dict[str, Document] = {}
+        self._recipe: dict[str, list] = {}
 
     # context-manager compatibility with the former subprocess client
     def __enter__(self):
@@ -120,23 +126,50 @@ class Engine:
         if not isinstance(args, dict):
             raise EngineError("arguments must be an object")
         self.calls += 1
+        if tool in DISK_TOOLS:
+            self.flush()
         with self.store.lock:
             res = fn(self, copy.deepcopy(args))
             mutated = res.pop("_mutated", None)
             if mutated is not None:
                 mutated.revision += 1
-                self.store.save(mutated)
                 rec = dict(args)
-                if tool == "doc_new":
-                    rec["doc_id"] = mutated.id
+                rec["doc_id"] = mutated.id
+                if self._batch:
+                    self._dirty[mutated.id] = mutated
+                    self._recipe.setdefault(mutated.id, []).append({"name": tool, "arguments": rec})
                 else:
-                    rec["doc_id"] = mutated.id
-                self.store.append_recipe(mutated.id, {"name": tool, "arguments": rec})
+                    self.store.save(mutated)
+                    self.store.append_recipe(mutated.id, {"name": tool, "arguments": rec})
                 res.setdefault("revision", mutated.revision)
             return res
 
+    def flush(self) -> None:
+        """Write documents changed in batch mode (and their recipe lines) to disk."""
+        with self.store.lock:
+            dirty, recipe = self._dirty, self._recipe
+            self._dirty, self._recipe = {}, {}
+            for did, d in dirty.items():
+                self.store.save(d)
+            for did, lines in recipe.items():
+                self.store.append_recipe_lines(did, lines)
+
+    @contextmanager
+    def batch(self):
+        self._batch += 1
+        try:
+            yield self
+        finally:
+            self._batch -= 1
+            if not self._batch:
+                self.flush()
+
     def run(self, calls: list[dict], doc_id: str | None = None, progress=None, cancel=None) -> str | None:
         """Execute calls; "$DOC" is replaced by the doc created by the first doc_new (or doc_id)."""
+        with self.batch():
+            return self._run(calls, doc_id, progress, cancel)
+
+    def _run(self, calls, doc_id, progress, cancel):
         n = len(calls)
         for i, c in enumerate(calls):
             if cancel:
@@ -153,6 +186,10 @@ class Engine:
 
     def replay(self, recipe: Path) -> str:
         """Rebuild a document from a recipe file (new doc id; old ids are remapped)."""
+        with self.batch():
+            return self._replay(recipe)
+
+    def _replay(self, recipe: Path) -> str:
         ids: dict[str, str] = {}
         last = None
         for ln, line in enumerate(Path(recipe).read_text(encoding="utf-8").splitlines(), 1):
@@ -175,6 +212,7 @@ class Engine:
         return last
 
     def doc_dir(self, doc_id: str) -> Path:
+        self.flush()
         return self.store.path(doc_id)
 
     def export_frames(self, doc_id: str, out_dir: Path | None = None, tag: str | None = None):
@@ -585,4 +623,5 @@ def t_doc_export(e, a):
     raise EngineError("doc_export op must be sheet|anim")
 
 
+DISK_TOOLS = {"list_docs", "delete_doc"}   # read or change the store on disk: flush batched changes first
 TOOLS = {n[2:]: f for n, f in globals().items() if n.startswith("t_") and callable(f)}

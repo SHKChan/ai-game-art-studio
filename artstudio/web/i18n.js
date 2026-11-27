@@ -233,9 +233,9 @@ const ZH = {
   'back': '返回', 'cursor': '光标',
   // v0.7 character kit
   'character_kit': '角色套装', 'preset': '职业', 'base': '基底', 'male': '男', 'female': '女', 'knight': '骑士', 'mage': '法师',
-  'ranger': '游侠', 'priest': '牧师', 'berserker': '狂战士', 'facing': '朝向', 'rear': '背面', 'action': '动作',
-  'Unarmed_Idle': '空手待机', 'Unarmed_Walk': '空手行走', 'Unarmed_Run': '空手奔跑', 'Unarmed_Hurt': '空手受击', 'Unarmed_Death': '空手倒地', 'Sword_Idle': '持剑待机', 'Sword_Walk': '持剑行走', 'Sword_Run': '持剑奔跑', 'Sword_Attack': '挥剑攻击', 'Sword_Walk_Attack': '边走边砍', 'Sword_Run_Attack': '边跑边砍', 'Sword_Hurt': '持剑受击', 'Sword_Death': '持剑倒地', 'Bow_Attack': '弓箭射击',
-  '4-direction base character (Craftpix pack) — plain or as knight / mage / ranger / priest / berserker; 13 actions + bow attack. Needs the local base pack.': '四方向基础角色（Craftpix 素材包）——原样或装扮成骑士 / 法师 / 游侠 / 牧师 / 狂战士；13 个动作 + 弓箭射击。需要本地基础素材包。',
+  'ranger': '游侠', 'priest': '牧师', 'berserker': '狂战士', 'necromancer': '死灵法师', 'skeleton': '骷髅兵', 'facing': '朝向', 'rear': '背面', 'action': '动作',
+  'Unarmed_Idle': '空手待机', 'Unarmed_Walk': '空手行走', 'Unarmed_Run': '空手奔跑', 'Unarmed_Hurt': '空手受击', 'Unarmed_Death': '空手倒地', 'Sword_Idle': '持剑待机', 'Sword_Walk': '持剑行走', 'Sword_Run': '持剑奔跑', 'Sword_Attack': '挥剑攻击', 'Sword_Walk_Attack': '边走边砍', 'Sword_Run_Attack': '边跑边砍', 'Sword_Hurt': '持剑受击', 'Sword_Death': '持剑倒地', 'Bow_Attack': '弓箭射击', 'Cast_Spell': '施法', 'Summon_Rise': '召唤破土',
+  '4-direction base character (Craftpix pack) — plain or as knight / mage / ranger / priest / berserker / necromancer / skeleton; 13 actions + bow attack, spell cast, summon rise. Needs the local base pack.': '四方向基础角色（Craftpix 素材包）——原样或装扮成骑士 / 法师 / 游侠 / 牧师 / 狂战士 / 死灵法师 / 骷髅兵；13 个动作 + 弓箭射击、施法、召唤破土。需要本地基础素材包。',
   // error codes (job.error_code)
   'err:provider_unavailable': '生成服务不可用', 'err:missing_models': '服务器上缺少所需模型', 'err:missing_nodes': '服务器上缺少所需节点',
   'err:invalid_values': '工作流参数值无效', 'err:invalid_workflow': 'ComfyUI 拒绝了该工作流', 'err:execution_error': '生成执行失败',

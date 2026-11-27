@@ -96,3 +96,55 @@ class EngineTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class EngineBatchTests(unittest.TestCase):
+    """run() writes each document once at the end (was: after every call), and survives brief Windows file locks."""
+
+    def setUp(self):
+        self.tmp = Path(tempfile.mkdtemp())
+
+    def tearDown(self):
+        cleanup(self.tmp)
+
+    def _calls(self, n=20):
+        calls = [{"name": "doc_new", "arguments": {"name": "b", "width": 8, "height": 8}}]
+        calls += [{"name": "doc_paint_grid", "arguments": {"doc_id": "$DOC", "layer": 0, "x": i % 8, "y": i // 8 % 8,
+                                                     "legend": {"A": "#ff0000"}, "rows": ["A"]}}
+                  for i in range(n)]
+        calls.append({"name": "list_docs", "arguments": {}})
+        return calls
+
+    def test_run_saves_once_and_keeps_the_full_recipe(self):
+        e = Engine(self.tmp)
+        saves = []
+        orig = e.store.save
+        e.store.save = lambda d: (saves.append(d.id), orig(d))
+        did = e.run(self._calls(20))
+        self.assertLessEqual(len(saves), 2, "doc_new + paint calls are batched; list_docs flushes once")
+        recipe = (e.doc_dir(did) / "doc.recipe").read_text(encoding="utf-8").splitlines()
+        self.assertEqual(len(recipe), 21)
+        replayed = Engine(self.tmp / "r").replay(e.doc_dir(did) / "doc.recipe")
+        self.assertTrue(replayed)
+        fresh = Engine(self.tmp)                      # reload from disk: everything was written
+        f1, _, _ = fresh.export_frames(did)
+        f2, _, _ = e.export_frames(did)
+        self.assertEqual(f1[0].tobytes(), f2[0].tobytes())
+
+    def test_save_retries_transient_permission_errors(self):
+        import artstudio.engine.document as D
+        n = {"k": 0}
+        real = D.os.replace
+
+        def flaky(a, b):
+            n["k"] += 1
+            if n["k"] <= 2:
+                raise PermissionError(5, "Access is denied")
+            return real(a, b)
+        D.os.replace = flaky
+        try:
+            did = Engine(self.tmp).run(self._calls(3))
+        finally:
+            D.os.replace = real
+        self.assertTrue((Engine(self.tmp).doc_dir(did) / "doc.json").is_file())
+        self.assertGreater(n["k"], 2)

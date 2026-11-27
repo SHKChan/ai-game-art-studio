@@ -20,3 +20,19 @@ for _n in _NAMES:
     except ModuleNotFoundError as _e:  # builder not present in this build
         if _e.name != f"{__name__}.{_n}":
             raise
+
+
+_BUILD_CACHE: "dict[str, list]" = {}
+
+
+def cached_build(name: str, params: dict | None = None) -> list:
+    """Builders are deterministic, so the call list for (builder, params) is cached: in the Forge editor most
+    changes are edits (speed, colours, outline …) that re-render the same calls. Returns a private copy."""
+    import copy
+    import json
+    key = name + json.dumps(params or {}, sort_keys=True, default=str)
+    if key not in _BUILD_CACHE:
+        if len(_BUILD_CACHE) >= 64:
+            _BUILD_CACHE.pop(next(iter(_BUILD_CACHE)))
+        _BUILD_CACHE[key] = BUILDERS[name].build(**(params or {}))
+    return copy.deepcopy(_BUILD_CACHE[key])

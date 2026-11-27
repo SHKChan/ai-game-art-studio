@@ -138,8 +138,21 @@ character (not in the repo — licence) frame by frame.
   near-side weapon (pack layer `sword_front`) goes in `front`, over the face: right-handed facing right; facing left it
   is `sword_back` → `back`. Lying (Death) frames drop capes and long hair and lay staffs flat.
 - `bow.py`: `shoot()` builds `Bow_Attack` from the Sword_Attack body poses and draws bow, string and arrow per facing.
-- `presets.py`: outfits for base / knight / mage / ranger / priest / berserker. New class = a new outfit dict
-  (keys: hair, head, head_ramp, armor, tabard, cape, robe, trim, shirt, pants, boots, weapon).
+  Side views with an arrow on the string (`side_shot`) strip the pose's arms outside the torso column and re-draw both:
+  bow arm straight to the grip under the chin, draw arm shoulder → elbow → hand, and the string's pull point **is** the
+  hand, so string and hand move together.
+- `cast.py`: `cast()` builds `Cast_Spell` (Sword_Attack poses 0, 1, 5, 6, 7; front / back release with the staff held
+  high). The staff is re-drawn upright through the hand (sword hilt), leaning forward in the side views and outwards in
+  front / back; effects: rune circle (in `shadow`), gathering motes, head glow, burst + bolt. Colour = outfit `magic`,
+  else the staff's orb ramp. `presets.ATTACK` maps a preset's `Sword_Attack` to `Cast_Spell` (mage, priest, necromancer).
+- `skeleton.py`: outfit `skeleton: True` turns the skin into bone (by luminance rank), thins every limb to its centre
+  line (across the thinner direction) and rebuilds the torso as a spine pole with collarbone / pelvis bars, plus a
+  skull head (sockets, teeth, crack, narrowed jaw); `shield()` draws the buckler for outfit `shield`; `stiff: <slow>`
+  (in `charkit.stiffen`) drops every other in-between frame and slows the action; `eyes: <ramp>` gives glowing eyes to a normal head; `rise()` builds `Summon_Rise` from the idle frames
+  (body shifted down and clipped at the ground line, crack, dirt, wisps, rune circle).
+- `presets.py`: outfits for base / knight / mage / ranger / priest / berserker / necromancer / skeleton. New class = a
+  new outfit dict (keys: hair (None = bald), head, head_ramp, armor, tabard, cape, robe, trim, shirt, pants, boots,
+  weapon, magic, eyes, skeleton) and optionally an `ATTACK` entry.
 - The builder paints each group as a layer, merges identical consecutive frames into holds, and declares
   `pivot = (32, 44)` (feet) and `LOOP(action)` as a function of the params.
 - `scripts/make_character_pack.py` exports sheets / GIFs / meta to `assets_local/character_pack/` (git-ignored).

@@ -1,5 +1,6 @@
 """Character kit (角色套装): the Craftpix 4-direction base character, plain or dressed as one of five fantasy classes
-(knight, mage, ranger, priest, berserker), in any of its 13 actions plus a synthesised bow attack, one facing per
+(knight, mage, ranger, priest, berserker, necromancer) or as a skeleton soldier, in any of its 13 actions plus synthesised
+bow attack, spell cast and summon rise (mage / priest / necromancer cast instead of swinging the staff), one facing per
 document. Layers: shadow, back (cape, back hair, far-side weapon), body, gear (armour, head, hair, headgear),
 front (near-side weapon over the face, swing trail), flash (hurt tint).
 
@@ -11,8 +12,8 @@ from ..charkit import ALL_ACTIONS, FEET, PRESETS, is_loop, render
 from ..charkit.costume import GROUPS, flatten
 from ._ui import emit
 
-DESCRIPTION = ("4-direction base character (Craftpix pack) — plain or as knight / mage / ranger / priest / berserker; "
-               "13 actions + bow attack. Needs the local base pack.")
+DESCRIPTION = ("4-direction base character (Craftpix pack) — plain or as knight / mage / ranger / priest / berserker / "
+               "necromancer / skeleton; 13 actions + bow attack, spell cast, summon rise. Needs the local base pack.")
 ASSET_TYPE = "animation"
 GROUP = "Characters"
 FACINGS = {"front": "front", "left": "side_left", "right": "side_right", "rear": "back"}

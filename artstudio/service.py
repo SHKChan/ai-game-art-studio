@@ -95,7 +95,7 @@ class Studio:
         import base64
         import io
         import time
-        from .procedural import BUILDERS
+        from .procedural import BUILDERS, cached_build
         from .procedural.edits import base_palette, final_palette, normalize
         from .providers.base import JobContext
         b = BUILDERS.get(builder)
@@ -114,7 +114,7 @@ class Studio:
                     size = im.size
                     im.save(buf, "PNG")
                 frames.append("data:image/png;base64," + base64.b64encode(buf.getvalue()).decode())
-            calls = b.build(**(params or {}))
+            calls = cached_build(builder, params or {})
             e = normalize(edits)
             return {"frames": frames, "durations": res.metadata["durations"], "size": list(size),
                     "base_palette": base_palette(calls), "palette": final_palette(calls, e),

@@ -22,6 +22,9 @@ RAMPS = {  # 6 tones dark → light (outline first)
     "pink": ["#3a0c24", "#6e1a44", "#a82a6a", "#da4a8e", "#f47ab4", "#ffc0dc"],
     "blonde": ["#3a2408", "#7a5414", "#b08420", "#dcb03a", "#f4d460", "#fff2a8"],
     "silver": ["#2a2e3a", "#525868", "#7c8496", "#a8b0c0", "#d0d6e2", "#ffffff"],
+    "bone": ["#3a3024", "#6e6046", "#9e8e6e", "#c8b894", "#e6dabc", "#fffaf0"],
+    "rust": ["#1e120c", "#4a2a18", "#6e4024", "#8e5a34", "#a87a52", "#c8a07a"],
+    "necro": ["#08180e", "#0e3a1e", "#16682e", "#2ea84a", "#6ef07a", "#d0ffd4"],
 }
 
 def _pixels(img):

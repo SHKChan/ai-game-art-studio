@@ -12,7 +12,6 @@ RAMPS.update({
     "steel": ["#1a1e2a", "#3c4656", "#5a6878", "#7c8c9c", "#a4b4c2", "#d8e2ea"],
     "leather": ["#1e1008", "#3e2412", "#5e3a1c", "#7e5228", "#a06c38", "#c48c50"],
     "fur": ["#2a1a10", "#4e3424", "#6e4c34", "#8e6a4a", "#b08c66", "#d4b48c"],
-    "bone": ["#3a3024", "#6e6046", "#9e8e6e", "#c8b894", "#e6dabc", "#fffaf0"],
     "darkgreen": ["#0a1a0e", "#14301a", "#1e4626", "#2a5c32", "#3c7a40", "#5c9a52"],
     "crimson": ["#1e0608", "#420c12", "#6e141e", "#9a1e28", "#c4303a", "#e8605a"],
 })
@@ -185,6 +184,27 @@ def headgear(hi, style, dirn, ramp, accent="gold"):
         band |= {(x, brim_y - 2) for (x, _) in band}
         pieces.append((band, accent, {"flat": 4, "outline": False}))
         pieces.append((brim, ramp, {}))
+    elif style == "mitre":                                           # bishop's mitre: tall, pointed, gold bands + cross
+        brim_y = (et - 1) if face else y0 + 4
+        under = {(x, y) for (x, y) in m if y < brim_y}
+        pieces.append((grow(under, 1, cond=lambda q: q not in m and q[1] < brim_y), ramp, {}))
+        narrow = 1.0 if dirn in ("front", "back") else 0.7
+        hat = set()
+        H = 11
+        for k in range(H):
+            y = brim_y - 1 - k
+            half = (hw / 2) * narrow * (1 - (k / H) ** 2.2)
+            for x in range(int(cx - half), int(cx + half) + 1):
+                if dirn in ("front", "back") and k > H - 4 and abs(x + .5 - cx) < 1:
+                    continue                                         # the split between the two peaks
+                hat.add((x, y))
+        pieces.append((hat, ramp, {}))
+        band = {(x, y) for (x, y) in hat if y >= brim_y - 2}
+        pieces.append((band, accent, {"flat": 4, "outline": False}))
+        if dirn in ("front", "back"):
+            ccx, ccy = int(cx), brim_y - 6
+            pieces.append(({(ccx, ccy + d) for d in (-2, -1, 0, 1, 2)} | {(ccx - 1, ccy - 1), (ccx + 1, ccy - 1)},
+                           accent, {"flat": 4, "outline": False}))
     elif style == "circlet":
         yb = (et - 2) if face else y0 + 4
         band = {(x, yb) for x in range(x0, x1 + 1) if (x, yb) in m or (x, yb - 1) in m}
@@ -238,17 +258,84 @@ def body_pieces(bi, outfit, dirn, fi):
             for x in range(min(xs) - flare, max(xs) + flare + 1):
                 robe.add((x, y))
         robe |= T
+        if outfit.get("hem") == "tattered":
+            robe = tatter(robe, feet)
         over.append((robe, outfit["robe"], {}))
         trim = outfit.get("trim", "gold")
-        hem = {(x, y) for (x, y) in robe if y == feet - 1}
-        over.append((hem, trim, {"flat": 4, "outline": False}))
-        if dirn in ("front", "back"):
+        low = {}
+        for (x, y) in robe:
+            if y >= waist:
+                low[x] = max(low.get(x, -1), y)
+        if outfit.get("hem") != "tattered":                           # rags get no trim, the torn edge is the detail
+            hem = {(x, y) for x, y in low.items() if y >= feet - 4}
+            over.append((hem, trim, {"flat": 4, "outline": False}))
+        style = outfit.get("robe_trim", "center")
+        if style == "center" and dirn in ("front", "back"):
             over.append(({(int(cx), y) for y in range(y0 + 2, feet - 1)}, trim, {"flat": 3, "outline": False}))
+        if outfit.get("pattern") == "stars":                         # scattered stars on the cloth
+            stars = {(x, y) for (x, y) in robe if y > y0 + 1 and (x * 7 + y * 11 + (dirn == "back") * 3) % 19 == 0
+                     and all((x + dx, y + dy) in robe for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)))}
+            over.append((stars, outfit.get("accent", "gold"), {"flat": 5, "outline": False}))
+    stole = outfit.get("stole")
+    if stole:                                                         # priest's stole: two bands down the front
+        xs = (int(cx) - 2, int(cx) + 1) if dirn == "front" else ((int(cx),) if dirn != "back" else ())
+        band = {(x, y) for x in xs for y in range(y0 + 1, feet - 1)}
+        over.append((band, stole, {"flat": 4, "outline": False}))
+        if dirn == "front":
+            over.append(({(x, feet - 2) for x in (xs[0] - 1, xs[1] + 1)} | {(x, feet - 3) for x in xs}, stole,
+                         {"flat": 3, "outline": False}))
     if outfit.get("belt", True) and (arm or outfit.get("robe")):
         belt = {(x, waist - 1) for (x, y) in (T | bi["mask"]) if y == waist - 1}
-        over.append((belt, "leather", {"flat": 1, "outline": False}))
+        sash = outfit.get("sash")
+        over.append((belt, sash or "leather", {"flat": 3 if sash else 1, "outline": False}))
+        if sash:                                                      # knotted sash with a hanging tail
+            kx = int(cx) + (2 if dirn != "side_right" else -2) if dirn != "back" else int(cx) - 2
+            tail = {(kx, waist - 1 + k) for k in range(5)} | {(kx + 1, waist + k) for k in range(1, 4)}
+            over.append((tail, sash, {}))
+        elif dirn in ("front", "back"):
+            over.append(({(int(cx), waist - 1)}, outfit.get("buckle", "gold"), {"flat": 4, "outline": False}))
+    mantle = outfit.get("mantle")
+    if mantle:                                                        # short shoulder cape with a trimmed edge
+        m = set()
+        for y in range(y0 - 1, y0 + 4):
+            half = tw + 1 + (y - y0 + 1) * 0.6 if dirn in ("front", "back") else tw + 1 + (y - y0 + 1) * 0.3
+            for x in range(int(cx - half), int(cx + half) + 1):
+                m.add((x, y))
+        over.append((m, mantle, {}))
+        edge = {(x, y) for (x, y) in m if (x, y + 1) not in m}
+        over.append((edge, outfit.get("trim", "gold"), {"flat": 4, "outline": False}))
+    emblem = outfit.get("emblem")
+    if emblem and dirn in ("front", "back"):
+        ex, ey = int(cx), (y0 + 2 if dirn == "front" else y0 + 3)
+        shape = {"cross": [(0, -1), (0, 0), (0, 1), (0, 2), (-1, 0), (1, 0)],
+                 "star": [(0, -1), (-1, 0), (0, 0), (1, 0), (0, 1)],
+                 "skull": [(-1, 0), (0, 0), (1, 0), (-1, 1), (1, 1), (0, 1)]}[emblem]
+        over.append(({(ex + dx, ey + dy) for dx, dy in shape}, outfit.get("emblem_ramp", "gold"), {"flat": 4, "outline": False}))
+    if outfit.get("pauldrons") == "skull":                           # little skulls on the shoulders
+        ys = y0
+        sxs = (int(cx - tw - 1), int(cx + tw)) if dirn in ("front", "back") else (int(cx),)
+        for sx in sxs:
+            sk = {(sx + dx, ys + dy) for dx in (-1, 0, 1) for dy in (-1, 0, 1)} | {(sx, ys - 2), (sx, ys + 2)}
+            top.append((sk, "bone", {}))                               # drawn after the hood drape
+            if dirn != "back":
+                top.append(({(sx - 1, ys), (sx + 1, ys)} if dirn == "front" else {(sx, ys)}, "black", {"flat": 0, "outline": False}))
+    collar = outfit.get("collar")
+    if collar == "spikes":                                            # bone spikes standing up behind the head
+        c = set()
         if dirn in ("front", "back"):
-            over.append(({(int(cx), waist - 1)}, "gold", {"flat": 4, "outline": False}))
+            for sgn in (-1, 1):
+                for j, (off, hgt) in enumerate(((tw + 2, 7), (tw + 4, 5))):   # two spikes per side, fanning out
+                    bx = int(cx) + sgn * int(off)
+                    for k in range(hgt):
+                        c.add((bx + sgn * (k // 3), y0 + 1 - k))
+                        if k < hgt - 2:
+                            c.add((bx + sgn * (k // 3) - sgn, y0 + 1 - k))
+        else:
+            sgn = 1 if dirn == "side_left" else -1
+            bx = int(cx) + sgn * 2
+            for k in range(6):
+                c.add((bx + sgn * (k // 2), y0 - k)); c.add((bx + sgn * (k // 2) - sgn, y0 - k + 1))
+        (top if dirn == "front" else under).append((c, outfit.get("collar_ramp", "bone"), {"flat": 4, "outline": False}))
     cape = outfit.get("cape")
     if cape:
         sway = (fi % 4 in (1, 2)) * 1
@@ -278,7 +365,24 @@ def body_pieces(bi, outfit, dirn, fi):
                 for k in range(int(w) + 1):
                     pts.add((int(bx + sgn * k), y))
             under.append((pts, cape, {}))
+    if outfit.get("hem") == "tattered":
+        under = [(tatter(p, feet + 1), r, k) if r == cape else (p, r, k) for p, r, k in under]
+        top = [(tatter(p, feet + 2), r, k) if r == cape and not k.get("flat") else (p, r, k) for p, r, k in top]
     return under, over, top
+
+
+def tatter(pts, bottom):
+    """Rip the hem: cut jagged notches into the lowest rows of a cloth point set."""
+    cut = [0, 2, 1, 3, 0, 1, 2, 0, 3, 1]
+    low = {}
+    for (x, y) in pts:
+        low[x] = max(low.get(x, -1), y)
+    out = set()
+    for (x, y) in pts:
+        if y > low[x] - cut[x % len(cut)] or (y >= bottom - 4 and y > low[x] - cut[x % len(cut)]):
+            continue
+        out.add((x, y))
+    return out or set(pts)
 
 # ------------------------------------------------------------------ staff weapon
 def staff_from_sword(front, back, body, wood="brown", orb="blue", head="orb"):
@@ -323,6 +427,9 @@ def staff_from_sword(front, back, body, wood="brown", orb="blue", head="orb"):
                 r = math.hypot(x + .5 - hc[0], y + .5 - hc[1])
                 if 0 <= x < 64 and 0 <= y < 64 and r <= 2.6:
                     po[x, y] = OUT if r > 1.9 else (G[5] if (x < hc[0] and y < hc[1]) else G[3])
+    elif head == "skull":
+        from .cast import draw_skull
+        draw_skull(o, hc, orb)
     else:                                                              # holy cross head
         cxh, cyh = int(hc[0]), int(hc[1])
         for (x, y) in [(cxh, cyh + k) for k in range(-3, 3)] + [(cxh + k, cyh - 1) for k in (-2, -1, 1, 2)]:
