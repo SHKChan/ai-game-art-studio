@@ -175,7 +175,7 @@ const ZH = {
   'Bring in sprite sheets, GIFs, videos or PNG frames: remove the background, slice and align them.': '导入精灵表、GIF、视频或 PNG 帧：去背景、切图并对齐。',
   'Pick something to make, then adjust it on the right.': '选择要制作的内容，然后在右侧调整。', 'Skills & effects': '技能与特效', 'Items & icons': '道具与图标',
   'Scenery': '场景', 'Saved in this project': '本项目已保存', 'open': '打开', 'editing a copy': '编辑副本', 'Preview': '预览', 'light': '浅色',
-  'rendering…': '渲染中…', 'rendered in': '渲染耗时', 'Variant': '样式', 'Speed & loop': '速度与循环', 'Speed': '速度', 'Colours': '颜色', 'Hue': '色相',
+  'rendering…': '渲染中…', 'rendered in': '渲染耗时', 'Variant': '样式', 'Speed & loop': '速度与循环', 'Speed': '速度', 'Colours': '颜色', 'Colour scheme': '配色方案', 'Palette tweaks': '调色板微调', 'Fine-tune the finished picture: each swatch is a colour it uses — change one to replace it everywhere. Applied on top of the colour scheme above, and kept when you switch schemes (only colours the new scheme also uses).': '微调成品画面：每个色块是画面里用到的一种颜色，改一个就替换所有用到它的像素。它叠加在上面的「配色方案」之上；切换配色方案时会保留，只作用于新方案里也有的颜色。', 'Hue': '色相',
   'Saturation': '饱和度', 'Brightness': '亮度', 'Reset colours': '重置颜色', 'Outline & glow': '描边与光晕', 'Outline': '描边', 'Glow': '光晕',
   'auto': '自动', 'Flip horizontally': '水平翻转', 'Output scale': '输出放大', 'Outline colour': '描边颜色', 'Glow colour': '光晕颜色', 'Save': '保存',
   'Asset name': '素材名称', 'Save to library': '保存到资源库', 'Save & export': '保存并导出', 'Reset all': '全部重置', 'Saved to library': '已保存到资源库',

@@ -9,7 +9,7 @@ Read this first, then `SPECIFICATION.md` (authoritative requirements) and `DEVEL
   - **Motion Studio** (动作工作室) — character animation via Codex CLI or ComfyUI. Code: `actions.py`, `web/wizard.js`.
   - **Asset Import** (素材导入) — import/clean/align existing art. Code: `processing/`, `Studio.import_file`.
   User-facing overview: `README.md` / `README.zh-CN.md`.
-- **Version:** `VERSION` (currently 0.8.0). History: `CHANGELOG.md`.
+- **Version:** `VERSION` (currently 0.8.1). History: `CHANGELOG.md`.
 - **Based on (MIT):** Atelier (marmikshah/atelier @ 8ac6adf) — call format re-implemented in `artstudio/engine`;
   Pixel Atelier (jinxingtaire/pixel-atelier @ 15d199f) — code moved into `artstudio/pipeline`, `prompts_zh_sheet.py`,
   `providers/codex_rpc.py`, `samples/knight`. Neither is a dependency any more; do not re-add them as checkouts.

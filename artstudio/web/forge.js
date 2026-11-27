@@ -98,8 +98,12 @@ async function refresh(canvas, info, strip) {
   strip.innerHTML = '';
   F.imgs.forEach((im, i) => strip.append(el('img', { src: im.src, title: `${i + 1}: ${r.durations[i]} ms`, onclick: () => { F.frame = i; draw(canvas); } })));
   if (F.playing) animate(canvas); else draw(canvas);
-  document.querySelectorAll('.swatch-in').forEach((inp, i) => { if (r.palette && r.palette[i] && document.activeElement !== inp) inp.value = r.palette[i]; });
+  if (F.fillSwatches && JSON.stringify(r.base_palette || []) !== F.swatchKey && !document.activeElement?.classList.contains('swatch-in')) F.fillSwatches();
+  else document.querySelectorAll('.swatch-in').forEach((inp, i) => { if (r.palette && r.palette[i] && document.activeElement !== inp) inp.value = r.palette[i]; });
 }
+
+// builder params whose raw name would clash with the editor's own sections
+const PARAM_LABELS = { color: 'Colour scheme' };
 
 function renderControls(box, canvas, info, strip, root) {
   const update = () => { clearTimeout(F.timer); F.timer = setTimeout(() => guard(() => refresh(canvas, info, strip)), 180); };
@@ -107,7 +111,7 @@ function renderControls(box, canvas, info, strip, root) {
   const sec = (name, ...kids) => el('div', { class: 'fsec' }, el('h4', {}, name), ...kids);
   // variant params
   const pkids = Object.entries(b.params).map(([k, p]) => {
-    if (p.enum) return el('div', { class: 'frow' }, el('label', {}, k), el('div', { class: 'chips' }, ...p.enum.map(v => el('button', { class: 'chip' + (F.params[k] === v ? ' on' : ''),
+    if (p.enum) return el('div', { class: 'frow' + (p.enum.length > 4 ? ' stack' : '') }, el('label', {}, PARAM_LABELS[k] || k), el('div', { class: 'chips' }, ...p.enum.map(v => el('button', { class: 'chip' + (F.params[k] === v ? ' on' : ''),
       onclick: (e) => { F.params[k] = v; e.target.closest('.chips').querySelectorAll('.chip').forEach(c => c.classList.toggle('on', c === e.currentTarget)); update(); } }, v))));
     const isSize = k === 'size';
     const lo = p.min ?? (isSize ? 16 : (k === 'frames' ? 2 : 1)), hi = p.max ?? (isSize ? 128 : 16), st = p.step ?? (isSize ? 8 : (p.type === 'float' ? 0.1 : 1));
@@ -123,17 +127,20 @@ function renderControls(box, canvas, info, strip, root) {
   const sw = el('div', { class: 'swatches' });
   const fillSwatches = () => {
     sw.innerHTML = '';
+    const map = F.edits.palette_map || {};
     (F.prev?.base_palette || []).forEach((c, i) => {
-      const inp = el('input', { type: 'color', class: 'swatch-in', value: (F.edits.palette && F.edits.palette[i]) || (F.prev.palette || [])[i] || c, title: `#${i}` });
-      inp.oninput = () => { const pal = (F.edits.palette || F.prev.base_palette).slice(); pal[i] = inp.value; F.edits.palette = pal; F.edits.hue = 0; F.edits.saturation = 1; F.edits.brightness = 1; update(); };
+      const inp = el('input', { type: 'color', class: 'swatch-in', value: map[c] || (F.prev.palette || [])[i] || c, title: c });
+      inp.oninput = () => { F.edits.palette_map = { ...(F.edits.palette_map || {}), [c]: inp.value }; F.edits.palette = null; update(); };
       sw.append(inp);
     });
+    F.swatchKey = JSON.stringify(F.prev?.base_palette || []);
   };
-  const colours = sec('Colours', sw,
+  F.fillSwatches = fillSwatches;
+  const colours = sec('Palette tweaks', el('p', { class: 'small muted' }, 'Fine-tune the finished picture: each swatch is a colour it uses — change one to replace it everywhere. Applied on top of the colour scheme above, and kept when you switch schemes (only colours the new scheme also uses).'), sw,
     slider('Hue', F.edits.hue, -180, 180, 5, (v) => { F.edits.hue = v; update(); }, (v) => `${v}°`),
     slider('Saturation', F.edits.saturation, 0, 2, 0.05, (v) => { F.edits.saturation = v; update(); }, (v) => `${Math.round(v * 100)}%`),
     slider('Brightness', F.edits.brightness, 0.5, 1.5, 0.05, (v) => { F.edits.brightness = v; update(); }, (v) => `${Math.round(v * 100)}%`),
-    el('button', { class: 'small', onclick: () => { Object.assign(F.edits, { palette: null, hue: 0, saturation: 1, brightness: 1 }); renderForge(root); } }, 'Reset colours'));
+    el('button', { class: 'small', onclick: () => { Object.assign(F.edits, { palette: null, palette_map: null, hue: 0, saturation: 1, brightness: 1 }); renderForge(root); } }, 'Reset colours'));
   // shape
   const oc = el('input', { type: 'color', value: F.edits.outline_color || '#14101e', 'aria-label': 'Outline colour' });
   oc.oninput = () => { F.edits.outline_color = oc.value; update(); };

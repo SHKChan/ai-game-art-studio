@@ -1,10 +1,13 @@
 """Pixel Forge edits: quick adjustments applied on top of a builder, kept replayable.
 
-Colour edits rewrite the builder's `doc_palette` call *before* painting (builders paint by palette index, so the
+`palette_map` replaces colours by value (the base colour → its replacement), so a swatch edit survives switching the
+builder's own colour scheme: colours the new scheme does not use are simply not touched. `palette` (by index) is the
+older form, kept for saved recipes. Colour edits rewrite the builder's `doc_palette` call *before* painting (builders paint by palette index, so the
 whole asset recolours consistently). Everything else is appended as ordinary pixel-engine calls after the build
 (frame durations, an outline / glow layer, flip, rescale), so the saved `doc.recipe` reproduces the edited asset.
 
-    edits = {"speed": 1.0, "palette": ["#rrggbb", ...] | None, "hue": 0, "saturation": 1.0, "brightness": 1.0,
+    edits = {"speed": 1.0, "palette": ["#rrggbb", ...] | None, "palette_map": {"#from": "#to"} | None,
+             "hue": 0, "saturation": 1.0, "brightness": 1.0,
              "outline": 0..3, "outline_color": "#rrggbb", "glow": 0..4, "glow_color": "#rrggbb" | None,
              "flip": False, "scale": 1..4, "loop": True | False | None}
 """
@@ -16,7 +19,7 @@ import re
 
 import numpy as np
 
-DEFAULTS = {"speed": 1.0, "palette": None, "hue": 0.0, "saturation": 1.0, "brightness": 1.0, "outline": 0,
+DEFAULTS = {"speed": 1.0, "palette": None, "palette_map": None, "hue": 0.0, "saturation": 1.0, "brightness": 1.0, "outline": 0,
             "outline_color": "#14101e", "glow": 0, "glow_color": None, "flip": False, "scale": 1, "loop": None}
 HEX = re.compile(r"^#[0-9a-fA-F]{6}$")
 
@@ -55,6 +58,11 @@ def normalize(edits: dict | None) -> dict:
     if e["palette"] is not None:
         if not isinstance(e["palette"], list) or not all(HEX.match(str(c)) for c in e["palette"]):
             raise EditError("palette must be a list of #rrggbb colours")
+    if e["palette_map"] is not None:
+        m = e["palette_map"]
+        if not isinstance(m, dict) or not all(HEX.match(str(k)) and HEX.match(str(v)) for k, v in m.items()):
+            raise EditError("palette_map must map #rrggbb to #rrggbb")
+        e["palette_map"] = {str(k).lower(): str(v).lower() for k, v in m.items() if str(k).lower() != str(v).lower()} or None
     if e["loop"] is not None:
         e["loop"] = bool(e["loop"])
     return e
@@ -88,6 +96,8 @@ def final_palette(calls, e) -> list[str] | None:
     pal = list(base)
     if e["palette"]:
         pal = [e["palette"][i] if i < len(e["palette"]) else c for i, c in enumerate(pal)]
+    if e.get("palette_map"):
+        pal = [e["palette_map"].get(c.lower(), c) for c in pal]
     if e["hue"] or e["saturation"] != 1.0 or e["brightness"] != 1.0:
         pal = [adjust(c, e["hue"], e["saturation"], e["brightness"]) for c in pal]
     return pal

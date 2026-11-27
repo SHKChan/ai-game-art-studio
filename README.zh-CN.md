@@ -1,6 +1,6 @@
 # AI 游戏美术工作室
 
-[English](README.md) · 版本 **0.8.0**（[更新日志](CHANGELOG.md)）· MIT 许可
+[English](README.md) · 版本 **0.8.1**（[更新日志](CHANGELOG.md)）· MIT 许可
 
 **本地优先的 2D 游戏美术制作工具**：支持像素风和高清插画，从单个图标到角色动画精灵，都能直接导出到游戏引擎。
 纯 Python 应用（Pillow + numpy），网页界面支持中英文，不需要云服务、数据库或付费 API。

@@ -25,11 +25,11 @@ _ln = math.hypot(*LIGHT)
 LIGHT = (LIGHT[0] / _ln, LIGHT[1] / _ln)
 
 
-KX = 0.32  # oblique (cabinet-style) receding offset: the back shifts right, showing the right side
+KX = 0.45  # oblique (cabinet-style) receding offset: the back shifts right, showing the right side as a real face
 
 
 def _proj(x, y, z, s, base_y):
-    return ((x - 3.0 - z * KX) * s, base_y + (-y * CA + z * SA) * s)
+    return ((x - 2.5 - z * KX) * s, base_y + (-y * CA + z * SA) * s)
 
 
 def _depth(y, z):

@@ -54,6 +54,19 @@ class ForgeTests(unittest.TestCase):
         pal = list(base["base_palette"]); pal[3] = "#00ff00"
         self.assertEqual(self.s.forge_preview("fireball", {}, {"palette": pal})["palette"][3], "#00ff00")
 
+    def test_palette_map_follows_colour_scheme(self):
+        """Swatch edits are keyed by colour: switching the builder's own colour scheme still changes the picture, and an
+        edit applies again wherever the new scheme uses that colour."""
+        azure = self.s.forge_preview("sword_slash", {"color": "azure"})
+        gold = self.s.forge_preview("sword_slash", {"color": "gold"})
+        self.assertNotEqual(azure["base_palette"], gold["base_palette"])
+        only_azure = next(c for c in azure["base_palette"] if c not in gold["base_palette"])
+        m = {only_azure: "#00ff00"}
+        self.assertIn("#00ff00", self.s.forge_preview("sword_slash", {"color": "azure"}, {"palette_map": m})["palette"])
+        g2 = self.s.forge_preview("sword_slash", {"color": "gold"}, {"palette_map": m})
+        self.assertEqual(g2["palette"], gold["base_palette"])                  # the scheme switch is not overridden
+        self.assertEqual(g2["frames"], gold["frames"])
+
     def test_outline_and_glow_add_layers_and_pixels(self):
         a = self.s.procedural(self.pid, "frost_nova", {"color": "arcane"}, edits={"outline": 1, "glow": 2, "outline_color": "#ff00ff"})
         doc = self.s.ws.engine_home(self.pid) / "documents" / a["procedural"]["doc_id"] / "doc.json"
@@ -74,7 +87,7 @@ class ForgeTests(unittest.TestCase):
         self.assertEqual([f["duration_ms"] for f in a["animation"]["frames"]], [60] * 8)
 
     def test_edit_validation(self):
-        for bad in ({"speed": 0}, {"outline": 9}, {"palette": ["red"]}, {"nope": 1}, {"glow_color": "#12"}):
+        for bad in ({"speed": 0}, {"outline": 9}, {"palette": ["red"]}, {"palette_map": {"#000000": "red"}}, {"nope": 1}, {"glow_color": "#12"}):
             with self.assertRaises(EditError):
                 normalize(bad)
         with self.assertRaises(StudioError):

@@ -1,6 +1,6 @@
 # AI Game Art Studio
 
-[简体中文](README.zh-CN.md) · Version **0.8.0** ([CHANGELOG](CHANGELOG.md)) · Licence MIT
+[简体中文](README.zh-CN.md) · Version **0.8.1** ([CHANGELOG](CHANGELOG.md)) · Licence MIT
 
 A **local-first studio for 2D game art**: pixel art and HD illustration, from a single icon to animated character
 sprites, exported straight into game engines. It is a self-contained Python app (Pillow + numpy) with a web UI in

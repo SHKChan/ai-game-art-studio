@@ -5,6 +5,19 @@ versions follow [Semantic Versioning](https://semver.org/). The current version 
 
 ## [Unreleased]
 
+## [0.8.1] — 2026-11-27
+
+### Fixed
+- **Pixel Forge layout**: option chips no longer run past the panel edge — a parameter with many options (character
+  kit actions, presets) puts its label above a full-width, wrapping chip row.
+- **Colour scheme vs. palette swatches**: the builder parameter `color` is now labelled *Colour scheme* (配色方案) and the
+  swatch section *Palette tweaks* (调色板微调) with a one-line explanation. Swatch edits are stored by colour
+  (`edits.palette_map`, base colour → replacement) instead of a full palette by index, so switching the colour scheme
+  after editing a swatch now changes the picture (before, the old palette silently overrode the new scheme). The
+  swatches rebuild when the scheme changes. `edits.palette` (by index) still works for saved recipes.
+- **Treasure chest looked cut off at the back right**: the oblique depth offset was so small that the right side face
+  was a sliver with a steep notch at the bottom; the side is now a readable face (`chest`, `chest_open`).
+
 ## [0.8.0] — 2026-11-27
 
 Casters cast, archers draw with their hand, and the undead arrive: necromancer and a see-through skeleton soldier.
@@ -259,6 +272,7 @@ First Stage A (offline) implementation of SPECIFICATION.md.
 - Stage B (real ComfyUI inference) not run. AI generation is mock-tested only.
 
 [Unreleased]: #unreleased
+[0.8.1]: #081--2026-11-27
 [0.8.0]: #080--2026-11-27
 [0.7.0]: #070--2026-11-27
 [0.4.0]: #040--2026-11-26
