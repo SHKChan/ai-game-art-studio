@@ -355,6 +355,11 @@ def api_char_report(s, h, m, q, body):
 
 
 # Pixel Forge (procedural builders + quick edits)
+def _default_loop(b) -> bool:
+    v = getattr(b, "LOOP", False)
+    return bool(v() if callable(v) else v)
+
+
 @route("GET", r"/api/forge/builders")
 def api_forge_builders(s, h, m, q, body):
     from ..procedural import BUILDERS
@@ -362,7 +367,7 @@ def api_forge_builders(s, h, m, q, body):
     group = {"effect": "Skills & effects", "icon": "Items & icons", "item": "Items & icons", "animation": "Items & icons",
              "environment": "Scenery"}
     return {"builders": {k: {"description": b.DESCRIPTION, "params": b.PARAMS, "asset_type": b.ASSET_TYPE,
-                             "loop": bool(getattr(b, "LOOP", False)),
+                             "loop": _default_loop(b),
                              "group": getattr(b, "GROUP", None) or group.get(b.ASSET_TYPE, "Other")} for k, b in BUILDERS.items()},
             "edit_defaults": DEFAULTS}
 

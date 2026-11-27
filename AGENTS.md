@@ -152,12 +152,14 @@ python scripts/production_smoke_test.py --comfy URL --checkpoint FILE   # Stage 
   (bool, or a function of the params) and QA accepts edge contact for them.
 - **Pixel Forge parity:** brushes anchor at `size // 2`; `doc_region` rects are inclusive `[x0,y0,x1,y1]`; ellipses use
   Atelier's +0.5 inflation. Changing any of these breaks `tests/fixtures/showcase` replay.
-- **New builder checklist:** module in `artstudio/procedural/` (`DESCRIPTION`, `ASSET_TYPE`, `PARAMS`, optional `LOOP = True`,
+- **New builder checklist:** module in `artstudio/procedural/` (`DESCRIPTION`, `ASSET_TYPE`, `PARAMS`, optional `LOOP = True` (or a function of the params),
   `GROUP` (gallery group), `FULL_BLEED`, `pivot(**params)`,
   `build()`; paint by **palette index** so Forge recolouring works; params with `min`/`max`/`step` become sliders, `enum`
   becomes chips), register in `_NAMES`, add `(frames, size)` to `PixelForgeTests` in `tests/test_integration.py`, add the
   Chinese description to `artstudio/web/i18n.js`, add a row to both READMEs, add a CHANGELOG entry, look at the contact
   sheet yourself. Keep 2 px clear of the canvas edge or QA reports `source_clipped`. Shared effect helpers: `procedural/_fx.py`.
+- **Third-party art that cannot be redistributed** (the Craftpix base packs for `character_kit`) lives in git-ignored
+  `assets_local/`; never commit it or anything exported from it. Tests that need it skip when it is absent.
 - **Never edit `vibe-game/`** (sibling project in the same parent folder).
 
 ## Keep DEVELOPMENT_PROGRESS.md current

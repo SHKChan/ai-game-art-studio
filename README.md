@@ -1,6 +1,6 @@
 # AI Game Art Studio
 
-[简体中文](README.zh-CN.md) · Version **0.6.0** ([CHANGELOG](CHANGELOG.md)) · Licence MIT
+[简体中文](README.zh-CN.md) · Version **0.7.0** ([CHANGELOG](CHANGELOG.md)) · Licence MIT
 
 A **local-first studio for 2D game art**: pixel art and HD illustration, from a single icon to animated character
 sprites, exported straight into game engines. It is a self-contained Python app (Pillow + numpy) with a web UI in
@@ -14,7 +14,7 @@ The studio has three tools. They all produce the **same asset format**, so editi
 
 | Tool | Use it for | How |
 |---|---|---|
-| **🔥 Pixel Forge** | Skill effects, items, icons, props, scenery | Built-in pixel builders with a **live editor**: variant, size, speed, colours, outline, glow, flip, scale. Layered and replayable. Offline, no AI. |
+| **🔥 Pixel Forge** | Skill effects, items, icons, props, scenery, 4-direction class characters | Built-in pixel builders with a **live editor**: variant, size, speed, colours, outline, glow, flip, scale. Layered and replayable. Offline, no AI. |
 | **🎬 Motion Studio** | A character's action frames: idle, walk, attack, custom moves | Reference image (uploaded or generated from a description) → actions → one sheet per action, drawn by the **Codex CLI** or your local **ComfyUI**; cut, aligned and cleaned locally; pixel-level sprite editor. |
 | **📥 Asset Import** | Art you already have | PNG / sequences / sprite sheets / GIF / APNG / MP4 / WebM: remove the background, slice, align. |
 
@@ -85,6 +85,29 @@ area** that covers the target cells, the space above is headroom for flames and 
 | `ui_icon` | 20 menu icons (bag, equipment, skills, map, quest, shop, settings, save, home, mail, battle, auto, speed, confirm, close, back, gold, gem, stamina, cursor hand); `style` color / mono |
 
 The rendered kit (PNGs, sprite strips + `meta.json`, GIFs, contact sheets) is in [deliverables/jrpg_pack](deliverables/jrpg_pack).
+
+**Character kit** (v0.7, `character_kit`, group *Characters*): a 4-direction 64×64 base character with paper-doll
+costumes drawn on top of every frame, so clothes, hair, headgear and weapons follow the animation.
+
+| Preset | Head | Body | Weapon |
+|---|---|---|---|
+| `base` | — (plain Craftpix base; `base` = male / female) | — | sword |
+| `knight` | steel helmet (rim, nose guard, cheek guards, ridge) | plate armour, pauldrons, red tabard, belt, red cape | steel sword |
+| `mage` | purple wizard hat (brim, gold band, bent tip) | blue robe with gold trim | staff with a blue orb |
+| `ranger` | green hood (pointed tail, falls over the shoulders) | leather vest, belt, green cloak | short sword; **bow attack** |
+| `priest` | white hood + gold circlet with a red gem | white robe with gold trim | gold cross staff |
+| `berserker` | horned helmet | fur pauldrons over leather | axe |
+
+Options: `action` = the pack's 13 actions (Unarmed / Sword × Idle, Walk, Run, Hurt, Death, Sword Attack, Walk/Run
+Attack) **+ `Bow_Attack`** (synthesised on the sword-attack body poses: nock → draw → release → follow-through);
+`facing` front / left / right / rear; `base` auto / male / female. Layers: shadow, back, body, gear, front, flash —
+the near-side weapon of a right-handed character is drawn over the face. Pivot = feet (32, 44); idle / walk / run loop.
+
+> **The base art is not in this repo.** It is Craftpix's free *Base 4-Direction Male / Female Character* pack, whose
+> licence allows use in games but not redistribution. Download both zips from craftpix.net, then
+> `python scripts/setup_character_base.py <male.zip> <female.zip>` (unzips into the git-ignored `assets_local/`;
+> or set `ARTSTUDIO_CHARKIT_DIR`). `python scripts/make_character_pack.py` exports every preset × action as sprite
+> sheets (rows = front, side_left, side_right, back), GIF previews and `meta.json` into `assets_local/character_pack/`.
 
 New assets don't need new code: an agent can write a call list and run `artstudio draw`. See
 [docs/pixel-forge-guide.md](docs/pixel-forge-guide.md).
@@ -201,7 +224,7 @@ included. Licences and derived-file list: [THIRD_PARTY_NOTICES.md](THIRD_PARTY_N
 
 ## Verification status
 
-- ✅ **Offline (Stage A):** 98 automated tests (engine, pipeline, encoding, action plans, ComfyUI mock, Codex test double, server,
+- ✅ **Offline (Stage A):** 107 automated tests (5 character-kit tests need the local Craftpix pack and skip without it) (engine, pipeline, encoding, action plans, ComfyUI mock, Codex test double, server,
   CLI), Playwright UI test of the whole guided flow in English and Chinese, proof-of-concept build. Details in [DEVELOPMENT_PROGRESS.md](DEVELOPMENT_PROGRESS.md).
 - 🧪 **AI generation is mock-tested only**: ComfyUI against `mock_comfyui/`, Codex against a test double
   (`tests/fake_codex.py`). Mock output is labelled TEST FIXTURE and is not AI art. The real Codex CLI has not been run here.

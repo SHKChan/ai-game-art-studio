@@ -39,7 +39,7 @@ function galleryPanel(root) {
   const mine = (S.data?.assets || []).filter(a => a.procedural?.builder && F.builders[a.procedural.builder]).slice(-12).reverse();
   return el('div', { class: 'card fgallery' }, el('h3', {}, 'Pixel Forge'),
     el('p', { class: 'small muted' }, 'Pick something to make, then adjust it on the right.'),
-    ...['Skills & effects', 'Skill icons', 'Items & icons', 'UI', 'Scenery', 'Other'].filter(g => groups[g]).map(g => el('div', {},
+    ...['Characters', 'Skills & effects', 'Skill icons', 'Items & icons', 'UI', 'Scenery', 'Other'].filter(g => groups[g]).map(g => el('div', {},
       el('h4', {}, g), el('div', { class: 'fgrid' }, ...groups[g].map(k => el('button', { class: 'fitem' + (k === F.builder && !F.source ? ' sel' : ''), title: F.builders[k].description,
         onclick: () => { choose(k); renderForge(root); } }, el('img', { src: `/api/forge/thumb/${k}.png`, alt: '' }), el('span', { 'data-no-i18n': '' }, title(k))))))),
     mine.length ? el('div', {}, el('h4', {}, 'Saved in this project'), ...mine.map(a => el('div', { class: 'row small fsaved' },
@@ -89,6 +89,8 @@ async function refresh(canvas, info, strip) {
   const r = await api('/api/forge/preview', { body: { builder: F.builder, params: F.params, edits: F.edits } });
   if (seq !== F.seq) return;
   F.prev = r;
+  const lb = document.getElementById('forgeLoop');
+  if (lb && F.edits.loop == null) lb.checked = !!r.loop;   // per-variant default (e.g. character idle loops, attack does not)
   F.imgs = await Promise.all(r.frames.map(src => new Promise(res => { const i = new Image(); i.onload = () => res(i); i.src = src; })));
   if (F.frame >= F.imgs.length) F.frame = 0;
   const total = r.durations.reduce((a, b) => a + b, 0);
@@ -112,7 +114,7 @@ function renderControls(box, canvas, info, strip, root) {
     return slider(k, F.params[k], lo, hi, st, (v) => { F.params[k] = p.type === 'float' ? v : Math.round(v); update(); }, (v) => (isSize ? `${v} px` : String(v)));
   });
   // timing
-  const loopBox = el('input', { type: 'checkbox', checked: F.edits.loop ?? b.loop });
+  const loopBox = el('input', { type: 'checkbox', id: 'forgeLoop', checked: F.edits.loop ?? b.loop });
   loopBox.onchange = () => { F.edits.loop = loopBox.checked; update(); };
   const timing = sec('Speed & loop', slider('Speed', F.edits.speed, 0.25, 3, 0.05, (v) => { F.edits.speed = v; update(); }, (v) => `${(+v).toFixed(2)}×`),
     el('label', { class: 'frow' }, loopBox, 'Loop'));

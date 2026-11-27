@@ -10,7 +10,9 @@ _NAMES = ["potion", "chest", "chest_open", "fireball", "sword_slash", "ice_spear
           "dark_vortex", "life_drain",
           "weapon_icon", "armor_icon", "consumable_icon", "material_icon", "skill_icon", "status_icon",
           # v0.6 — UI kit
-          "ui_panel", "ui_button", "ui_bar", "ui_frame", "ui_icon"]
+          "ui_panel", "ui_button", "ui_bar", "ui_frame", "ui_icon",
+          # v0.7 — character kit (Craftpix base + class costumes; needs the local base pack)
+          "character_kit"]
 BUILDERS = {}
 for _n in _NAMES:
     try:

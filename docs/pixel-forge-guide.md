@@ -122,6 +122,28 @@ emblem) and `status_icon` (16×16 badge, ASCII symbol + up/down arrow) follow th
 Gallery placement: `ASSET_TYPE` picks the group; set `GROUP = "Skill icons"` (or another group name) to override.
 `python scripts/make_jrpg_pack.py --out <dir>` renders every kit variant into PNGs, strips, GIFs and contact sheets.
 
+## 4d. Character kit (v0.7)
+
+`character_kit` is a builder over **external base art**: `artstudio/charkit/` dresses the Craftpix 4-direction base
+character (not in the repo — licence) frame by frame.
+
+- `base.py`: finds the packs (`assets_local/craftpix-base/{male,female}` or `ARTSTUDIO_CHARKIT_DIR`), reads the layer
+  sheets (`<Action><n>_<layer>.png`; rows = `DIRS` front, side_left, side_right, back; 64×64 cells) and the per-frame
+  durations from the `.aseprite` headers. Missing pack → `BasePackMissing` (a `StudioError`, code `charkit_base_missing`).
+- `doll.py`: body recolour by luminance rank into clothing ramps (shirt / pants / boots regions), hair from the head
+  mask, sword recolour / axe along the blade's PCA axis. `equip.py`: `head_info` / `body_info` locate the head, eyes,
+  torso and feet per frame; `headgear()` (helm, horned, hood, wizard, circlet) and `body_pieces()` (armour, tabard,
+  robe + trim, belt, cape) return pixel sets with ramps; `staff_from_sword()` replaces the sword with an upright staff.
+- `costume.py`: `compose(sex, action, outfit, dirs)` → per frame `{shadow, back, body, gear, front, flash}`. The
+  near-side weapon (pack layer `sword_front`) goes in `front`, over the face: right-handed facing right; facing left it
+  is `sword_back` → `back`. Lying (Death) frames drop capes and long hair and lay staffs flat.
+- `bow.py`: `shoot()` builds `Bow_Attack` from the Sword_Attack body poses and draws bow, string and arrow per facing.
+- `presets.py`: outfits for base / knight / mage / ranger / priest / berserker. New class = a new outfit dict
+  (keys: hair, head, head_ramp, armor, tabard, cape, robe, trim, shirt, pants, boots, weapon).
+- The builder paints each group as a layer, merges identical consecutive frames into holds, and declares
+  `pivot = (32, 44)` (feet) and `LOOP(action)` as a function of the params.
+- `scripts/make_character_pack.py` exports sheets / GIFs / meta to `assets_local/character_pack/` (git-ignored).
+
 ## 5. Art rules (from the Atelier and Pixel Atelier guides)
 
 - **Silhouette first.** It must read in one flat colour at 1×. Detail last, only on the focal area.

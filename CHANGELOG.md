@@ -5,6 +5,34 @@ versions follow [Semantic Versioning](https://semver.org/). The current version 
 
 ## [Unreleased]
 
+## [0.7.0] — 2026-11-27
+
+Pixel Forge gets a character kit: a 4-direction base character with five fantasy class costumes and a bow attack.
+
+### Added
+- **Character kit** (`artstudio/charkit/`, Pixel Forge builder `character_kit`, gallery group *Characters*): the Craftpix
+  4-direction base character (male / female, 64×64, 13 actions with per-frame durations read from the .aseprite files)
+  plus five class presets drawn on every frame — `knight`, `mage`, `ranger`, `priest`, `berserker` (helmets / hats /
+  hoods / circlet, plate / leather / fur armour, robes with trim, tabard, belts, capes; sword recolour, axe, orb and
+  cross staffs).
+- **`Bow_Attack`**: synthesised bow shot on the sword-attack body poses (ready → nock → draw → full draw → release →
+  follow-through → recover) for all four facings; right-handed archer (bow in the left hand), bow faces the viewer in
+  the front view, no arms visible from the back.
+- `scripts/setup_character_base.py` (unzip the packs into git-ignored `assets_local/craftpix-base/`, or set
+  `ARTSTUDIO_CHARKIT_DIR`) and `scripts/make_character_pack.py` (sprite sheets, GIF previews, `meta.json`).
+- Builder `LOOP` may be a function of the params (character idle / walk / run loop, attacks don't); the Forge loop
+  checkbox follows the variant.
+- `tests/test_character_kit.py` (7 tests; the 5 render tests skip without the local pack).
+
+### Fixed
+- Near-side weapon layering: facing right, a right-handed character's sword is drawn over the face and headgear;
+  facing left it stays behind the body.
+- Death frames: no cape or long hair on the lying body; a staff falls flat instead of standing upright.
+
+### Notes
+- The Craftpix art is **not** committed (`assets_local/` is git-ignored): its free licence forbids redistribution.
+  Exports made from it are for use in your own games only.
+
 ## [0.6.0] — 2026-11-27
 
 Pixel Forge gets a JRPG kit for tactics / idle-dungeon games: top-down grid skills, item / skill / status icons and a

@@ -1,6 +1,6 @@
 # AI 游戏美术工作室
 
-[English](README.md) · 版本 **0.6.0**（[更新日志](CHANGELOG.md)）· MIT 许可
+[English](README.md) · 版本 **0.7.0**（[更新日志](CHANGELOG.md)）· MIT 许可
 
 **本地优先的 2D 游戏美术制作工具**：支持像素风和高清插画，从单个图标到角色动画精灵，都能直接导出到游戏引擎。
 纯 Python 应用（Pillow + numpy），网页界面支持中英文，不需要云服务、数据库或付费 API。
@@ -82,6 +82,21 @@
 | `ui_icon` | 20 个菜单图标：背包、装备、技能、地图、任务、商店、设置、存档、主页、邮件、战斗、自动、倍速、确认、关闭、返回、金币、宝石、体力、手指光标；`style` 彩色 / 白色 |
 
 一次导出全部变体：`python scripts/make_jrpg_pack.py --out deliverables/jrpg_pack`（PNG、精灵条、GIF、预览图、`meta.json`）。
+**角色套装**（v0.7，`character_kit`，图库分组「角色」）：64×64 四方向基础角色，在每一帧上程序绘制纸娃娃式装扮，衣服、头发、头饰和武器跟随动作。
+
+| 职业 | 头部 | 身体 | 武器 |
+|---|---|---|---|
+| `base` | —（原版 Craftpix 基底；`base` 选男 / 女） | — | 剑 |
+| `knight` 骑士 | 钢盔（帽檐、护鼻、护颊、中脊） | 板甲 + 护肩、红色罩袍、腰带、红披风 | 钢剑 |
+| `mage` 法师 | 紫色巫师帽（帽檐、金带、弯尖） | 蓝色金边长袍 | 蓝宝珠法杖 |
+| `ranger` 游侠 | 绿色兜帽（盖住头部，后有尖尾，垂到肩上） | 皮背心 + 腰带 + 绿斗篷 | 短剑；**弓箭射击** |
+| `priest` 牧师 | 白兜帽 + 金头环（正面红宝石） | 白色金边长袍 | 金色十字杖 |
+| `berserker` 狂战士 | 角盔 | 毛皮护肩 + 皮甲 | 斧 |
+
+参数：`action` = 素材包的 13 个动作（空手 / 持剑 × 待机、行走、奔跑、受击、倒地，挥剑攻击、边走边砍、边跑边砍）**+ `Bow_Attack` 弓箭射击**（基于挥剑的身体姿势合成：搭箭 → 拉弓 → 放箭 → 收势）；`facing` 正面 / 左 / 右 / 背面；`base` 自动 / 男 / 女。图层：影子、后层、身体、装备、前层、受击闪红——右手持武器时，近侧武器画在脸前。轴心 = 脚底 (32, 44)；待机 / 行走 / 奔跑循环播放。
+
+> **基础美术不在仓库里。** 它是 Craftpix 免费的 *Base 4-Direction Male / Female Character* 素材包，许可允许用于游戏，但不允许再分发。请从 craftpix.net 下载两个 zip，然后运行 `python scripts/setup_character_base.py <男.zip> <女.zip>`（解压到被 git 忽略的 `assets_local/`；也可以设置 `ARTSTUDIO_CHARKIT_DIR`）。`python scripts/make_character_pack.py` 把所有职业 × 动作导出为精灵表（行 = 正面、左、右、背面）、GIF 预览和 `meta.json`，输出到 `assets_local/character_pack/`。
+
 新素材不一定要写代码：Agent 可以写一个调用列表，用 `artstudio draw` 运行。见
 [docs/pixel-forge-guide.md](docs/pixel-forge-guide.md)（英文，供 Agent 使用）。
 
@@ -178,7 +193,7 @@ AI 生成通过 **[ComfyUI](https://github.com/comfyanonymous/ComfyUI)** 的服�
 
 ## 验证状态
 
-- ✅ **离线验收（阶段 A）**：98 项自动化测试、覆盖完整引导流程的 Playwright 中英文界面测试、概念验证素材，见 [DEVELOPMENT_PROGRESS.md](DEVELOPMENT_PROGRESS.md)。
+- ✅ **离线验收（阶段 A）**：107 项自动化测试（其中 5 项角色套装测试需要本地 Craftpix 素材包，没有时跳过）、覆盖完整引导流程的 Playwright 中英文界面测试、概念验证素材，见 [DEVELOPMENT_PROGRESS.md](DEVELOPMENT_PROGRESS.md)。
 - 🧪 **AI 生成目前只经过模拟测试**：ComfyUI 使用 `mock_comfyui/`，Codex 使用测试替身（`tests/fake_codex.py`）。模拟输出标记为 TEST FIXTURE，不是 AI 作品。真实的 Codex CLI 尚未在此运行。
 - ⛔ **阶段 B（真实 ComfyUI 推理）尚未运行**。请在 ComfyUI 电脑上运行 `scripts/production_smoke_test.py`。
 

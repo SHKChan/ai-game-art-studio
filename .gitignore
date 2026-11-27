@@ -35,3 +35,6 @@ node_modules/
 Thumbs.db
 desktop.ini
 *.log
+
+# local third-party art that must not be redistributed (Craftpix base packs) and exports made from it
+assets_local/

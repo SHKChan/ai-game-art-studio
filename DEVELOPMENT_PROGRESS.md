@@ -3,7 +3,7 @@
 Labels: **implemented** · **offline-tested** (executed here with real data) · **mock-tested** (only against mock providers) ·
 **production-verified** (Stage B on a real ComfyUI — none yet).
 
-## Current state (2026-11-27, v0.6.0)
+## Current state (2026-11-27, v0.7.0)
 
 Tool names: **Pixel Forge** (procedural pixel engine, was Engine A), **Motion Studio** (character animation, was Engine B),
 **Asset Import** (import, was Engine C).
@@ -14,6 +14,7 @@ Tool names: **Pixel Forge** (procedural pixel engine, was Engine A), **Motion St
 | Pixel Forge — own Python pixel engine (`artstudio/engine`), Atelier-compatible call format | offline-tested | tests/test_engine.py: tool semantics, persistence, determinism; **Atelier showcase recipes potion/slash replay pixel-identical to Atelier's GIFs**; all builders identical to the earlier Atelier-rendered POC frames |
 | Builders: potion, chest, chest_open, fireball, sword_slash, **ice_spear** (3 elements), **hero_shrine** (96×96, animated) + `artstudio draw` call lists | offline-tested | PixelForgeTests; contact sheets inspected |
 | JRPG kit (v0.6): 10 top-down grid skills (lava_burn …), lit icon renderer (32/48/64) with tiered weapon/armor/consumable/material/skill/status icons, UI kit (panels, buttons, bars, frames, menu icons × 4 themes), `scripts/make_jrpg_pack.py` | offline-tested | tests/test_jrpg_assets.py; every variant rendered and contact sheets inspected |
+| Character kit (v0.7): Craftpix 4-direction base (male/female, 13 actions) + knight / mage / ranger / priest / berserker costumes, synthesised `Bow_Attack`, `character_kit` builder, setup + export scripts | offline-tested | tests/test_character_kit.py (needs the local pack; all 6 presets × 14 actions × 4 facings pass QA); lineup, death and bow sheets inspected |
 | Pixel Forge authoring guide + skill | done | docs/pixel-forge-guide.md, skills/procedural-builder-authoring |
 | Pixel Atelier code moved in: spritepipe, Chinese sheet prompts, Codex client, knight sample | offline-tested | tests/test_spritepipe.py (14 upstream tests ported, pass); POC spritepipe TECHNICAL_VERIFIED |
 | Encoding (GBK/cp936/cp1252/C locale) | offline-tested | tests/test_encoding.py: no locale-default I/O in code; full Chinese CLI flow under C locale with UTF-8 mode OFF and no relaunch; POSIX argv recovery |

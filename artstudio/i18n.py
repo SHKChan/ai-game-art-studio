@@ -15,7 +15,7 @@ CODES = {
     "invalid_values": "工作流参数值无效", "invalid_workflow": "ComfyUI 拒绝了该工作流", "execution_error": "生成执行失败",
     "timeout": "生成超时", "unreachable": "无法连接 ComfyUI", "budget_exceeded": "已超出生成预算", "no_outputs": "没有可取回的输出",
     "bad_request": "请求无效", "engine_error": "像素引擎错误", "environment": "运行环境不符合要求", "sample_missing": "缺少示例素材",
-    "not_procedural": "不是程序化素材", "document_missing": "找不到引擎文档（可回放配方重建）", "conflict": "数据已被其他操作修改，请刷新后重试",
+    "not_procedural": "不是程序化素材", "charkit_base_missing": "缺少 Craftpix 基础角色素材包（需本地解压到 assets_local/craftpix-base，不随仓库分发）", "document_missing": "找不到引擎文档（可回放配方重建）", "conflict": "数据已被其他操作修改，请刷新后重试",
 }
 
 # (regex on the English message, Chinese template using regex groups)

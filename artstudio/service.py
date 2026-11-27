@@ -26,6 +26,12 @@ from .workspace import Workspace
 log = logging.getLogger("artstudio.service")
 
 
+
+def _builder_loop(b, params) -> bool:
+    """Builder LOOP: a bool, or a function of the builder params (e.g. character_kit loops idle/walk/run only)."""
+    v = getattr(b, "LOOP", False)
+    return bool(v(**(params or {})) if callable(v) else v)
+
 class Studio:
     def __init__(self, cfg: Config | None = None, workers: int = 2, enable_mock: bool = True):
         self.cfg = cfg or load_config()
@@ -69,7 +75,7 @@ class Studio:
             provider={"id": "procedural", "kind": "procedural", "is_test_fixture": False,
                       "details": {"calls": res.metadata["calls"]}},
             character_id=character_id, origin="procedural", asset_type=b.ASSET_TYPE if b.ASSET_TYPE != "animation" else "animation",
-            loop=(edits or {}).get("loop") if (edits or {}).get("loop") is not None else bool(getattr(b, "LOOP", False)),
+            loop=(edits or {}).get("loop") if (edits or {}).get("loop") is not None else _builder_loop(b, params),
             tags=["procedural", builder])
         d = self.ws.asset_dir(pid, asset["id"])
         rec_dst = d / "source" / "doc.recipe"
@@ -112,7 +118,7 @@ class Studio:
             e = normalize(edits)
             return {"frames": frames, "durations": res.metadata["durations"], "size": list(size),
                     "base_palette": base_palette(calls), "palette": final_palette(calls, e),
-                    "loop": e["loop"] if e["loop"] is not None else bool(getattr(b, "LOOP", False)),
+                    "loop": e["loop"] if e["loop"] is not None else _builder_loop(b, params),
                     "ms": int((time.time() - t0) * 1000)}
         finally:
             shutil.rmtree(tmp, ignore_errors=True)
