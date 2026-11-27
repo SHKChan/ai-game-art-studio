@@ -22,6 +22,7 @@ from pathlib import Path
 
 from . import SCHEMA_VERSION, __version__
 from .schema import require_valid
+from .tagging import normalize_tags
 from .util import StudioError, check_id, new_id, now, read_json, safe_join, sha256_file, slug, write_json
 
 DIRECTION_SETS = {
@@ -123,6 +124,31 @@ class Workspace:
         if not f.is_file():
             raise StudioError(f"Unknown project {pid}")
         return read_json(f)
+
+    def trash_project(self, pid: str, confirm: str | None = None) -> dict:
+        """Delete a project by moving its folder to <workspace>/_trash/ (recoverable: move it back into projects/).
+        `confirm` must equal the project's name (or id) so a stray click cannot delete it."""
+        import time
+        p = self.get_project(pid)
+        if confirm is not None and confirm.strip() not in (p["name"], pid):
+            raise StudioError("Type the project name exactly to confirm deletion", code="confirm_mismatch")
+        dest_root = self.root / "_trash"
+        dest_root.mkdir(parents=True, exist_ok=True)
+        dest = dest_root / f"{pid}-{time.strftime('%Y%m%d-%H%M%S')}"
+        n = 1
+        while dest.exists():
+            n += 1
+            dest = dest_root / f"{pid}-{time.strftime('%Y%m%d-%H%M%S')}-{n}"
+        src = self.project_dir(pid)
+        for attempt in range(5):            # Windows: a file viewer / antivirus may hold a handle for a moment
+            try:
+                shutil.move(str(src), str(dest))
+                break
+            except PermissionError:
+                if attempt == 4:
+                    raise StudioError("A file in this project is in use (close any viewer and try again)", code="in_use")
+                time.sleep(0.4)
+        return {"deleted": pid, "name": p["name"], "trash": str(dest)}
 
     def update_project(self, pid: str, patch: dict) -> dict:
         allowed = {"name", "game", "genre", "default_style", "prompt_language"}
@@ -289,7 +315,7 @@ class Workspace:
         self.get_project(pid)
         aid = fields.pop("aid", None) or slug(name) + "-" + new_id()[:6]
         a = {"schema_version": SCHEMA_VERSION, "id": aid, "type": type_, "name": name, "project_id": pid,
-             "character_id": fields.get("character_id"), "art_style": art_style, "tags": fields.get("tags", []),
+             "character_id": fields.get("character_id"), "art_style": art_style, "tags": normalize_tags(fields.get("tags", [])),
              "provider": provider, "prompt": fields.get("prompt"), "reference_images": fields.get("reference_images", []),
              "source_files": [], "processed_files": [], "processing": fields.get("processing", {}),
              "procedural": fields.get("procedural"), "versions": [], "status": "draft",
@@ -330,6 +356,7 @@ class Workspace:
             if snapshot_note is not None:
                 self._snapshot(a, d, snapshot_note)
             a["updated_at"] = now()
+            a["tags"] = normalize_tags(a.get("tags"))   # English-only search tags
             require_valid(a, "asset")
             write_json(d / "asset.json", a)
             return a

@@ -30,7 +30,7 @@ def _issue(code, severity, msg, frame=None, **extra):
 def check_frames(images: list[Image.Image], durations: list[int] | None = None, *, mode: str = "pixel",
                  pivot=None, source_images: list[Image.Image] | None = None, airborne: list[int] | None = None,
                  jitter_px: float = 3.0, scale_tolerance: float = 0.18, motion_checks: bool = True,
-                 edge_ok: bool = False) -> list[dict]:
+                 edge_ok: bool = False, soft_alpha_ok: bool = False, blank_ok: bool = False) -> list[dict]:
     issues = []
     airborne = set(airborne or [])
     if not images:
@@ -45,7 +45,10 @@ def check_frames(images: list[Image.Image], durations: list[int] | None = None, 
         bb = alpha_bbox(im)
         bbs.append(bb)
         if bb is None or (al > 0).sum() == 0:
-            issues.append(_issue("empty_frame", "error", "Frame has no visible pixels", i))
+            if blank_ok:   # pauses inside imported pack effects are part of the timing
+                issues.append(_issue("blank_frame", "info", "Blank frame (pause) kept from the source", i))
+            else:
+                issues.append(_issue("empty_frame", "error", "Frame has no visible pixels", i))
             hashes.append(None)
             continue
         if (al == 255).all():
@@ -54,7 +57,7 @@ def check_frames(images: list[Image.Image], durations: list[int] | None = None, 
         if bg["kind"] in ("solid", "checker") and not edge_ok:
             issues.append(_issue("unexpected_background", "error", f"Border looks like a {bg['kind']} background", i, background=bg))
         partial = ((al > 0) & (al < 255)).mean()
-        if mode == "pixel" and partial > 0:
+        if mode == "pixel" and partial > 0 and not soft_alpha_ok:
             issues.append(_issue("partial_alpha_in_pixel_mode", "warning", f"{partial:.2%} semi-transparent pixels in pixel-art mode", i))
         if mode == "pixel" and ((al == 0) & (a[..., :3].max(-1) > 0)).any():
             issues.append(_issue("dirty_transparent_rgb", "info", "Transparent pixels carry colour data", i))
@@ -135,7 +138,8 @@ def check_asset(ws, a: dict, save: bool = True) -> dict:
         # (fireballs, slashes, opening chests) legitimately move and change extent, so they are skipped.
         motion = a["type"] in ("animation", "character_sprite") and bool(a.get("character_id") or anim.get("direction") not in (None, "none"))
         issues = check_frames(imgs, durs, mode=a["art_style"], pivot=anim["pivot"], source_images=srcs, airborne=airborne, motion_checks=motion,
-                              edge_ok=bool(anim.get("full_bleed")))
+                              edge_ok=bool(anim.get("full_bleed") or anim.get("source_cells")), soft_alpha_ok=bool(anim.get("soft_alpha")),
+                              blank_ok=bool(anim.get("blank_frames_ok")))
         n = len(anim["frames"])
         for e in anim.get("events", []):
             if not 0 <= e["frame"] < n:

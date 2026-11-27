@@ -168,6 +168,17 @@ const ZH = {
   'Frames were cut on an even grid because the generator did not return separate sprites — check the frames.': '生成结果中的角色没有分开，已按等宽网格切帧 —— 请检查各帧。',
   'Nothing generated yet.': '还没有生成内容。', 'For': '用于', 'approved only': '仅已通过', 'Everything': '全部格式',
   'PNG frames + sheets + GIF': 'PNG 帧 + 精灵表 + GIF', '⬇ Download ZIP': '⬇ 下载 ZIP', 'Cocos Creator': 'Cocos Creator', 'Godot': 'Godot', 'Phaser / PixiJS': 'Phaser / PixiJS',
+  // asset packs + tags (v0.9) — tags themselves stay English
+  'Asset packs': '素材包', 'Asset pack': '素材包', 'Licence: ': '授权：', 'Not installed. Put the pack ZIP on this computer and run:': '尚未安装。把素材包 ZIP 放到本机后运行：',
+  'Tags (click to filter, all selected tags must match):': '标签（点击筛选，需同时满足所有选中的标签）：', 'Search pack': '搜索素材包',
+  'select shown': '全选当前', 'select none': '全不选', 'Import selected': '导入选中', 'Import all shown': '导入当前全部',
+  'Nothing matches these tags.': '没有符合这些标签的内容。', 'Nothing selected': '没有选中任何内容',
+  'Include drop shadows': '包含投影', 'Style tier': '风格档位', 'Include colour variants': '包含配色变体',
+  'search tags… (fire, dungeon, monster)': '搜索标签…（fire、dungeon、monster）', 'Search builders': '搜索生成器',
+  'Delete project…': '删除项目…', 'Danger zone': '危险操作', 'Type the project name to confirm': '输入项目名确认',
+  'Type the project name to confirm. The folder is moved to workspace/_trash and can be restored from there.': '输入项目名确认删除。项目文件夹会移到 workspace/_trash，需要时可以从那里恢复。',
+  'Project moved to the trash folder': '项目已移到回收文件夹',
+  'Monsters': '怪物', 'Spells': '法术', 'Effects': '特效',
   // tools (names) + Pixel Forge editor + theme
   'Motion Studio': '动作工作室', 'Pixel Forge': '像素工坊', 'Asset Import': '素材导入', 'Pixel documents': '像素文档',
   'Animate a character: upload one image, list the actions you need, and let Codex or your local ComfyUI draw every frame.': '制作角色动画：上传一张图片，列出需要的动作，由 Codex 或本地 ComfyUI 画出每一帧。',
@@ -286,7 +297,7 @@ const ZH = {
 // Dynamic strings: [regex, replacement]
 const ZH_PATTERNS = [
   [/^(\d+) frames$/, '$1 帧'], [/^(\d+) generation call\(s\) — one image per action$/, '$1 次生成调用 —— 每个动作一张图'],
-  [/^(\d+)\/(\d+) actions generated$/, '已生成 $1/$2 个动作'], [/^Failed: (.*)$/, '失败：$1'], [/^Poses: (\d+), frames: (\d+)$/, '姿势 $1 个，帧数 $2'],
+  [/^(\d+)\/(\d+) actions generated$/, '已生成 $1/$2 个动作'], [/^(\d+) animations imported$/, '已导入 $1 个动画'], [/^Failed: (.*)$/, '失败：$1'], [/^Poses: (\d+), frames: (\d+)$/, '姿势 $1 个，帧数 $2'],
   [/^(\d+) frames · (.*)$/, '$1 帧 · $2'], [/^(.+) — frame (\d+): what should change\? \(leave empty to just redo it\)$/, '$1 —— 第 $2 帧：需要修改什么？（留空则直接重做）'],
   [/^(\d+) file\(s\): (.*)$/, '$1 个文件：$2'], [/^Imported (\d+) knight animations$/, '已导入 $1 个骑士动画'],
   [/^Missing: (.*)$/, '缺少：$1'], [/^(\d+) files$/, '$1 个文件'], [/^(\d+) tools$/, '$1 个工具'],

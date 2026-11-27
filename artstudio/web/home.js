@@ -25,6 +25,16 @@ export async function renderHome(root, { show, projectForm }) {
     const plans = await Promise.all(chars.slice(0, 12).map(c => api(`/api/projects/${S.project}/characters/${c.id}/plan`).catch(() => null)));
     root.append(el('h3', { class: 'section' }, 'Continue'), el('div', { class: 'cards' }, ...chars.slice(0, 12).map((c, i) => {
       const p = plans[i]; const n = p?.actions.length || 0; const g = p ? p.actions.filter(a => a.asset_id).length : 0; const m = master(c);
+      // Characters that came with their animations (asset packs, imports) have no Motion Studio plan: show their
+      // idle frame and open the Library filtered to them instead of the reference-image step.
+      const own = S.data.assets.filter(a => a.character_id === c.id && a.animation);
+      if (!n && !m && own.length) {
+        const idle = own.find(a => a.animation.name === 'idle') || own[0];
+        const f = idle.animation.frames.find(x => x.status !== 'rejected');
+        return el('div', { class: 'pick', title: c.description || '', onclick: () => { S.libChar = c.id; S.libTags = []; show('library'); } },
+          el('div', { class: 'thumb checker' }, f ? el('img', { src: fileUrl(idle, f.file), alt: c.name }) : el('span', { class: 'muted small' }, '—')),
+          el('div', { class: 'name', 'data-no-i18n': '' }, c.name), el('div', { class: 'small muted' }, `${own.length} animations imported`));
+      }
       return el('div', { class: 'pick', onclick: () => show('wizard', { cid: c.id, step: !n ? 1 : (g ? 4 : 2) }) },
         el('div', { class: 'thumb checker' }, m ? el('img', { src: charUrl(c, m.file), alt: c.name }) : el('span', { class: 'muted small' }, 'no reference')),
         el('div', { class: 'name', 'data-no-i18n': '' }, c.name), el('div', { class: 'small muted' }, `${g}/${n} actions generated`));

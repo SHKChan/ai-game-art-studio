@@ -4,6 +4,8 @@
   python -m artstudio project create "My RPG" --style pixel
   python -m artstudio procedural potion --project P
   python -m artstudio import sheet.png --project P --opts '{"slicing":{"method":"grid","cols":4,"rows":2}}'
+  python -m artstudio packs items --pack pvfx-foundry --tag spell --tag fire
+  python -m artstudio packs import --project P --pack craftpix-dungeon
   python -m artstudio export --project P --assets A1 A2 --formats atlas cocos gif json
   python -m artstudio serve
 """
@@ -43,7 +45,7 @@ def build_parser():
     sub.add_parser("builders", help="list procedural builders and animation templates")
 
     p = sub.add_parser("project")
-    p.add_argument("action", choices=["list", "create", "show"])
+    p.add_argument("action", choices=["list", "create", "show", "delete"], help="delete moves the project to <workspace>/_trash/")
     p.add_argument("name", nargs="?")
     p.add_argument("--style", default="pixel", choices=["pixel", "hd"])
     p.add_argument("--game", default="")
@@ -205,6 +207,19 @@ def build_parser():
     an.add_argument("--params", default="{}", help="generate: provider params JSON (ComfyUI: checkpoint, denoise, cell ...)")
     an.add_argument("--budget", type=int, help="generate: max generation calls (default: number of actions)")
 
+    rt = sub.add_parser("retag", help="add the current search tags to a project's existing Pixel Forge / pack assets")
+    rt.add_argument("--project", required=True)
+
+    pk = sub.add_parser("packs", help="local asset packs (assets_local/packs): list items by tag, import into a project")
+    pk.add_argument("action", choices=["list", "items", "import"])
+    pk.add_argument("--pack", help="pack id (tiny-rpg, craftpix-dungeon, pvfx-foundry)")
+    pk.add_argument("--project", help="import: target project id")
+    pk.add_argument("--tag", action="append", default=[], help="filter: item must have every --tag (English)")
+    pk.add_argument("--query", help="filter: substring of name / id / tags")
+    pk.add_argument("--item", action="append", default=[], help="import only these item ids")
+    pk.add_argument("--options", default="{}", help='pack options JSON, e.g. {"tier":"strict"} or {"shadows":false}')
+    pk.add_argument("--force", action="store_true", help="import again even if already in the project")
+
     ks = sub.add_parser("knight-sample", help="import the bundled knight sample as a character")
     ks.add_argument("--project", required=True)
     ks.add_argument("--character")
@@ -272,6 +287,8 @@ def _run(args, cfg, Studio):
             return _j(s.ws.list_projects())
         if a.action == "create":
             return _j(s.ws.create_project(a.name, a.game, "", a.style, a.id))
+        if a.action == "delete":
+            return _j(s.ws.trash_project(a.name))
         return _j({"project": s.ws.get_project(a.name), "assets": [x["id"] for x in s.ws.list_assets(a.name)],
                    "characters": [x["id"] for x in s.ws.list_characters(a.name)]})
     if a.cmd == "character":
@@ -371,6 +388,22 @@ def _run(args, cfg, Studio):
         return _j({"written": str(s.ws.backup(Path(a.out), not a.no_exports))})
     if a.cmd == "animate":
         return _j(_animate(s, a))
+    if a.cmd == "retag":
+        return _j(s.retag(a.project))
+    if a.cmd == "packs":
+        from . import packs
+        if a.action == "list":
+            return _j(packs.list_packs())
+        if not a.pack:
+            raise StudioError("--pack is required")
+        opts = json.loads(a.options)
+        if a.action == "items":
+            lst = packs.items(a.pack, opts, tags=a.tag, query=a.query)
+            return _j({"count": len(lst), "tags": dict(packs.tag_counts(lst)),
+                       "items": [{k: i[k] for k in ("id", "name", "type", "group", "frames", "tags")} for i in lst]})
+        if not a.project:
+            raise StudioError("--project is required")
+        return _j(s.import_pack(a.project, a.pack, a.item or None, tags=a.tag, query=a.query, options=opts, force=a.force, ctx=_ctx()))
     if a.cmd == "knight-sample":
         cid = a.character or s.ws.create_character(a.project, "Knight (sample)", "side2", "pixel")["id"]
         return _j({"character_id": cid, "assets": [x["id"] for x in s.import_knight_sample(a.project, cid, a.actions)]})

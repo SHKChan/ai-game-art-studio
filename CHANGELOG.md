@@ -5,6 +5,49 @@ versions follow [Semantic Versioning](https://semver.org/). The current version 
 
 ## [Unreleased]
 
+## [0.9.0] — 2026-11-27
+
+Asset packs and search tags: import the Tiny RPG characters, the Craftpix pixel dungeon and the PVFX Foundry spells,
+then find anything by English tags.
+
+### Added
+- **Asset packs** (`artstudio/packs/`, `scripts/setup_asset_packs.py`). Downloaded pack ZIPs install into the
+  git-ignored `assets_local/packs/`; the setup script recognises each pack from its contents. Each pack item becomes
+  a normal asset with the pack's own cells, pivot, timing, loop/hold, soft alpha and blank frames.
+  - `tiny-rpg`: Soldier, Orc, Demon A, Blood Monster A. 26 action animations plus the arrow. Each character gets a
+    side-view character record.
+  - `craftpix-dungeon`: 8 tilesets (tile grid stored as `asset.tileset`) and 15 animated props (torches, braziers,
+    candles, gates/doors, chests, lever, spike trap). The `Dungeon1.tmx` sample map is rendered with its animated tiles
+    by a small Tiled renderer.
+  - `pvfx-foundry` (CC0): 253 effects read from the grid manifests. Options: `lit`/`strict` tier and colour variants.
+  - UI: **Asset Import → Asset packs** browser with thumbnails, tag chips and select/import buttons; it runs as an
+    `import_pack` job.
+  - CLI: `artstudio packs list | items | import`; `artstudio retag --project P` adds the new tags to assets saved
+    before 0.9.
+  - API: `GET /api/packs`, `GET /api/packs/<pack>/items`, `GET /api/packs/<pack>/thumb`,
+    `POST /api/projects/<pid>/packs/import`.
+- **Search tags** (`artstudio/tagging.py`). Tags are English only: they are normalised on every save, and tags with
+  other characters are dropped. Every Pixel Forge builder has tags for scene, monster, and skill element/role; they
+  are copied onto the assets it makes. Character-kit presets are tagged `hero`, or `monster`/`enemy`/`undead` for the
+  necromancer and the skeleton. Tags show in `/api/forge/builders`.
+- **Tag search in the UI**: Library tag chips (all selected tags must match; search words match name, id and tags),
+  Pixel Forge gallery search by tag, and tags in tooltips.
+- Docs: [docs/asset-packs.md](docs/asset-packs.md) (packs, tag vocabulary, adding a pack). 15 new tests run on
+  synthetic fixture packs; one more runs against the real packs when they are installed.
+
+- **Delete project**: Library → *Danger zone* → *Delete project…*. You type the project name to confirm. The project
+  folder moves to `<workspace>/_trash/`, so you can restore it by moving it back into `projects/`. Projects with
+  queued or running jobs can't be deleted. Also available as `DELETE /api/projects/<pid>` (`{"confirm": name}`) and
+  `artstudio project delete <id>`.
+
+### Changed
+- Characters that came with their animations (pack imports) now show their idle frame and an "N animations imported"
+  count on Home and in the Library. Clicking one opens the Library filtered to that character, not Motion Studio's
+  reference step.
+- `normalize_group` accepts blank frames when at least one frame has content (pauses inside effects).
+- QA: assets that keep the source cells (`animation.source_cells`), soft alpha (`animation.soft_alpha`) or blank frames
+  (`animation.blank_frames_ok`) report these as information instead of clipping, partial-alpha or empty-frame problems.
+
 ## [0.8.1] — 2026-11-27
 
 ### Fixed

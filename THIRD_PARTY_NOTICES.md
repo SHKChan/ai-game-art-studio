@@ -36,3 +36,11 @@ Pillow (MIT-CMU), NumPy (BSD-3-Clause); Playwright (Apache-2.0, optional, tests 
 
 ## Formats / APIs referenced (no code copied)
 ComfyUI server API (the GPL-3.0 ComfyUI code is not included), TexturePacker JSON-hash and cocos2d plist formats.
+
+## Art packs used locally (not included in this repository)
+The importers in `artstudio/packs/` read packs that the owner downloads and installs into the git-ignored
+`assets_local/packs/` (`scripts/setup_asset_packs.py`). No pack art is committed.
+- Tiny RPG Character Asset Pack 01 / 02 (free) — Zerie. Use in games; not redistributable.
+- Free 2D Top-Down Pixel Dungeon Asset Pack — Craftpix.net (https://craftpix.net/file-licenses/). Use in games; not redistributable.
+- PVFX Foundry 1.x sprite sheets and manifests — CC0 1.0 (publisher's asset scope in the pack's LICENSE.txt).
+- Craftpix Free Base 4-Direction Male / Female Character (character kit, v0.7) — Craftpix.net licence; not redistributable.

@@ -1,6 +1,7 @@
 // Character, Procedural, Import & Processing, Generation and Export studios.
 import { t } from './i18n.js';
 import { S, api, el, toast, guard, emit, fileUrl, charUrl, exportUrl, badge, fixtureBadge, refreshProject, select, readFile, waitJob, assetsOfProject, field, DIRS } from './core.js';
+import { renderPackBrowser } from './packs.js';
 
 const lines = (v) => (v || '').split('\n').map(s => s.trim()).filter(Boolean);
 const needProject = (root) => { if (!S.project) { root.innerHTML = '<p class="muted">Create or select a project first.</p>'; return true; } return false; };
@@ -192,7 +193,10 @@ export async function renderImport(root) {
     });
   }) }, 'Import & process');
   const ext = S.providers.find(p => p.id === 'external');
-  root.append(el('div', { class: 'grid cols2' },
+  const packBox = el('div', { class: 'card', id: 'packBrowser' });
+  root.append(packBox);
+  guard(() => renderPackBrowser(packBox));
+  root.append(el('div', { class: 'grid cols2', style: 'margin-top:12px' },
     el('div', { class: 'card' }, el('h3', {}, 'Options'),
       el('div', { class: 'form' }, ...field('Mode', mode), ...field('Slicing', slicing), ...field('Grid cols/rows/count', el('div', { class: 'row' }, cols, rows, count)),
         ...field('Background', el('div', { class: 'row' }, bgm, bgc, 'tol', tol)), ...field('Anchor', anchor), ...field('Group scale', scale), ...field('or target height', th),

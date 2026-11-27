@@ -372,17 +372,23 @@ def normalize_group(frames: list[Image.Image], params: NormalizeParams | dict | 
         p.binary_alpha = p.mode == "pixel"
     srcs = [f.convert("RGBA") for f in frames]
     bbs = [alpha_bbox(f, p.alpha_threshold) for f in srcs]
-    if any(b is None for b in bbs):
-        bad = [i for i, b in enumerate(bbs) if b is None]
-        raise StudioError(f"Empty frames: {bad}")
+    if all(b is None for b in bbs):
+        raise StudioError(f"Empty frames: {list(range(len(bbs)))}")
+    ref_i = p.reference_frame if bbs[p.reference_frame] is not None else next(i for i, b in enumerate(bbs) if b is not None)
     scale = float(p.scale)
     if p.target_height:
-        rb = bbs[p.reference_frame]
+        rb = bbs[ref_i]
         scale = p.target_height / (rb[3] - rb[1])
     if p.mode == "pixel" and scale >= 1:
         scale = max(1, round(scale))  # integer upscale keeps square pixel clusters
     scaled = [resample(f, (round(f.width * scale), round(f.height * scale)), p.mode) for f in srcs]
     sbbs = [alpha_bbox(f, p.alpha_threshold) for f in scaled]
+    if any(b is None for b in sbbs):
+        # Blank frames (pauses inside effects) are allowed as long as one frame has content: they get a
+        # zero-size box at the content's bottom centre so they do not move the shared anchor.
+        real = [b for b in sbbs if b is not None]
+        zx, zy = round((min(b[0] for b in real) + max(b[2] for b in real)) / 2), max(b[3] for b in real)
+        sbbs = [b if b is not None else (zx, zy, zx, zy) for b in sbbs]
     # Source-relative common reference: union of bboxes in cell space.
     ul = min(b[0] for b in sbbs); ur = max(b[2] for b in sbbs); ub = max(b[3] for b in sbbs)
     common_x, common_y = (ul + ur) / 2, ub

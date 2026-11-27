@@ -173,7 +173,18 @@ the action keeps them. Shortcuts: P B E I G L R M (tools), arrows + Enter / Dele
 Edits are stored with the asset and recorded as pixel-engine calls, so saved assets replay exactly and can be
 reopened in the Forge ("Saved in this project").
 
-**📥 Asset Import** — drop files, choose slicing / background / alignment, import.
+**📥 Asset Import** — drop files, choose slicing / background / alignment, import. The **Asset packs** panel at the top
+imports installed third-party packs: Tiny RPG characters (Soldier, Orc, Demon, Blood Monster), the Craftpix pixel
+dungeon (tilesets, torches, doors, chests, traps, a sample map) and the 253 PVFX Foundry spells and effects. Filter
+them by tag, then import.
+
+**🗑 Delete a project**: Library → *Danger zone* → *Delete project…*, then type the project name. The folder is moved
+to `workspace/_trash/`, so you can still restore it.
+
+**🏷 Tags** — every asset carries **English** search tags: `dungeon`, `monster`, `spell`, `fire`, `top-down`,
+`action:walk` …. Pixel Forge builders tag what they make (scenes, monsters, skills by element and role), and pack
+items come with their own tags. Use tag chips in the Library, the pack browser, or the Pixel Forge search to find
+things. Tags in other languages are dropped. Vocabulary and pack setup: [docs/asset-packs.md](docs/asset-packs.md).
 
 Expert tools are under **More tools**: frame-level **Animation editor**, **Character details**, **Generation &
 workflows** (ComfyUI) and **Pixel documents** (recipes, layers, cels).
@@ -198,6 +209,9 @@ python -m artstudio animate add --project my-rpg --character <cid> --preset atta
 python -m artstudio animate add --project my-rpg --character <cid> --name "Spin slash" --description "spins once with the sword out" --frames 6
 python -m artstudio animate prompts --project my-rpg --character <cid> --method codex      # or --method template
 python -m artstudio animate generate --project my-rpg --character <cid> --provider codex --height 64 --retries 2   # or comfyui
+python scripts/setup_asset_packs.py <pack.zip> …                                        # install downloaded asset packs (git-ignored)
+python -m artstudio packs items --pack pvfx-foundry --tag spell --tag fire               # browse pack items by tag
+python -m artstudio packs import --project my-rpg --pack tiny-rpg                        # Soldier / Orc / Demon / Blood Monster
 python -m artstudio draw my_gem.jsonl --project my-rpg --name "Red Gem" --type icon
 python -m artstudio import hero_walk.png --project my-rpg --opts '{"slicing":{"method":"grid","cols":8,"rows":1},"background":{"method":"auto"}}'
 python -m artstudio generate --project my-rpg --provider comfyui --workflow sd-image-to-image --character hero --template walk --direction east --params '{"checkpoint":"<file>.safetensors"}'
@@ -229,7 +243,7 @@ included. Licences and derived-file list: [THIRD_PARTY_NOTICES.md](THIRD_PARTY_N
 
 ## Verification status
 
-- ✅ **Offline (Stage A):** 107 automated tests (5 character-kit tests need the local Craftpix pack and skip without it) (engine, pipeline, encoding, action plans, ComfyUI mock, Codex test double, server,
+- ✅ **Offline (Stage A):** 128 automated tests (8 character-kit tests need the local Craftpix pack and 1 test needs the installed asset packs; they skip without them) (engine, pipeline, encoding, action plans, ComfyUI mock, Codex test double, server,
   CLI), Playwright UI test of the whole guided flow in English and Chinese, proof-of-concept build. Details in [DEVELOPMENT_PROGRESS.md](DEVELOPMENT_PROGRESS.md).
 - 🧪 **AI generation is mock-tested only**: ComfyUI against `mock_comfyui/`, Codex against a test double
   (`tests/fake_codex.py`). Mock output is labelled TEST FIXTURE and is not AI art. The real Codex CLI has not been run here.

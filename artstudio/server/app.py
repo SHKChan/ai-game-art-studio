@@ -88,6 +88,14 @@ def api_project_settings(s, h, m, q, body):
     return s.ws.update_project(m["pid"], body)
 
 
+@route("DELETE", r"/api/projects/(?P<pid>[a-z0-9_-]+)")
+def api_delete_project(s, h, m, q, body):
+    busy = [j for j in s.jobs.list(1000, m["pid"]) if j["status"] in ("queued", "running")]
+    if busy:
+        raise StudioError("This project has queued or running jobs — wait for them or cancel them first", code="project_busy")
+    return s.ws.trash_project(m["pid"], (body or {}).get("confirm", ""))
+
+
 @route("GET", r"/api/projects/(?P<pid>[a-z0-9_-]+)")
 def api_project(s, h, m, q, body):
     pid = m["pid"]
@@ -366,10 +374,57 @@ def api_forge_builders(s, h, m, q, body):
     from ..procedural.edits import DEFAULTS
     group = {"effect": "Skills & effects", "icon": "Items & icons", "item": "Items & icons", "animation": "Items & icons",
              "environment": "Scenery"}
+    from ..tagging import builder_tags
     return {"builders": {k: {"description": b.DESCRIPTION, "params": b.PARAMS, "asset_type": b.ASSET_TYPE,
+                             "tags": [t for t in builder_tags(k) if t not in ("procedural", k)],
                              "loop": _default_loop(b),
                              "group": getattr(b, "GROUP", None) or group.get(b.ASSET_TYPE, "Other")} for k, b in BUILDERS.items()},
             "edit_defaults": DEFAULTS}
+
+
+# ------------------------------------------------------------------ asset packs
+_PACK_ITEM_KEYS = ("id", "name", "type", "group", "frames", "tags", "description")
+
+
+def _pack_opts(q) -> dict:
+    out = {}
+    for k in ("tier", "variants", "shadows"):
+        if k in q:
+            v = q[k][0]
+            out[k] = v.lower() in ("1", "true", "yes") if k in ("variants", "shadows") else v
+    return out
+
+
+@route("GET", r"/api/packs")
+def api_packs(s, h, m, q, body):
+    from .. import packs
+    return {"packs": packs.list_packs()}
+
+
+@route("GET", r"/api/packs/(?P<pack>[a-z0-9_-]+)/items")
+def api_pack_items(s, h, m, q, body):
+    from .. import packs
+    packs.get_pack(m["pack"])
+    tags = [t for t in (q.get("tags", [""])[0]).split(",") if t]
+    allitems = packs.items(m["pack"], _pack_opts(q))
+    lst = packs.items(m["pack"], _pack_opts(q), tags=tags, query=q.get("q", [None])[0])
+    return {"count": len(lst), "total": len(allitems), "tags": packs.tag_counts(allitems),
+            "items": [{k: i.get(k) for k in _PACK_ITEM_KEYS} for i in lst]}
+
+
+@route("GET", r"/api/packs/(?P<pack>[a-z0-9_-]+)/thumb")
+def api_pack_thumb(s, h, m, q, body):
+    return (s.pack_thumbnail(m["pack"], q["item"][0], _pack_opts(q)).read_bytes(), "image/png")
+
+
+@route("POST", r"/api/projects/(?P<pid>[a-z0-9_-]+)/packs/import")
+def api_pack_import(s, h, m, q, body):
+    from .. import packs
+    packs.get_pack(body["pack"])
+    s.ws.get_project(m["pid"])
+    params = {"pack": body["pack"], "items": body.get("items") or None, "tags": body.get("tags") or None,
+              "query": body.get("query") or None, "options": body.get("options") or {}, "force": bool(body.get("force"))}
+    return s.jobs.submit("import_pack", params, project_id=m["pid"], label=f"import pack {body['pack']}")
 
 
 @route("POST", r"/api/forge/preview")

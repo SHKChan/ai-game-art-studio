@@ -3,7 +3,7 @@
 Labels: **implemented** · **offline-tested** (executed here with real data) · **mock-tested** (only against mock providers) ·
 **production-verified** (Stage B on a real ComfyUI — none yet).
 
-## Current state (2026-11-27, v0.7.0)
+## Current state (2026-11-27, v0.9.0)
 
 Tool names: **Pixel Forge** (procedural pixel engine, was Engine A), **Motion Studio** (character animation, was Engine B),
 **Asset Import** (import, was Engine C).
@@ -16,6 +16,8 @@ Tool names: **Pixel Forge** (procedural pixel engine, was Engine A), **Motion St
 | JRPG kit (v0.6): 10 top-down grid skills (lava_burn …), lit icon renderer (32/48/64) with tiered weapon/armor/consumable/material/skill/status icons, UI kit (panels, buttons, bars, frames, menu icons × 4 themes), `scripts/make_jrpg_pack.py` | offline-tested | tests/test_jrpg_assets.py; every variant rendered and contact sheets inspected |
 | Character kit (v0.7): Craftpix 4-direction base (male/female, 13 actions) + knight / mage / ranger / priest / berserker costumes, synthesised `Bow_Attack`, `character_kit` builder, setup + export scripts | offline-tested | tests/test_character_kit.py (needs the local pack; all 6 presets × 14 actions × 4 facings pass QA); lineup, death and bow sheets inspected |
 | Character kit v0.8: `Cast_Spell` (mage / priest / necromancer attack), bow string follows the draw hand, distinct caster costumes, `necromancer` + see-through `skeleton` (spine pole, thin bones, skull, wooden shield, stiff timing, short chop), `Summon_Rise` | offline-tested | tests/test_character_kit.py (10 tests incl. string-follows-hand, casters cast, skeleton body / shield / stiffness / rise QA); 112 tests pass on the PC; all presets × bow / cast / rise and necromancer / skeleton × 16 actions stay off the canvas edge; sheets inspected |
+| Asset packs v0.9: `tiny-rpg` (Soldier, Orc, Demon A, Blood Monster A → characters + 26 actions + arrow), `craftpix-dungeon` (8 tilesets, 15 animated props, `Dungeon1.tmx` rendered with animated tiles), `pvfx-foundry` (253 CC0 effects, lit/strict, variants); setup script, `import_pack` job, pack browser UI, `packs` CLI, API | offline-tested | tests/test_packs.py (synthetic fixture packs + real-pack test); on the PC all three real packs installed in `assets_local/packs/` and imported into workspace project `asset-library` (4 characters, 303 assets); Tiny RPG strips, props, map and effects inspected on contact sheets; Playwright screenshots of the pack browser, Library tag chips and Forge tag search (en + zh) |
+| Search tags v0.9: English-only normalisation on save, `BUILDER_TAGS` for every builder + character-kit preset tags (monster / undead), Library tag chips, Forge tag search, `retag` command | offline-tested | tests/test_packs.py TagTests (every builder tagged, non-English dropped, retag) |
 | Pixel Forge authoring guide + skill | done | docs/pixel-forge-guide.md, skills/procedural-builder-authoring |
 | Pixel Atelier code moved in: spritepipe, Chinese sheet prompts, Codex client, knight sample | offline-tested | tests/test_spritepipe.py (14 upstream tests ported, pass); POC spritepipe TECHNICAL_VERIFIED |
 | Encoding (GBK/cp936/cp1252/C locale) | offline-tested | tests/test_encoding.py: no locale-default I/O in code; full Chinese CLI flow under C locale with UTF-8 mode OFF and no relaunch; POSIX argv recovery |
@@ -58,6 +60,7 @@ Tool names: **Pixel Forge** (procedural pixel engine, was Engine A), **Motion St
 - v0.2.0 — README (features, usage, upstreams), CHANGELOG, VERSION, AGENTS.md facts/gotchas, version consistency test.
 - v0.4.0 — tool names, Pixel Forge editor + six skill effects, theme selector.
 - v0.5.0 — reference from description, core action set, grid sheets + local processing + automatic regeneration, sprite editor with patch layer.
+- v0.9.0 — asset packs (Tiny RPG, Craftpix dungeon, PVFX Foundry) + English search tags.
 - v0.3.0 — Motion Studio = character animation (action plans, Codex/ComfyUI strips), guided UI, `artstudio animate` CLI.
 
 ## Blockers
@@ -77,6 +80,10 @@ Tool names: **Pixel Forge** (procedural pixel engine, was Engine A), **Motion St
 - Optional local vision model for `qa/visual.py`.
 
 ## Device verification
+
+- v0.9.0 on the user's computer (Linux VM): `python3 scripts/run_tests.py` → **128 tests OK, 0 skipped** (Craftpix base
+  and the three asset packs installed locally). Note: importing through the VM's mounted folder takes ~4 s per asset;
+  run imports from the studio on Windows for speed.
 
 - User's computer (Linux VM, Python 3.10, Pillow 12.3, numpy 2.2): `python3 scripts/run_tests.py` → **63 tests OK, 0 skipped**
   (Pixel Forge now runs everywhere — previously the Rust binary could not run there).

@@ -6,6 +6,7 @@ import { renderWizard } from './wizard.js';
 import { renderHome } from './home.js';
 import { renderForge } from './forge.js';
 import { openSpriteEditor } from './sprite.js';
+import { tagChips } from './packs.js';
 
 const RENDER = { home: (r) => renderHome(r, { show: showTab, projectForm }), wizard: renderWizard, forge: renderForge, library: renderLibrary, character: renderCharacter,
   animation: renderAnimation, procedural: renderProcedural, import: renderImport, generate: renderGenerate, export: renderExport };
@@ -52,16 +53,29 @@ function renderLibrary(root) {
   if (!S.project || S.creating) { root.append(projectForm()); return; }
   const d = S.data;
   const typeSel = select(['all', 'animation', 'character_sprite', 'item', 'effect', 'icon', 'tileset', 'environment', 'ui', 'concept', 'other'], 'all');
-  const charSel = select([['', 'all characters'], ...d.characters.map(c => [c.id, c.name])], '');
+  if (S.libChar && !d.characters.some(c => c.id === S.libChar)) S.libChar = '';
+  const charSel = select([['', 'all characters'], ...d.characters.map(c => [c.id, c.name])], S.libChar || '');
   const q = el('input', { placeholder: 'search…' });
   const grid = el('div', { class: 'assets' });
+  const chipBox = el('div', {});
+  S.libTags = (S.libTags || []).filter(t => d.assets.some(a => (a.tags || []).includes(t)));
+  const drawChips = () => {
+    const c = {};
+    for (const a of d.assets) for (const t of a.tags || []) if (!['pack', 'procedural', 'pixel-art'].includes(t)) c[t] = (c[t] || 0) + 1;
+    chipBox.innerHTML = '';
+    chipBox.append(tagChips(Object.entries(c).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])), S.libTags,
+      (t) => { S.libTags = S.libTags.includes(t) ? S.libTags.filter(x => x !== t) : [...S.libTags, t]; drawChips(); draw(); }, 36));
+  };
   const draw = () => {
     grid.innerHTML = '';
+    // search words match name / id / tags; selected tag chips must all be present
+    const words = q.value.toLowerCase().split(/\s+/).filter(Boolean);
     const list = d.assets.filter(a => (typeSel.value === 'all' || a.type === typeSel.value) && (!charSel.value || a.character_id === charSel.value)
-      && (!q.value || (a.name + a.id + (a.tags || []).join(' ')).toLowerCase().includes(q.value.toLowerCase())));
+      && S.libTags.every(t => (a.tags || []).includes(t))
+      && words.every(w => (a.name + ' ' + a.id + ' ' + (a.tags || []).join(' ')).toLowerCase().includes(w)));
     for (const a of list) {
       const f = a.animation?.frames?.find(x => x.status !== 'rejected');
-      grid.append(el('div', { class: 'asset', onclick: () => emit('open-asset', a.id) },
+      grid.append(el('div', { class: 'asset', title: (a.tags || []).join(' '), onclick: () => emit('open-asset', a.id) },
         el('div', { class: 'thumb checker' }, f ? el('img', { src: fileUrl(a, f.file), alt: a.name, loading: 'lazy' }) : '—'),
         el('div', { class: 'name', title: a.name }, a.name),
         el('div', { class: 'row small' }, badge(a.type, ''), badge(a.art_style, ''), badge(a.status), fixtureBadge(a),
@@ -70,8 +84,12 @@ function renderLibrary(root) {
     }
     if (!list.length) grid.append(el('p', { class: 'muted' }, 'No assets yet — use Procedural, Import or Generation.'));
   };
-  [typeSel, charSel].forEach(s => s.onchange = draw); q.oninput = draw;
-  const chars = el('div', {}, ...d.characters.map(c => el('div', { class: 'row' },
+  typeSel.onchange = draw; charSel.onchange = () => { S.libChar = charSel.value; draw(); }; q.oninput = draw;
+  const imported = (c) => !Object.keys(c.masters || {}).length && d.assets.some(a => a.character_id === c.id && a.animation);
+  const chars = el('div', {}, ...d.characters.map(c => imported(c) ? el('div', { class: 'row' },
+    // pack / imported characters: the name filters the asset list to their animations
+    el('a', { href: '#', 'data-no-i18n': '', onclick: (e) => { e.preventDefault(); charSel.value = c.id; S.libChar = c.id; draw(); } }, c.name),
+    badge(c.direction_mode, ''), el('span', { class: 'muted small' }, `${d.assets.filter(a => a.character_id === c.id).length} animations imported`)) : el('div', { class: 'row' },
     el('a', { href: '#', 'data-no-i18n': '', onclick: (e) => { e.preventDefault(); showTab('wizard', { cid: c.id, step: 1 }); } }, c.name),
     el('a', { href: '#', class: 'small', onclick: (e) => { e.preventDefault(); S.character = c.id; showTab('character'); } }, 'details'),
     badge(c.direction_mode, ''), badge(c.art_style, ''), el('span', { class: 'muted small' }, `${Object.keys(c.masters).length}/${c.directions.length} masters`))));
@@ -83,9 +101,31 @@ function renderLibrary(root) {
       el('button', { onclick: () => showTab('wizard', { cid: null }) }, '+ Character'),
       el('h4', {}, 'Samples'),
       el('button', { onclick: () => guard(async () => { const r = await api(`/api/projects/${S.project}/knight-sample`, { body: {} }); toast(`Imported ${r.assets.length} knight animations`); await refreshProject(); renderLibrary(root); }) },
-        'Import knight sample')),
-    el('div', { class: 'card' }, el('div', { class: 'row' }, el('h3', {}, 'Assets'), typeSel, charSel, q), grid)));
-  draw();
+        'Import knight sample'),
+      deleteProjectBox(d.project)),
+    el('div', { class: 'card' }, el('div', { class: 'row' }, el('h3', {}, 'Assets'), typeSel, charSel, q), chipBox, grid)));
+  drawChips(); draw();
+}
+
+// Delete = move to <workspace>/_trash/ (recoverable). Typing the name confirms, so one stray click cannot delete.
+function deleteProjectBox(project) {
+  const box = el('div', { class: 'danger-zone' });
+  const open = el('button', { class: 'danger small', onclick: () => {
+    box.innerHTML = '';
+    const name = el('input', { placeholder: project.name, 'aria-label': 'Type the project name to confirm', 'data-no-i18n': '' });
+    const go = el('button', { class: 'danger', disabled: true, onclick: () => guard(async () => {
+      const r = await api(`/api/projects/${project.id}`, { method: 'DELETE', body: { confirm: name.value } });
+      toast('Project moved to the trash folder');
+      console.info('project trash:', r.trash);
+      S.project = null; S.asset = null; S.libChar = ''; S.libTags = [];
+      await loadProjects(); showTab('home');
+    }) }, 'Delete');
+    name.oninput = () => { go.disabled = name.value.trim() !== project.name; };
+    box.append(el('p', { class: 'small' }, 'Type the project name to confirm. The folder is moved to workspace/_trash and can be restored from there.'),
+      el('div', { class: 'row' }, name, go, el('button', { class: 'small', onclick: () => box.replaceWith(deleteProjectBox(project)) }, 'Cancel')));
+  } }, 'Delete project…');
+  box.append(el('h4', {}, 'Danger zone'), open);
+  return box;
 }
 
 function newProject() {

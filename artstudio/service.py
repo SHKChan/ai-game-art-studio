@@ -20,6 +20,7 @@ from .prompts import build_keyframe_prompt, build_master_prompt
 from .providers import Registry
 from .providers.base import GenerationError, GenerationRequest
 from .qa import check_asset, check_animation_set, check_character_directions
+from .tagging import builder_tags
 from .util import StudioError, new_id, now, read_json, write_json
 from .workspace import Workspace
 
@@ -49,6 +50,7 @@ class Studio:
             "action_prompts": self._job_action_prompts,
             "batch_actions": self._job_batch_actions,
             "reference_candidates": self._job_reference_candidates,
+            "import_pack": self._job_import_pack,
         }, workers=workers)
 
     # ------------------------------------------------------------------ Pixel Forge
@@ -76,7 +78,7 @@ class Studio:
                       "details": {"calls": res.metadata["calls"]}},
             character_id=character_id, origin="procedural", asset_type=b.ASSET_TYPE if b.ASSET_TYPE != "animation" else "animation",
             loop=(edits or {}).get("loop") if (edits or {}).get("loop") is not None else _builder_loop(b, params),
-            tags=["procedural", builder])
+            tags=builder_tags(builder, params))
         d = self.ws.asset_dir(pid, asset["id"])
         rec_dst = d / "source" / "doc.recipe"
         shutil.copyfile(res.metadata["recipe"], rec_dst)
@@ -246,6 +248,126 @@ class Studio:
                                       params=params, provider=provider or {"id": "external", "kind": "import", "is_test_fixture": False},
                                       character_id=character_id, template=template, source_file=path, source_rects=rects,
                                       origin=origin, processing_note={"import": steps})
+
+    # ------------------------------------------------------------------ Asset packs (local third-party art)
+    def import_pack(self, pid: str, pack: str, item_ids: list[str] | None = None, *, tags=None, query: str | None = None,
+                    options: dict | None = None, force: bool = False, ctx=None) -> dict:
+        """Import items of an installed asset pack as assets (exact cells, pack timing, English search tags).
+        Characters get a character record (side view) and their actions are linked to it. Items already imported into
+        this project are skipped unless `force`."""
+        from . import packs
+        from .util import slug
+        m = packs.get_pack(pack)
+        if not m.available(packs.pack_root(pack)):
+            raise StudioError(f"Asset pack {pack} is not installed. Run: python scripts/setup_asset_packs.py <zip>", code="pack_missing")
+        opts = packs._opts(pack, options)
+        lst = packs.items(pack, opts, tags=tags, query=query)
+        if item_ids:
+            want = list(dict.fromkeys(item_ids))
+            by_id = {i["id"]: i for i in lst} if not (tags or query) else {i["id"]: i for i in packs.items(pack, opts)}
+            missing = [i for i in want if i not in by_id]
+            if missing:
+                raise StudioError(f"Unknown items in {pack}: {missing}")
+            lst = [by_id[i] for i in want]
+        if not lst:
+            raise StudioError("No pack items match the filter")
+        existing = {}
+        for a in self.ws.list_assets(pid):
+            imp = (a.get("processing") or {}).get("import") or {}
+            if imp.get("pack") == pack and a.get("animation"):   # an interrupted import (no frames yet) does not count
+                existing[imp.get("pack_item")] = a["id"]
+        chars = {c["name"]: c for c in self.ws.list_characters(pid)}
+        done, skipped, made_chars = [], [], []
+        for n, it in enumerate(lst):
+            if ctx:
+                ctx.check_cancel()
+                ctx.progress(n / len(lst), f"{pack}: {it['name']} ({n + 1}/{len(lst)})")
+            if it["id"] in existing and not force:
+                skipped.append(it["id"])
+                continue
+            cid = None
+            ch = it.get("character")
+            if ch:
+                c = chars.get(ch["name"])
+                if c is None:
+                    c = self.ws.create_character(pid, ch["name"], direction_mode="side2", description=ch.get("description", ""),
+                                                 visual_style=f"{m.TITLE} — {m.LICENSE_NOTE}", camera="side")
+                    chars[ch["name"]] = c
+                    made_chars.append(c["id"])
+                cid = c["id"]
+            d = packs.load(it, opts)
+            piv = list(d["pivot"])
+            params = {"mode": "pixel", "anchor": "source", "padding": 0, "canvas": list(d["canvas"]), "pivot": piv,
+                      "source_pivot": piv, "binary_alpha": bool(d.get("binary_alpha", False))}
+            a = create_animation_asset(
+                self.ws, pid, it["name"], d["frames"], anim_name=d.get("anim_name") or slug(it["id"].split("/")[-1]),
+                direction=d.get("direction", "none"), mode="pixel", params=params,
+                provider={"id": "pack", "kind": "import", "is_test_fixture": False,
+                          "details": {"pack": pack, "item": it["id"], "license": m.LICENSE_NOTE}},
+                character_id=cid, source_file=d.get("source_file"), source_rects=d.get("source_rects"), origin="imported",
+                asset_type=it["type"], loop=bool(d.get("loop")), events=[], tags=it["tags"],
+                processing_note={"import": {"kind": "pack", "pack": pack, "pack_item": it["id"], "options": opts}})
+            anim = a["animation"]
+            anim["loop"]["hold_last"] = bool(d.get("hold_last", False))
+            anim["loop"]["ping_pong"] = bool(d.get("ping_pong", False))
+            if d.get("full_bleed"):
+                anim["full_bleed"] = True
+            anim["soft_alpha"] = not params["binary_alpha"]      # glows / shadows kept as drawn
+            anim["blank_frames_ok"] = True                       # pauses are part of the pack's timing
+            anim["source_cells"] = True                          # cells kept exactly as the pack cut them
+            for k, v in (d.get("extra") or {}).items():
+                a[k] = v
+            a = self.ws.save_asset(a)
+            check_asset(self.ws, a)
+            done.append(a["id"])
+        if ctx:
+            ctx.progress(1.0, f"{pack}: imported {len(done)}, skipped {len(skipped)}")
+        return {"pack": pack, "imported": done, "skipped": skipped, "characters": made_chars}
+
+    def retag(self, pid: str) -> dict:
+        """Add the current tags to existing assets: builder tags for Pixel Forge assets, item tags for pack imports.
+        Tags are only added (hand-added tags stay); non-English tags are dropped by the save."""
+        from . import packs
+        changed = []
+        for a in self.ws.list_assets(pid):
+            proc = a.get("procedural") or {}
+            imp = (a.get("processing") or {}).get("import") or {}
+            extra = []
+            if proc.get("builder"):
+                extra = builder_tags(proc["builder"], proc.get("params"))
+            elif imp.get("kind") == "pack":
+                try:
+                    extra = packs.find_item(imp["pack"], imp["pack_item"], imp.get("options"))["tags"]
+                except StudioError:
+                    extra = []
+            new = list(dict.fromkeys(list(a.get("tags") or []) + extra))
+            if new != a.get("tags"):
+                a["tags"] = new
+                self.ws.save_asset(a)
+                changed.append(a["id"])
+        return {"project": pid, "retagged": changed}
+
+    def pack_thumbnail(self, pack: str, item_id: str, options: dict | None = None) -> Path:
+        """Cached preview frame (middle frame, max 128 px) of a pack item for the import browser."""
+        import hashlib
+        from . import packs
+        it = packs.find_item(pack, item_id, options)
+        key = hashlib.sha1(f"{pack}|{item_id}|{sorted((options or {}).items())}".encode()).hexdigest()[:16]
+        out = self.ws.root / "cache" / "packs" / f"{key}.png"
+        if not out.is_file():
+            frames = packs.load(it, options)["frames"]
+            from .processing.frames import alpha_bbox
+            nonempty = [im for im, _ in frames if alpha_bbox(im, 16)] or [frames[0][0]]
+            im = nonempty[len(nonempty) // 2]
+            b = alpha_bbox(im, 16)
+            if b and it["type"] != "tileset" and not it["id"].startswith("scene/"):
+                im = im.crop(b)
+            im = im.copy()
+            if max(im.size) > 128:
+                im.thumbnail((128, 128), Image.NEAREST)
+            out.parent.mkdir(parents=True, exist_ok=True)
+            im.save(out)
+        return out
 
     # ------------------------------------------------------------------ Motion Studio
     def import_knight_sample(self, pid: str, character_id: str, actions: list[str] | None = None, mode: str = "pixel") -> list[dict]:
@@ -739,6 +861,10 @@ class Studio:
         a = self.import_file(job["project_id"], path, extra_files=extra, **p)
         check_asset(self.ws, a)
         return {"asset_id": a["id"]}
+
+    def _job_import_pack(self, p, ctx, budget, job):
+        p = dict(p)
+        return self.import_pack(job["project_id"], p.pop("pack"), p.pop("items", None), ctx=ctx, **p)
 
     def _job_generate(self, p, ctx, budget, job):
         r = self.generate(job["project_id"], ctx=ctx, budget=budget, **p)

@@ -143,7 +143,16 @@ powershell -ExecutionPolicy Bypass -File .\start.ps1      # 自动创建 .venv�
 
 所有修改都会随素材保存，并记录为像素引擎调用，因此保存的素材可以精确回放，也能在工坊中重新打开（「本项目已保存」）。
 
-**📥 素材导入** —— 拖入文件，选择切图 / 去背景 / 对齐方式后导入。
+**📥 素材导入** —— 拖入文件，选择切图 / 去背景 / 对齐方式后导入。顶部的 **素材包** 面板用来导入本机已安装的第三方素材包：
+Tiny RPG 角色（Soldier、Orc、Demon、Blood Monster）、Craftpix 像素地牢（图块集、火把、门、宝箱、陷阱、示例地图）、
+PVFX Foundry 的 253 个法术和特效。可按标签筛选后导入。
+
+**🗑 删除项目**：资源库 → *危险操作* → *删除项目…*，输入项目名确认。项目文件夹会移到 `workspace/_trash/`，需要时可以恢复。
+
+**🏷 标签** —— 每个素材都带有**英文**检索标签，例如 `dungeon`、`monster`、`spell`、`fire`、`top-down`、`action:walk`。
+像素工坊生成器会给作品自动打标签（场景、怪物，技能按元素和用途分），素材包条目也自带标签。
+在资源库、素材包浏览器或像素工坊搜索框里点标签或输入关键词即可检索。非英文标签保存时会被去掉。
+标签词表和素材包安装说明见 [docs/asset-packs.md](docs/asset-packs.md)。
 
 专业工具在 **更多工具** 中：逐帧 **动画编辑器**、**角色详情**、**生成与工作流**（ComfyUI）和 **像素文档**（配方、图层、图格）。
 
@@ -167,6 +176,9 @@ python -m artstudio animate add --project my-rpg --character <角色ID> --preset
 python -m artstudio animate add --project my-rpg --character <角色ID> --name "旋风斩" --description "伸剑原地转一圈" --frames 6
 python -m artstudio animate prompts --project my-rpg --character <角色ID> --method codex --language zh-CN
 python -m artstudio animate generate --project my-rpg --character <角色ID> --provider codex --height 64 --retries 2
+python scripts/setup_asset_packs.py <素材包.zip> …                                      # 安装下载的素材包（不进 git）
+python -m artstudio packs items --pack pvfx-foundry --tag spell --tag fire               # 按标签浏览素材包
+python -m artstudio packs import --project my-rpg --pack tiny-rpg                        # Soldier / Orc / Demon / Blood Monster
 python -m artstudio draw my_gem.jsonl --project my-rpg --name "红宝石" --type icon
 python -m artstudio generate --project my-rpg --provider comfyui --workflow sd-image-to-image --character hero --template walk --direction east --prompt-language zh-CN --params '{"checkpoint":"<文件>.safetensors"}'
 python -m artstudio export --project my-rpg --assets <素材ID…> --formats atlas cocos gif json zip
@@ -195,7 +207,7 @@ AI 生成通过 **[ComfyUI](https://github.com/comfyanonymous/ComfyUI)** 的服�
 
 ## 验证状态
 
-- ✅ **离线验收（阶段 A）**：107 项自动化测试（其中 5 项角色套装测试需要本地 Craftpix 素材包，没有时跳过）、覆盖完整引导流程的 Playwright 中英文界面测试、概念验证素材，见 [DEVELOPMENT_PROGRESS.md](DEVELOPMENT_PROGRESS.md)。
+- ✅ **离线验收（阶段 A）**：128 项自动化测试（其中 8 项角色套装测试需要本地 Craftpix 素材包，1 项需要已安装的素材包，没有时跳过）、覆盖完整引导流程的 Playwright 中英文界面测试、概念验证素材，见 [DEVELOPMENT_PROGRESS.md](DEVELOPMENT_PROGRESS.md)。
 - 🧪 **AI 生成目前只经过模拟测试**：ComfyUI 使用 `mock_comfyui/`，Codex 使用测试替身（`tests/fake_codex.py`）。模拟输出标记为 TEST FIXTURE，不是 AI 作品。真实的 Codex CLI 尚未在此运行。
 - ⛔ **阶段 B（真实 ComfyUI 推理）尚未运行**。请在 ComfyUI 电脑上运行 `scripts/production_smoke_test.py`。
 

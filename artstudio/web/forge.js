@@ -35,12 +35,18 @@ export async function renderForge(root) {
 
 function galleryPanel(root) {
   const groups = {};
-  for (const [k, b] of Object.entries(F.builders)) (groups[b.group] ||= []).push(k);
+  // search box: every word must appear in the builder name or its (English) tags
+  const words = (F.q || '').toLowerCase().split(/\s+/).filter(Boolean);
+  const hit = (k) => words.every(w => (k.replace(/_/g, ' ') + ' ' + (F.builders[k].tags || []).join(' ')).toLowerCase().includes(w));
+  for (const [k, b] of Object.entries(F.builders)) if (hit(k)) (groups[b.group] ||= []).push(k);
+  const search = el('input', { placeholder: 'search tags… (fire, dungeon, monster)', value: F.q || '', 'aria-label': 'Search builders' });
+  search.onchange = () => { F.q = search.value; renderForge(root); };
   const mine = (S.data?.assets || []).filter(a => a.procedural?.builder && F.builders[a.procedural.builder]).slice(-12).reverse();
   return el('div', { class: 'card fgallery' }, el('h3', {}, 'Pixel Forge'),
-    el('p', { class: 'small muted' }, 'Pick something to make, then adjust it on the right.'),
+    el('p', { class: 'small muted' }, 'Pick something to make, then adjust it on the right.'), search,
+    !Object.keys(groups).length ? el('p', { class: 'muted small' }, 'Nothing matches these tags.') : null,
     ...['Characters', 'Skills & effects', 'Skill icons', 'Items & icons', 'UI', 'Scenery', 'Other'].filter(g => groups[g]).map(g => el('div', {},
-      el('h4', {}, g), el('div', { class: 'fgrid' }, ...groups[g].map(k => el('button', { class: 'fitem' + (k === F.builder && !F.source ? ' sel' : ''), title: F.builders[k].description,
+      el('h4', {}, g), el('div', { class: 'fgrid' }, ...groups[g].map(k => el('button', { class: 'fitem' + (k === F.builder && !F.source ? ' sel' : ''), title: F.builders[k].description + '\n#' + (F.builders[k].tags || []).join(' #'),
         onclick: () => { choose(k); renderForge(root); } }, el('img', { src: `/api/forge/thumb/${k}.png`, alt: '' }), el('span', { 'data-no-i18n': '' }, title(k))))))),
     mine.length ? el('div', {}, el('h4', {}, 'Saved in this project'), ...mine.map(a => el('div', { class: 'row small fsaved' },
       el('a', { href: '#', 'data-no-i18n': '', onclick: (e) => { e.preventDefault(); choose(a.procedural.builder, a.procedural.params, a.procedural.edits, a.id); renderForge(root); } }, a.name),
