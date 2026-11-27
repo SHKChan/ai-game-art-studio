@@ -8,6 +8,7 @@ studio.config.json
 tests/ui_screens/
 deliverables/poc/poc_workspace_backup.zip
 .sync/
+Claude outputs/
 
 # former upstream checkouts are no longer used
 upstream/
